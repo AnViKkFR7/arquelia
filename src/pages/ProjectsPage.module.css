@@ -1,0 +1,9 @@
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.loading {
+  padding-block: var(--sp-16);
+  color: var(--text-subtle);
+}

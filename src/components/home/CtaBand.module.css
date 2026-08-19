@@ -1,0 +1,74 @@
+.band {
+  position: relative;
+  padding-block: clamp(5rem, 12vw, 9rem);
+  background: var(--black-950) center / cover no-repeat fixed;
+  color: var(--text-inverse);
+  overflow: hidden;
+  text-align: center;
+}
+
+/* `fixed` sólo en desktop: en móvil provoca saltos y consume batería. */
+@media (max-width: 1023px) {
+  .band {
+    background-attachment: scroll;
+  }
+}
+
+.plain {
+  background: var(--bg-inverse);
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0.86) 0%, rgba(6, 6, 6, 0.78) 100%);
+}
+
+.inner {
+  position: relative;
+  z-index: var(--z-base);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: var(--fs-h2);
+  max-width: 16ch;
+  color: var(--text-inverse);
+}
+
+.text {
+  margin-top: var(--sp-5);
+  max-width: 48ch;
+  color: var(--text-inverse-muted);
+  font-size: var(--fs-lead);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-5);
+  margin-top: var(--sp-10);
+}
+
+@media (min-width: 640px) {
+  .actions {
+    flex-direction: row;
+    gap: var(--sp-8);
+  }
+}
+
+.phone {
+  font-size: var(--fs-sm);
+  color: var(--text-inverse-muted);
+  border-bottom: 1px solid transparent;
+  padding-bottom: 0.15rem;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+
+.phone:hover {
+  color: var(--white);
+  border-bottom-color: var(--accent-bright);
+}

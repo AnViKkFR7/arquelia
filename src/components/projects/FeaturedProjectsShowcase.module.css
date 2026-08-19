@@ -1,0 +1,29 @@
+.showcase {
+  padding-block: var(--sp-16) var(--section-y);
+  background: var(--bg-alt);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-8);
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-6);
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--sp-16);
+}

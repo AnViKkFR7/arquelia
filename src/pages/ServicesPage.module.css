@@ -1,0 +1,91 @@
+/* ── Tarjetas destacadas ─────────────────────────────── */
+.featured {
+  background: var(--bg);
+}
+
+.featuredGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-6);
+}
+
+@media (min-width: 640px) {
+  .featuredGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-4);
+  }
+}
+
+@media (min-width: 1024px) {
+  .featuredGrid {
+    gap: var(--sp-6);
+  }
+}
+
+/* ── Catálogo ────────────────────────────────────────── */
+.catalog {
+  background: var(--bg-inverse);
+  padding-block: var(--section-y);
+  color: var(--text-inverse);
+}
+
+.iconGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: var(--line-inverse);
+  border: 1px solid var(--line-inverse);
+}
+
+@media (min-width: 560px) {
+  .iconGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .iconGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.iconCard {
+  background: var(--bg-inverse);
+  padding: var(--sp-8) var(--sp-6);
+  transition: background var(--t-base) var(--ease);
+}
+
+.iconCard:hover {
+  background: var(--black-850);
+}
+
+.iconWrap {
+  display: block;
+  color: var(--accent-bright);
+  transition: transform var(--t-base) var(--ease);
+}
+
+.iconCard:hover .iconWrap {
+  transform: translateY(-3px);
+}
+
+.iconTitle {
+  margin-top: var(--sp-8);
+  font-size: 1.05rem;
+  color: var(--text-inverse);
+}
+
+.iconDesc {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--text-inverse-muted);
+}
+
+/* ── Proceso ─────────────────────────────────────────── */
+.process {
+  background: var(--bg);
+}
+
+.timelineWrap {
+  max-width: 860px;
+}

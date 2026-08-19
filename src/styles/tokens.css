@@ -1,0 +1,112 @@
+:root {
+  /* ─── Paleta ─────────────────────────────────────────────
+     Negros, grises neutros, blanco y dorado. Sin azules.
+     El dorado es acento: nunca superficie grande.            */
+  --black-950: #060606;
+  --black-900: #0e0e0e;
+  --black-850: #141414;
+  --black-800: #1c1c1c;
+
+  --grey-050: #fafaf9;
+  --grey-100: #f4f4f3;
+  --grey-200: #e6e5e3;
+  --grey-300: #d8d7d4;
+  --grey-500: #8c8b87;
+  --grey-600: #6b6a66;
+  --grey-700: #4a4a48;
+
+  --white: #ffffff;
+
+  --gold-700: #9a7b22;
+  --gold-600: #b8952e;
+  --gold-500: #d4af37;
+  --gold-400: #e3c65f;
+
+  /* ─── Roles semánticos ───────────────────────────────── */
+  --bg: var(--white);
+  --bg-alt: var(--grey-100);
+  --bg-inverse: var(--black-950);
+  --bg-inverse-alt: var(--black-900);
+
+  --text: var(--black-950);
+  --text-muted: var(--grey-700);
+  --text-subtle: var(--grey-500);
+  --text-inverse: var(--white);
+  --text-inverse-muted: rgba(255, 255, 255, 0.62);
+  --text-inverse-subtle: rgba(255, 255, 255, 0.4);
+
+  --accent: var(--gold-600);
+  --accent-bright: var(--gold-500);
+
+  --line: var(--grey-200);
+  --line-strong: var(--grey-300);
+  --line-inverse: rgba(255, 255, 255, 0.12);
+
+  /* ─── Tipografía ─────────────────────────────────────── */
+  --font-display: 'Fraunces', 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Escala fluida (mobile → desktop) */
+  --fs-display: clamp(2.75rem, 9vw, 7rem);
+  --fs-h1: clamp(2.25rem, 6vw, 4.25rem);
+  --fs-h2: clamp(1.75rem, 4.2vw, 3rem);
+  --fs-h3: clamp(1.25rem, 2.4vw, 1.6rem);
+  --fs-lead: clamp(1.05rem, 1.6vw, 1.3rem);
+  --fs-body: 1rem;
+  --fs-sm: 0.875rem;
+  --fs-xs: 0.75rem;
+
+  --lh-tight: 1.05;
+  --lh-snug: 1.2;
+  --lh-body: 1.65;
+
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.14em;
+
+  /* ─── Espaciado (escala 4px) ─────────────────────────── */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.25rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+  --sp-20: 5rem;
+  --sp-24: 6rem;
+  --sp-32: 8rem;
+  --sp-40: 10rem;
+
+  /* Ritmo vertical de sección, fluido */
+  --section-y: clamp(4.5rem, 10vw, 9rem);
+
+  /* ─── Layout ─────────────────────────────────────────── */
+  --container: 1320px;
+  --container-narrow: 780px;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --header-h: 68px;
+
+  /* ─── Movimiento ─────────────────────────────────────── */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --t-fast: 220ms;
+  --t-base: 420ms;
+  --t-slow: 720ms;
+  --t-slower: 1100ms;
+
+  /* ─── Capas ──────────────────────────────────────────── */
+  --z-base: 1;
+  --z-sticky: 50;
+  --z-header: 100;
+  --z-overlay: 200;
+
+  /* ─── Sombras ────────────────────────────────────────── */
+  --shadow-sm: 0 1px 3px rgba(6, 6, 6, 0.06);
+  --shadow-md: 0 8px 30px rgba(6, 6, 6, 0.08);
+  --shadow-lg: 0 24px 70px rgba(6, 6, 6, 0.16);
+}
+
+/* Breakpoints de referencia (mobile-first, siempre min-width):
+   sm 480 · md 768 · lg 1024 · xl 1280 · 2xl 1536                */

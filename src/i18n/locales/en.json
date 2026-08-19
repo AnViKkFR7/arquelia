@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "projects": "Projects",
+    "about": "About Us",
+    "contact": "Contact",
+    "cta": "Request a quote"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "legal": "Legal notice",
+    "cookies": "Cookie policy",
+    "privacy": "Privacy policy"
+  },
+  "home": {
+    "heroTitle": "Architecture you live in",
+    "heroSubtitle": "Premium renovations and construction in Catalonia",
+    "aboutTeaser": "At Arquelia we transform spaces with millimetric precision and the highest quality finishes, taking care of every detail from the first sketch to the last joint.",
+    "featuredProjects": "Featured projects",
+    "ctaTitle": "Have a project in mind?"
+  }
+}

@@ -1,0 +1,246 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+/* ── Progreso ────────────────────────────────────────── */
+.progress {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.bars {
+  display: flex;
+  flex: 1;
+  gap: var(--sp-2);
+}
+
+.bar {
+  flex: 1;
+  height: 2px;
+  background: var(--line-strong);
+  transition: background var(--t-base) var(--ease);
+}
+
+.barOn {
+  background: var(--accent-bright);
+}
+
+.counter {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Paso ────────────────────────────────────────────── */
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.stepTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  line-height: 1.15;
+  padding: 0;
+}
+
+.stepHint {
+  margin-top: calc(var(--sp-2) * -1);
+  font-size: var(--fs-sm);
+  color: var(--text-subtle);
+}
+
+/* ── Selector de servicio ────────────────────────────── */
+.services {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-2);
+}
+
+.service {
+  position: relative;
+  text-align: left;
+  padding: var(--sp-4);
+  border: 1px solid var(--line-strong);
+  font-size: var(--fs-sm);
+  color: var(--text);
+  transition:
+    border-color var(--t-fast) var(--ease),
+    background var(--t-fast) var(--ease),
+    transform var(--t-fast) var(--ease);
+}
+
+.service:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.serviceOn {
+  border-color: var(--accent-bright);
+  background: rgba(212, 175, 55, 0.09);
+  font-weight: 500;
+}
+
+.serviceOn::after {
+  content: '';
+  position: absolute;
+  top: var(--sp-3);
+  right: var(--sp-3);
+  width: 6px;
+  height: 6px;
+  background: var(--accent-bright);
+}
+
+/* ── Campos ──────────────────────────────────────────── */
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.label {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+
+.field input,
+.field textarea {
+  padding: var(--sp-3) 0;
+  border: none;
+  border-bottom: 1px solid var(--line-strong);
+  background: transparent;
+  font-size: var(--fs-body);
+  color: var(--text);
+  resize: vertical;
+  transition: border-color var(--t-fast) var(--ease);
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--grey-500);
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+/* ── Resumen ─────────────────────────────────────────── */
+.summary {
+  display: flex;
+  flex-direction: column;
+}
+
+.summaryRow {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: var(--sp-4);
+  padding-block: var(--sp-3);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-sm);
+}
+
+.summaryKey {
+  color: var(--text-subtle);
+  letter-spacing: var(--tracking-wide);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  padding-top: 0.15rem;
+}
+
+.summaryVal {
+  color: var(--text);
+}
+
+.privacy {
+  font-size: var(--fs-xs);
+  color: var(--text-subtle);
+  line-height: 1.6;
+}
+
+.privacy a {
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+/* ── Acciones ────────────────────────────────────────── */
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+.back {
+  font-size: var(--fs-sm);
+  color: var(--text-subtle);
+  transition: color var(--t-fast) var(--ease);
+}
+
+.back:hover {
+  color: var(--text);
+}
+
+.next {
+  margin-left: auto;
+}
+
+/* ── Confirmación ────────────────────────────────────── */
+.done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-5);
+  padding-block: var(--sp-8);
+}
+
+.doneMark {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent-bright);
+  color: var(--black-950);
+  font-size: 1.5rem;
+  animation: pop var(--t-slow) var(--ease) both;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.doneTitle {
+  font-size: clamp(1.5rem, 3.4vw, 2rem);
+}
+
+.doneText {
+  max-width: 40ch;
+  color: var(--text-muted);
+}

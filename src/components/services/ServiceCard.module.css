@@ -1,0 +1,113 @@
+.card {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--black-900);
+  transition: transform var(--t-slow) var(--ease);
+}
+
+/* Escalonado vertical entre tarjetas hermanas */
+@media (min-width: 900px) {
+  .offset1 {
+    transform: translateY(-7%);
+  }
+  .offset2 {
+    transform: translateY(5%);
+  }
+  .card:hover {
+    transform: translateY(-2%);
+  }
+  .offset1:hover {
+    transform: translateY(-9%);
+  }
+  .offset2:hover {
+    transform: translateY(3%);
+  }
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  background: var(--grey-700) center / cover no-repeat;
+  transition: transform var(--t-slower) var(--ease), filter var(--t-slow) var(--ease);
+  filter: saturate(0.85);
+}
+
+.card:hover .image {
+  transform: scale(1.06);
+  filter: saturate(1);
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 6, 6, 0.32);
+  transition: background var(--t-slow) var(--ease);
+}
+
+.card:hover .veil {
+  background: rgba(6, 6, 6, 0.16);
+}
+
+/* ── Frase ───────────────────────────────────────────── */
+.phrase {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding-inline: var(--sp-4);
+  text-align: center;
+  color: var(--white);
+  font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.label {
+  flex-shrink: 0;
+  padding: 0.4rem 0.85rem;
+  background: var(--white);
+  color: var(--black-950);
+  font-weight: 600;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wider);
+  transition: background var(--t-base) var(--ease), color var(--t-base) var(--ease);
+}
+
+.card:hover .label {
+  background: var(--accent-bright);
+}
+
+/* Las palabras laterales sólo aparecen al hover */
+.side {
+  opacity: 0;
+  transform: translateX(0);
+  transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
+  white-space: nowrap;
+  font-size: var(--fs-xs);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+}
+
+.side:first-child {
+  transform: translateX(14px);
+}
+
+.side:last-child {
+  transform: translateX(-14px);
+}
+
+.card:hover .side {
+  opacity: 1;
+  transform: none;
+}
+
+/* En táctil no hay hover: la frase se muestra siempre */
+@media (hover: none) {
+  .side {
+    opacity: 1;
+    transform: none;
+  }
+}

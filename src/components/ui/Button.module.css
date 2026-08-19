@@ -1,0 +1,111 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-align: center;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition:
+    background var(--t-fast) var(--ease),
+    color var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease),
+    transform var(--t-fast) var(--ease);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Tamaños ─────────────────────────────────────────── */
+.sm {
+  padding: 0.5rem 1.15rem;
+  font-size: var(--fs-sm);
+}
+
+.md {
+  padding: 0.8rem 1.9rem;
+  font-size: var(--fs-sm);
+}
+
+.lg {
+  padding: 1.05rem 2.6rem;
+  font-size: var(--fs-body);
+}
+
+/* ── Variantes ───────────────────────────────────────── */
+.solid {
+  background: var(--black-950);
+  color: var(--white);
+}
+
+.solid:hover:not(:disabled) {
+  background: var(--black-800);
+}
+
+.gold {
+  background: var(--accent-bright);
+  color: var(--black-950);
+  font-weight: 600;
+}
+
+.gold:hover:not(:disabled) {
+  background: var(--gold-400);
+}
+
+.outline {
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+
+.outline:hover:not(:disabled) {
+  border-color: var(--text);
+}
+
+.ghost {
+  color: var(--text-inverse);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.ghost:hover:not(:disabled) {
+  border-color: var(--white);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Enlace subrayado, sin píldora */
+.link {
+  padding: 0;
+  border-radius: 0;
+  gap: var(--sp-3);
+  font-weight: 500;
+  border-bottom: 1px solid var(--accent);
+  padding-bottom: 0.35rem;
+}
+
+.link:hover {
+  transform: none;
+  border-bottom-color: var(--text);
+}
+
+/* ── Flecha ──────────────────────────────────────────── */
+.arrow {
+  display: inline-block;
+  transition: transform var(--t-base) var(--ease);
+}
+
+.btn:hover .arrow {
+  transform: translateX(4px);
+}

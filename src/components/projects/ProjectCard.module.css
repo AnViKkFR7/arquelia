@@ -1,0 +1,101 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  width: 100%;
+}
+
+.frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--grey-300);
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  background: var(--grey-300) center / cover no-repeat;
+  transition: transform var(--t-slower) var(--ease);
+}
+
+.card:hover .image {
+  transform: scale(1.05);
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0.28) 0%, rgba(6, 6, 6, 0) 45%);
+  opacity: 0.9;
+}
+
+.index {
+  position: absolute;
+  top: var(--sp-4);
+  left: var(--sp-4);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Botón "+" ───────────────────────────────────────── */
+.plus {
+  position: absolute;
+  top: var(--sp-4);
+  right: var(--sp-4);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(6px);
+  transition:
+    transform var(--t-base) var(--ease),
+    background var(--t-base) var(--ease);
+}
+
+.card:hover .plus {
+  transform: rotate(45deg);
+  background: var(--accent-bright);
+}
+
+.plusBar {
+  position: absolute;
+  width: 13px;
+  height: 1.5px;
+  background: var(--black-950);
+}
+
+.plusBarV {
+  transform: rotate(90deg);
+}
+
+/* ── Texto ───────────────────────────────────────────── */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-top: var(--sp-4);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  line-height: 1.2;
+  color: var(--text);
+  transition: color var(--t-fast) var(--ease);
+}
+
+.card:hover .title {
+  color: var(--accent);
+}
+
+.meta {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}

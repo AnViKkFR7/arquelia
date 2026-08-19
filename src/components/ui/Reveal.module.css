@@ -1,0 +1,55 @@
+.reveal {
+  transition:
+    opacity var(--t-slow) var(--ease),
+    transform var(--t-slow) var(--ease),
+    clip-path var(--t-slower) var(--ease);
+  will-change: opacity, transform;
+}
+
+/* ── Estados iniciales ───────────────────────────────── */
+.up {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+.fade {
+  opacity: 0;
+}
+
+.left {
+  opacity: 0;
+  transform: translateX(-32px);
+}
+
+.right {
+  opacity: 0;
+  transform: translateX(32px);
+}
+
+.clip {
+  clip-path: inset(0 0 100% 0);
+}
+
+/* ── Estado final ────────────────────────────────────── */
+.in.up,
+.in.left,
+.in.right {
+  opacity: 1;
+  transform: none;
+}
+
+.in.fade {
+  opacity: 1;
+}
+
+.in.clip {
+  clip-path: inset(0 0 0 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+}

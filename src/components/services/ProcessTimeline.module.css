@@ -1,0 +1,118 @@
+.timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: var(--sp-5);
+  align-items: start;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
+}
+
+.row.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Marca de regla ──────────────────────────────────── */
+.marker {
+  display: flex;
+  align-items: center;
+  height: 3.4rem;
+}
+
+.markerLine {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--line-strong);
+  transform-origin: left;
+  transform: scaleX(0.5);
+  transition: transform var(--t-base) var(--ease), background var(--t-base) var(--ease);
+}
+
+.active .markerLine {
+  transform: scaleX(1);
+  background: var(--accent);
+}
+
+/* ── Fila ────────────────────────────────────────────── */
+.button {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--sp-5);
+  align-items: baseline;
+  text-align: left;
+  width: 100%;
+  padding-block: var(--sp-4);
+  padding-left: var(--indent, 0px);
+  border-bottom: 1px solid var(--line);
+  transition: padding-left var(--t-slow) var(--ease);
+}
+
+@media (max-width: 767px) {
+  .button {
+    padding-left: 0;
+  }
+}
+
+.n {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  color: var(--text-subtle);
+  transition: color var(--t-base) var(--ease);
+}
+
+.active .n {
+  color: var(--accent);
+}
+
+.titleWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 3.2vw, 2.25rem);
+  line-height: 1.1;
+  color: var(--grey-500);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  transition: color var(--t-base) var(--ease);
+}
+
+.active .title {
+  color: var(--text);
+}
+
+/* ── Descripción desplegable ─────────────────────────── */
+.desc {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--t-base) var(--ease), margin-top var(--t-base) var(--ease);
+}
+
+.active .desc {
+  grid-template-rows: 1fr;
+  margin-top: var(--sp-3);
+}
+
+.descInner {
+  overflow: hidden;
+  min-height: 0;
+  max-width: 52ch;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity var(--t-base) var(--ease);
+}
+
+.active .descInner {
+  opacity: 1;
+}

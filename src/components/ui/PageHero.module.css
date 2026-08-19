@@ -1,0 +1,65 @@
+.hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(360px, 52svh, 560px);
+  padding-top: calc(var(--header-h) + var(--sp-16));
+  padding-bottom: var(--sp-16);
+  background: var(--bg-inverse) center / cover no-repeat;
+  color: var(--text-inverse);
+  overflow: hidden;
+}
+
+.tall {
+  min-height: 78svh;
+}
+
+.hasImage {
+  background-attachment: scroll;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0.72) 0%, rgba(6, 6, 6, 0.5) 45%, rgba(6, 6, 6, 0.9) 100%);
+}
+
+.inner {
+  position: relative;
+  z-index: var(--z-base);
+  animation: heroIn var(--t-slower) var(--ease) both;
+}
+
+@keyframes heroIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.eyebrow {
+  color: var(--accent-bright);
+}
+
+.title {
+  margin-top: var(--sp-5);
+  max-width: 18ch;
+  font-weight: 300;
+}
+
+.lead {
+  margin-top: var(--sp-6);
+  max-width: 52ch;
+  font-size: var(--fs-lead);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inner {
+    animation: none;
+  }
+}

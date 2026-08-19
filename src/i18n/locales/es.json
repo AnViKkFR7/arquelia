@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "services": "Servicios",
+    "projects": "Proyectos",
+    "about": "Sobre Nosotros",
+    "contact": "Contacto",
+    "cta": "Solicitar presupuesto"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados.",
+    "legal": "Aviso legal",
+    "cookies": "Política de cookies",
+    "privacy": "Política de privacidad"
+  },
+  "home": {
+    "heroTitle": "Arquitectura que se vive",
+    "heroSubtitle": "Reformas y construcciones premium en Cataluña",
+    "aboutTeaser": "En Arquelia transformamos espacios con precisión milimétrica y un acabado de altísima calidad, cuidando cada detalle desde el primer boceto hasta la última junta.",
+    "featuredProjects": "Proyectos destacados",
+    "ctaTitle": "¿Tienes un proyecto en mente?"
+  }
+}

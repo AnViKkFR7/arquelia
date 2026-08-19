@@ -1,0 +1,65 @@
+.marquee {
+  overflow: hidden;
+  width: 100%;
+  white-space: nowrap;
+  user-select: none;
+  --marquee-size: clamp(2.5rem, 7.5vw, 6.5rem);
+}
+
+.track {
+  display: inline-flex;
+  align-items: center;
+  animation: scroll linear infinite;
+  will-change: transform;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-display);
+  font-size: var(--marquee-size);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  padding-inline: var(--sp-6);
+}
+
+.separator {
+  margin-left: var(--sp-8);
+  color: var(--accent-bright);
+  font-size: 0.32em;
+  transform: translateY(-0.25em);
+}
+
+/* Variante fina, para franjas de menor jerarquía */
+.small {
+  --marquee-size: clamp(0.85rem, 1.5vw, 1.05rem);
+}
+
+.small .item {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  letter-spacing: var(--tracking-wider);
+}
+
+.small .separator {
+  font-size: 0.7em;
+  transform: none;
+  margin-left: var(--sp-6);
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+}

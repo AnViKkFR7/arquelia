@@ -1,0 +1,117 @@
+.section {
+  background: var(--bg);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-12);
+  align-items: start;
+}
+
+@media (min-width: 1000px) {
+  .grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: var(--sp-20);
+  }
+}
+
+/* ── Formulario ──────────────────────────────────────── */
+.formCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  padding: var(--sp-8);
+  background: var(--bg-alt);
+}
+
+@media (min-width: 768px) {
+  .formCard {
+    padding: var(--sp-10);
+  }
+}
+
+.formEyebrow {
+  color: var(--accent);
+}
+
+/* ── Información ─────────────────────────────────────── */
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1000px) {
+  .info {
+    position: sticky;
+    top: calc(var(--header-h) + var(--sp-10));
+  }
+}
+
+.infoTitle {
+  font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+}
+
+.infoText {
+  margin-top: var(--sp-4);
+  color: var(--text-muted);
+  max-width: 40ch;
+}
+
+.details {
+  margin-top: var(--sp-10);
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  padding-block: var(--sp-4);
+  border-top: 1px solid var(--line);
+}
+
+.detail:last-of-type {
+  border-bottom: 1px solid var(--line);
+}
+
+.detailLabel {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+
+.detailValue {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--text);
+}
+
+.detailLink {
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+
+.detailLink:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ── Nota ────────────────────────────────────────────── */
+.note {
+  margin-top: var(--sp-10);
+  padding: var(--sp-6);
+  background: var(--bg-inverse);
+  color: var(--text-inverse-muted);
+  font-size: var(--fs-sm);
+}
+
+.noteLabel {
+  display: block;
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--accent-bright);
+}
