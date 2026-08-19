@@ -1,86 +1,96 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Marquee } from '../ui/Marquee'
-import heroImage from '../../assets/livingroom_kitchen.webp'
+import { HeroCanvas } from './HeroCanvas'
 import styles from './Hero.module.css'
 
-/**
- * Hero de la landing.
- *
- * PROVISIONAL: hoy pinta una imagen fija con un zoom lento ligado al scroll.
- * Cuando llegue la secuencia de 80–90 frames WebP del diseñador, se sustituye
- * el <div className={styles.media}> por un <canvas> que dibuje el frame
- * correspondiente al progreso de scroll (misma técnica que modusprojects.nl).
- * El resto del layout —titular, franja inferior, indicador— no cambia.
- */
+/** Alto del recorrido, en múltiplos de pantalla, durante el que se ancla el hero. */
+const SCROLL_SPAN = 3
+
 export function Hero() {
   const { t } = useTranslation()
-  const [scrolled, setScrolled] = useState(0)
+  const wrapRef = useRef<HTMLElement | null>(null)
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
-    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-    if (reduce) return
+    const el = wrapRef.current
+    if (!el) return
 
     let frame = 0
+    const update = () => {
+      frame = 0
+      const rect = el.getBoundingClientRect()
+      // Recorrido útil: desde que el bloque toca arriba hasta que termina.
+      const distance = rect.height - window.innerHeight
+      const p = distance > 0 ? -rect.top / distance : 0
+      setProgress(Math.min(Math.max(p, 0), 1))
+    }
+
     const onScroll = () => {
       if (frame) return
-      frame = requestAnimationFrame(() => {
-        frame = 0
-        setScrolled(Math.min(window.scrollY / window.innerHeight, 1))
-      })
+      frame = requestAnimationFrame(update)
     }
+
+    update()
     window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
     return () => {
       if (frame) cancelAnimationFrame(frame)
       window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
     }
   }, [])
 
+  // El titular se retira durante el primer tramo del recorrido.
+  const titleOut = Math.min(progress / 0.32, 1)
+
   return (
-    <section className={styles.hero}>
-      <div
-        className={styles.media}
-        style={{
-          backgroundImage: `url(${heroImage})`,
-          transform: `scale(${1 + scrolled * 0.12})`,
-        }}
-      />
-      <div className={styles.scrim} />
+    <section ref={wrapRef} className={styles.wrap} style={{ height: `${SCROLL_SPAN * 100}svh` }}>
+      <div className={styles.sticky}>
+        <HeroCanvas progress={progress} className={styles.canvas} />
+        <div className={styles.scrim} />
 
-      <div className={`container ${styles.inner}`}>
-        <span className={`eyebrow ${styles.eyebrow}`}>P &amp; B Cornellà Construcciones</span>
+        <div
+          className={`container ${styles.inner}`}
+          style={{
+            opacity: 1 - titleOut,
+            transform: `translateY(${titleOut * -24}px)`,
+            pointerEvents: titleOut > 0.8 ? 'none' : undefined,
+          }}
+        >
+          <span className={`eyebrow ${styles.eyebrow}`}>P &amp; B Cornellà Construcciones</span>
 
-        {/* El título accesible va en un único nodo; la versión animada por
-            palabras se oculta a la API de accesibilidad para no leer fragmentos
-            sueltos ni perder los espacios entre palabras. */}
-        <h1 className={styles.title}>
-          <span className="visually-hidden">{t('home.heroTitle')}</span>
-          <span aria-hidden="true">
-            {t('home.heroTitle')
-              .split(' ')
-              .map((word, i) => (
-                <span key={`${word}-${i}`} className={styles.word}>
-                  <span style={{ animationDelay: `${140 + i * 90}ms` }}>{word}</span>
-                </span>
-              ))}
-          </span>
-        </h1>
+          {/* Título accesible completo; la versión animada por palabras se
+              oculta a la API de accesibilidad para no leer fragmentos sueltos. */}
+          <h1 className={styles.title}>
+            <span className="visually-hidden">{t('home.heroTitle')}</span>
+            <span aria-hidden="true">
+              {t('home.heroTitle')
+                .split(' ')
+                .map((word, i) => (
+                  <span key={`${word}-${i}`} className={styles.word}>
+                    <span style={{ animationDelay: `${140 + i * 90}ms` }}>{word}</span>
+                  </span>
+                ))}
+            </span>
+          </h1>
 
-        <p className={styles.subtitle}>{t('home.heroSubtitle')}</p>
+          <p className={styles.subtitle}>{t('home.heroSubtitle')}</p>
+        </div>
+
+        <div className={styles.strip} style={{ opacity: 1 - titleOut * 0.85 }}>
+          <Marquee
+            small
+            text="Reformas integrales · Cocinas · Baños · Interiorismo · Rehabilitación"
+            separator="◆"
+            speed={70}
+          />
+        </div>
+
+        <span className={styles.cue} style={{ opacity: 1 - titleOut }} aria-hidden="true">
+          <span className={styles.cueLine} />
+        </span>
       </div>
-
-      <div className={styles.strip}>
-        <Marquee
-          small
-          text="Reformas integrales · Cocinas · Baños · Interiorismo · Rehabilitación"
-          separator="◆"
-          speed={70}
-        />
-      </div>
-
-      <span className={styles.cue} aria-hidden="true">
-        <span className={styles.cueLine} />
-      </span>
     </section>
   )
 }

@@ -1,9 +1,21 @@
 # Material de referencia — Arquelia
 
 Todo el material visual de referencia está aquí para consulta rápida.
-Para regenerar los fotogramas: `python design-refs/extract_frames.py`
+Esta carpeta **no se empaqueta** en la web: queda fuera de `src/`.
+
+- Fotogramas de referencia (para inspeccionar los vídeos): `python design-refs/extract_frames.py`
+  → escribe en `design-refs/frames/` (vacío por defecto, se regenera cuando haga falta).
+- Secuencia real del hero: `python design-refs/build_hero_frames.py`
+  → escribe en `public/hero-frames/`. **Esto sí se publica.**
 
 ## Vídeos (`design-refs/videos/`)
+
+### `00-hero-zoom-source.mp4` — FUENTE DEL HERO
+3852×2148 · 24 fps · 5,04 s · 121 fotogramas.
+Recorrido: exterior de una vivienda moderna al atardecer → avanza hacia la fachada →
+atraviesa el ventanal → termina dentro, en el comedor con la cocina al fondo.
+Es exactamente el efecto de modusprojects.nl.
+→ **Usado por** `src/components/home/HeroCanvas.tsx` mediante la secuencia generada.
 
 ### `01-mosaic-gallery-architecture.mp4` (7s)
 Recorrido de scroll con tres momentos:

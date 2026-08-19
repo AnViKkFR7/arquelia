@@ -34,7 +34,7 @@
 - [x] Transición de entrada entre páginas
 
 ### F2 · Landing ✅
-- [x] Hero — imagen + titular, preparado para sustituir por canvas de frames (zoom-scroll)
+- [x] Hero — **canvas + secuencia de 61 fotogramas controlada por scroll** (zoom exterior→interior)
 - [x] `01 / Sobre nosotros` — texto + enlace
 - [x] Galería mosaico con revelado escalonado y escala por scroll (ref. vídeo 01)
 - [x] Franja de datos con marquesina (ref. vídeo 01, tramo 4.5–7s)
@@ -80,7 +80,6 @@
 
 | Qué | Quién | Bloquea |
 |---|---|---|
-| Secuencia de 80–90 frames WebP 1600×900 para el zoom-scroll del hero | Diseñador | Hero definitivo de la landing |
 | Logo de Arquelia | Cliente | Header y footer (ahora es texto) |
 | Fotos reales de obra | Cliente | Sustituir imágenes de stock |
 | Datos reales: teléfono, dirección, CIF, horario | Cliente | Contacto y páginas legales |
@@ -116,9 +115,19 @@ Reconstrucción del diseño sobre una base nueva. Lo relevante:
 
 - **Supabase**: los servicios de datos (`src/lib/projects.ts`) están **cerrados y funcionando**.
   No se tocan. `company_id` y `item_type='construcciones-arquelia'` vía variables de entorno.
-- **Efecto zoom-scroll**: se implementará con `<canvas>` + secuencia de frames, igual que
-  modusprojects.nl (verificado por inspección de su DOM). El componente `HeroCanvas` ya deja
-  el hueco preparado: hoy pinta una imagen fija, mañana la secuencia.
+- **Efecto zoom-scroll del hero** — implementado en `HeroCanvas.tsx`:
+  - Fuente: `design-refs/videos/00-hero-zoom-source.mp4` (3852×2148, 24 fps, 5,04 s, 121 fotogramas).
+  - Regenerar la secuencia: `python design-refs/build_hero_frames.py`
+    → `public/hero-frames/` (61 WebP de 1280×714 + `poster.webp` + `manifest.json`, ~3,2 MB).
+  - Ajustes elegidos midiendo peso real: 1600/q82 daba 13,4 MB y 1440/q65 daba 4 MB;
+    1280/q58 tomando 1 de cada 2 fotogramas baja a 3,2 MB sin pérdida visible tras el velo.
+  - Carga: póster primero, luego 8 fotogramas en paralelo, el resto en segundo plano.
+  - En móvil (<1024px), con `prefers-reduced-motion` o con ahorro de datos activo **no se
+    descarga la secuencia**: se queda el póster como fondo estático.
+  - El bloque mide 300svh y el interior es `sticky`, así que el hero queda anclado mientras
+    la secuencia avanza; el titular se retira durante el primer 32 % del recorrido.
+  - Si se cambia el número de fotogramas, actualizar `FRAME_COUNT` en `HeroCanvas.tsx`
+    (el `manifest.json` está escrito pero aún no se lee: es la mejora pendiente obvia).
 - **Limitación de verificación**: el panel de vista previa no composita fotogramas, así que
   las animaciones basadas en `IntersectionObserver`/`requestAnimationFrame` no se pueden
   comprobar visualmente desde aquí — se verifica el DOM/estilos y se prueba en navegador real.

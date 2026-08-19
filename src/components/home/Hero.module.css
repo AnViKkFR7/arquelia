@@ -1,27 +1,41 @@
-.hero {
+/* Bloque alto: su recorrido de scroll es lo que hace avanzar la secuencia. */
+.wrap {
   position: relative;
-  min-height: 100svh;
+  background: var(--black-950);
+}
+
+/* En móvil no se ancla: el hero es una pantalla normal con el póster. */
+@media (max-width: 1023px) {
+  .wrap {
+    height: 100svh !important;
+  }
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   overflow: hidden;
-  background: var(--black-950);
   color: var(--text-inverse);
 }
 
-.media {
+/* ── Lienzo ──────────────────────────────────────────── */
+.canvas {
   position: absolute;
   inset: 0;
-  background: var(--black-900) center / cover no-repeat;
-  transform-origin: center 60%;
-  will-change: transform;
+  width: 100%;
+  height: 100%;
+  /* Respaldo mientras carga el póster y en móvil, donde no se pinta secuencia */
+  background: var(--black-900) url('/hero-frames/poster.webp') center / cover no-repeat;
   animation: mediaIn var(--t-slower) var(--ease) both;
 }
 
 @keyframes mediaIn {
   from {
     opacity: 0;
-    transform: scale(1.08);
   }
   to {
     opacity: 1;
@@ -31,8 +45,12 @@
 .scrim {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(180deg, rgba(6, 6, 6, 0.62) 0%, rgba(6, 6, 6, 0.14) 32%, rgba(6, 6, 6, 0.88) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(6, 6, 6, 0.6) 0%,
+    rgba(6, 6, 6, 0.12) 34%,
+    rgba(6, 6, 6, 0.86) 100%
+  );
 }
 
 /* ── Contenido ───────────────────────────────────────── */
@@ -40,6 +58,7 @@
   position: relative;
   z-index: var(--z-base);
   padding-bottom: clamp(3.5rem, 8vw, 6rem);
+  will-change: opacity, transform;
 }
 
 .eyebrow {
@@ -56,7 +75,6 @@
   max-width: 16ch;
 }
 
-/* Máscara por palabra: cada una sube desde abajo */
 .word {
   display: inline-block;
   overflow: hidden;
@@ -103,8 +121,6 @@
   padding-block: var(--sp-4);
   border-top: 1px solid rgba(255, 255, 255, 0.14);
   color: rgba(255, 255, 255, 0.6);
-  opacity: 0;
-  animation: fadeUp var(--t-slow) var(--ease) 760ms both;
 }
 
 /* ── Indicador de scroll ─────────────────────────────── */
@@ -145,10 +161,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .media,
+  .wrap {
+    height: 100svh !important;
+  }
+  .canvas,
   .eyebrow,
   .subtitle,
-  .strip,
   .word > span {
     animation: none;
     opacity: 1;
