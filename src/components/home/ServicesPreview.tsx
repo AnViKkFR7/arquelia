@@ -9,6 +9,7 @@ import bano from '../../assets/baño_03.avif'
 import salon from '../../assets/salon_01.avif'
 import pasillo from '../../assets/pasillo_02.jpg'
 import aseo from '../../assets/aseo_02.jpg'
+import ButtonSlider from '../ui/ButtonSlider'
 
 const items = [
   { title: 'Reformas integrales', note: 'De la estructura al último acabado', image: salon },
@@ -68,9 +69,7 @@ export function ServicesPreview() {
 
       <div className={`container ${styles.footer}`}>
         <Reveal variant="fade">
-          <Button to="/servicios" variant="outline" arrow>
-            Todos los servicios
-          </Button>
+          <ButtonSlider to='/servicios' text="Todos los servicios" />
         </Reveal>
       </div>
 

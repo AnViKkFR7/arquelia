@@ -55,7 +55,7 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
           className={styles.image}
           style={project.coverUrl ? { backgroundImage: `url(${project.coverUrl})` } : undefined}
         />
-        <span className={styles.plus} aria-hidden="true">
+        <span className={styles.plus} aria-hidden="true" aria-label='Haz clic para saber más'>
           <span className={styles.plusBar} />
           <span className={`${styles.plusBar} ${styles.plusBarV}`} />
         </span>

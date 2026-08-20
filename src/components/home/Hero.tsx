@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Marquee } from '../ui/Marquee'
 import { HeroCanvas } from './HeroCanvas'
+import { usePinProgress } from '../../hooks/usePinProgress'
 import styles from './Hero.module.css'
 
 /**
@@ -14,9 +15,9 @@ const SPAN_MOBILE = 2.2
 
 export function Hero() {
   const { t } = useTranslation()
-  const wrapRef = useRef<HTMLElement | null>(null)
-  const [progress, setProgress] = useState(0)
   const [span, setSpan] = useState(SPAN_DESKTOP)
+  // `span` cambia el alto del bloque anclado: hay que recalcular el progreso.
+  const { ref: wrapRef, progress } = usePinProgress<HTMLElement>([span])
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 1024px)')
@@ -25,36 +26,6 @@ export function Hero() {
     mq.addEventListener('change', apply)
     return () => mq.removeEventListener('change', apply)
   }, [])
-
-  useEffect(() => {
-    const el = wrapRef.current
-    if (!el) return
-
-    let frame = 0
-    const update = () => {
-      frame = 0
-      const rect = el.getBoundingClientRect()
-      // Recorrido útil: desde que el bloque toca arriba hasta que termina.
-      const distance = rect.height - window.innerHeight
-      const p = distance > 0 ? -rect.top / distance : 0
-      setProgress(Math.min(Math.max(p, 0), 1))
-    }
-
-    const onScroll = () => {
-      if (frame) return
-      frame = requestAnimationFrame(update)
-    }
-
-    update()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll, { passive: true })
-    return () => {
-      if (frame) cancelAnimationFrame(frame)
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-    }
-    // `span` cambia el alto del bloque: hay que recalcular el progreso.
-  }, [span])
 
   // El titular se retira durante el primer tramo del recorrido.
   const titleOut = Math.min(progress / 0.32, 1)

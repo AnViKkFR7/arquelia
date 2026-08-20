@@ -7,8 +7,10 @@
   justify-content: center;
   padding: 0.18rem;
   background-color: var(--gold-400);
-  color: var(--black);
+  color: var(--black-950);
+  text-decoration: none;
   cursor: pointer;
+  border-radius: 5rem;
 }
 
 .btn_arrow__wrap {
@@ -19,6 +21,7 @@
   padding-left: 1.25rem;
   position: relative;
   overflow: hidden;
+  border-radius: 5rem;
 }
 
 .btn_arrow__text {
@@ -31,6 +34,8 @@
   width: 2.5rem;
   height: 2.5rem;
   background-color: var(--black-900);
+  border-radius: 50%;
+
   color: var(--gold-400);
   display: flex;
   align-items: center;
@@ -46,6 +51,8 @@
 /* El fondo que se expande en hover */
 .btn_arrow__bg {
   position: absolute;
+  border-radius: 5rem;
+
   inset: 0;
   background-color: var(--black-900);
   transform: translateX(105%);
@@ -53,12 +60,16 @@
   z-index: 1;
 }
 
-/* Estados hover */
-.btn_arrow:hover .btn-arrow__bg {
+/* Estados hover.
+   Antes decía `.btn-arrow__bg`/`.btn-arrow__text` (con guiones) en vez de
+   `.btn_arrow__bg`/`.btn_arrow__text` (con guion bajo, que es como se llama
+   la clase real más arriba). Al no coincidir nunca con nada, el barrido de
+   fondo y el cambio de color de texto en hover no se veían jamás. */
+.btn_arrow:hover .btn_arrow__bg {
   transform: translateX(0%);
 }
 
-.btn_arrow:hover .btn-arrow__text {
+.btn_arrow:hover .btn_arrow__text {
   color: var(--gold-400);
 }
 
@@ -67,24 +78,4 @@
   opacity: 0.6;
   cursor: not-allowed;
   pointer-events: none;
-}
-
-/* ============================================================
-   BUTTONS
-   ============================================================ */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 28px;
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  letter-spacing: var(--tracking-mono);
-  text-transform: uppercase;
-  font-weight: 400;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.3s var(--ease-spring);
-  white-space: nowrap;
-  text-decoration: none;
 }

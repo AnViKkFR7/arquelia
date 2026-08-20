@@ -4,6 +4,24 @@
   overflow: hidden;
 }
 
+/* ── Variante anclada (≥900px) ───────────────────────────
+   El propio <section> mide el recorrido extra (JS le fija el alto en
+   svh); `.stage` es lo que se queda fijo en pantalla mientras se recorre. */
+.pinSection {
+  position: relative;
+  background: var(--bg-alt);
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
 .head {
   padding-bottom: var(--sp-10);
 }
@@ -79,6 +97,10 @@
 
 /* ── Destacado ───────────────────────────────────────── */
 .featuredWrap {
+  position: relative;
+  /* Por encima de las columnas laterales: al crecer, tiene que taparlas
+     en vez de quedar debajo. */
+  z-index: 4;
   order: -1;
 }
 
@@ -96,6 +118,10 @@
   overflow: hidden;
   transform-origin: center;
   will-change: transform;
+  /* El escalado lo controla el scroll fotograma a fotograma (JS): con
+     transición de CSS de por medio iría siempre a remolque del dedo/rueda. */
+  transition: none;
+  border: 1rem solid var(--bg-alt);
 }
 
 @media (min-width: 900px) {

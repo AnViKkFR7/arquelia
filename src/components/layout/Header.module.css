@@ -65,11 +65,13 @@
 .nav {
   display: none;
   gap: var(--sp-8);
+  width: 50%;
 }
 
 @media (min-width: 1024px) {
   .nav {
     display: flex;
+    justify-content: space-between;
   }
 }
 
@@ -128,13 +130,14 @@
 .cta {
   display: none;
   padding: 0.55rem 1.35rem;
-  border-radius: 999px;
+  border-radius: 10px;
   background: var(--accent-bright);
   color: var(--black-950);
   font-size: var(--fs-sm);
   font-weight: 600;
   white-space: nowrap;
   transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+  width: 12rem;
 }
 
 .cta:hover {
@@ -254,9 +257,10 @@
 .panelCta {
   flex: 1;
   padding: 0.85rem 1.5rem;
-  border-radius: 999px;
+  border-radius: 10px;
   background: var(--accent-bright);
   color: var(--black-950);
   font-weight: 600;
   font-size: var(--fs-sm);
+  width: 12rem;
 }

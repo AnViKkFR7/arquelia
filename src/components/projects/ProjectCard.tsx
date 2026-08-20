@@ -31,7 +31,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         )}
 
         {/* Botón "+" que rota 45° al hover — igual que la referencia */}
-        <span className={styles.plus} aria-hidden="true">
+        <span className={styles.plus} aria-hidden="true" aria-label='Haz clic para saber más'>
           <span className={styles.plusBar} />
           <span className={`${styles.plusBar} ${styles.plusBarV}`} />
         </span>

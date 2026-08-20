@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Reveal } from '../ui/Reveal'
 import { Button } from '../ui/Button'
+import { useCTAForm } from '../../context/CTAFormContext'
 import styles from './IntroSection.module.css'
 import ButtonSlider from '../ui/ButtonSlider'
 
@@ -12,6 +13,7 @@ const facts = [
 
 export function IntroSection() {
   const { t } = useTranslation()
+  const { openForm } = useCTAForm()
 
   return (
     <section className={`section ${styles.section}`}>
@@ -47,7 +49,7 @@ export function IntroSection() {
           </Reveal>
           <Reveal variant='up' delay={215} once={false}>
             <div className={styles.btn_arrow_wrapper}>
-              <ButtonSlider text='Solicita presupuesto'></ButtonSlider>
+              <ButtonSlider text="Solicita presupuesto" onClick={openForm} />
             </div>
             
           </Reveal>

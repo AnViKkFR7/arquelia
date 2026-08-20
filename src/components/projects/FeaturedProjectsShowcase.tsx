@@ -1,8 +1,8 @@
 import { Reveal } from '../ui/Reveal'
-import { Button } from '../ui/Button'
 import { ProjectCard } from './ProjectCard'
 import type { Project } from '../../types/project'
 import styles from './FeaturedProjectsShowcase.module.css'
+import ButtonSlider from '../ui/ButtonSlider'
 
 interface FeaturedProjectsShowcaseProps {
   projects: Project[]
@@ -23,9 +23,7 @@ export function FeaturedProjectsShowcase({ projects }: FeaturedProjectsShowcaseP
 
       <div className={`container ${styles.footer}`}>
         <Reveal variant="fade">
-          <Button to="/proyectos" variant="outline" arrow>
-            Ver todos los proyectos
-          </Button>
+          <ButtonSlider to='/proyectos' text='Ver todos los proyectos'/>
         </Reveal>
       </div>
     </section>

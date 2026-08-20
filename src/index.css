@@ -14,6 +14,14 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* Va aquí y no en <body> a propósito: `overflow-x` en <body> obliga al
+     navegador a convertir su `overflow-y` (que dejamos en `visible`) en
+     `auto`, porque la spec no permite mezclar `visible` con lo que sea que
+     no lo es. Eso convierte a <body> en su propio contenedor de scroll,
+     distinto del viewport real — y con eso, todo `position: sticky` de la
+     página deja de anclarse (se mueve con el scroll como uno más, en vez
+     de quedarse fijo). En <html> no pasa: ya es la raíz del scroll. */
+  overflow-x: hidden;
 }
 
 body {
@@ -26,7 +34,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
 }
 
 h1,
