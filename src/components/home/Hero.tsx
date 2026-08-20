@@ -4,13 +4,27 @@ import { Marquee } from '../ui/Marquee'
 import { HeroCanvas } from './HeroCanvas'
 import styles from './Hero.module.css'
 
-/** Alto del recorrido, en múltiplos de pantalla, durante el que se ancla el hero. */
-const SCROLL_SPAN = 3
+/**
+ * Alto del recorrido en múltiplos de pantalla mientras el hero está anclado.
+ * En móvil se acorta: el gesto de scroll con el dedo avanza mucho menos que
+ * la rueda del ratón, y 3 pantallas se hacen eternas.
+ */
+const SPAN_DESKTOP = 3
+const SPAN_MOBILE = 2.2
 
 export function Hero() {
   const { t } = useTranslation()
   const wrapRef = useRef<HTMLElement | null>(null)
   const [progress, setProgress] = useState(0)
+  const [span, setSpan] = useState(SPAN_DESKTOP)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)')
+    const apply = () => setSpan(mq.matches ? SPAN_DESKTOP : SPAN_MOBILE)
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
+  }, [])
 
   useEffect(() => {
     const el = wrapRef.current
@@ -39,13 +53,14 @@ export function Hero() {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
     }
-  }, [])
+    // `span` cambia el alto del bloque: hay que recalcular el progreso.
+  }, [span])
 
   // El titular se retira durante el primer tramo del recorrido.
   const titleOut = Math.min(progress / 0.32, 1)
 
   return (
-    <section ref={wrapRef} className={styles.wrap} style={{ height: `${SCROLL_SPAN * 100}svh` }}>
+    <section ref={wrapRef} className={styles.wrap} style={{ height: `${span * 100}svh` }}>
       <div className={styles.sticky}>
         <HeroCanvas progress={progress} className={styles.canvas} />
         <div className={styles.scrim} />

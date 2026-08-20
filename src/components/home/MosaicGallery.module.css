@@ -39,6 +39,7 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
+
 @media (min-width: 900px) {
   .col {
     grid-template-columns: 1fr;
@@ -154,4 +155,29 @@
   border-top: 1px solid rgba(255, 255, 255, 0.18);
   color: var(--accent-bright);
   pointer-events: none;
+}
+
+/* ── Tablet ──────────────────────────────────────────────
+   El destacado pasa a ocupar todo el ancho y las dos columnas de detalles
+   se colocan a su lado, en vez de apilarse todas en vertical.
+   Va al final del archivo a propósito: una media query no añade especificidad,
+   así que necesita ganar por orden a las reglas base de arriba.             */
+@media (min-width: 640px) and (max-width: 899px) {
+  .mosaic {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-5);
+  }
+
+  .featuredWrap {
+    grid-column: 1 / -1;
+  }
+
+  .featured {
+    aspect-ratio: 16 / 10;
+  }
+
+  .col {
+    grid-template-columns: 1fr;
+    gap: var(--sp-5);
+  }
 }

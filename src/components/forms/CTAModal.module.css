@@ -3,51 +3,166 @@
   inset: 0;
   z-index: var(--z-overlay);
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  background: rgba(6, 6, 6, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(6, 6, 6, 0.62);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: overlayIn var(--t-base) var(--ease) both;
 }
 
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── Móvil: pantalla completa ────────────────────────── */
+.dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  animation: sheetIn var(--t-slow) var(--ease) both;
+}
+
+@keyframes sheetIn {
+  from {
+    opacity: 0;
+    transform: translateY(3%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Tablet: hoja centrada ───────────────────────────── */
 @media (min-width: 768px) {
   .overlay {
     align-items: center;
+    justify-content: center;
     padding: var(--sp-8);
+  }
+
+  .dialog {
+    width: min(100%, 640px);
+    height: auto;
+    max-height: min(88svh, 860px);
+  }
+
+  @keyframes sheetIn {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 }
 
-.dialog {
-  position: relative;
-  width: 100%;
-  max-width: 620px;
-  max-height: 92svh;
-  overflow-y: auto;
+/* ── Escritorio: panel lateral ───────────────────────── */
+@media (min-width: 1100px) {
+  .overlay {
+    align-items: stretch;
+    justify-content: flex-end;
+    padding: 0;
+  }
+
+  .dialog {
+    width: min(560px, 46vw);
+    height: 100%;
+    max-height: none;
+    box-shadow: var(--shadow-lg);
+    animation: panelIn var(--t-slow) var(--ease) both;
+  }
+
+  @keyframes panelIn {
+    from {
+      opacity: 0;
+      transform: translateX(32px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* ── Barra superior ──────────────────────────────────── */
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-shrink: 0;
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 1px solid var(--line);
   background: var(--bg);
-  padding: var(--sp-10) var(--sp-6) var(--sp-12);
 }
 
 @media (min-width: 768px) {
-  .dialog {
-    padding: var(--sp-12);
+  .bar {
+    padding: var(--sp-5) var(--sp-8);
   }
 }
 
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.brandMark {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-bright);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
 .close {
-  position: absolute;
-  top: var(--sp-4);
-  right: var(--sp-4);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid var(--line-strong);
   display: grid;
   place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
   color: var(--text);
-  transition: background var(--t-fast) var(--ease), transform var(--t-base) var(--ease);
+  transition:
+    background var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease),
+    transform var(--t-base) var(--ease);
 }
 
 .close:hover {
   background: var(--bg-alt);
+  border-color: var(--text);
   transform: rotate(90deg);
+}
+
+/* ── Contenido ───────────────────────────────────────── */
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding: var(--sp-5) var(--sp-5) calc(var(--sp-6) + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 768px) {
+  .content {
+    padding: var(--sp-8);
+  }
 }

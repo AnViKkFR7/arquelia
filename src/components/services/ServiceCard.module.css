@@ -6,6 +6,9 @@
   overflow: hidden;
   background: var(--black-900);
   transition: transform var(--t-slow) var(--ease);
+  /* Sin esto, el elemento de grid no baja de su ancho de contenido y la frase
+     con `nowrap` desborda el contenedor en pantallas estrechas. */
+  min-width: 0;
 }
 
 /* Escalonado vertical entre tarjetas hermanas */
@@ -55,10 +58,12 @@
 .phrase {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: var(--sp-2);
   padding-inline: var(--sp-4);
+  min-width: 0;
   text-align: center;
   color: var(--white);
   font-size: clamp(0.9rem, 1.5vw, 1.05rem);

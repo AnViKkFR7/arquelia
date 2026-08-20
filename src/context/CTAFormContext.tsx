@@ -21,7 +21,9 @@ export function CTAFormProvider({ children }: { children: ReactNode }) {
     <CTAFormContext.Provider value={value}>
       {children}
       <CTAModal isOpen={isOpen} onClose={closeForm}>
-        <CTAForm onDone={closeForm} />
+        {/* `key` reinicia el formulario en cada apertura: no queremos que
+            reaparezca la pantalla de "gracias" de un envío anterior. */}
+        <CTAForm key={String(isOpen)} onDone={closeForm} />
       </CTAModal>
     </CTAFormContext.Provider>
   )

@@ -1,14 +1,8 @@
-/* Bloque alto: su recorrido de scroll es lo que hace avanzar la secuencia. */
+/* Bloque alto: su recorrido de scroll es lo que hace avanzar la secuencia.
+   El alto lo fija el componente (`--hero-span`), también en móvil. */
 .wrap {
   position: relative;
   background: var(--black-950);
-}
-
-/* En móvil no se ancla: el hero es una pantalla normal con el póster. */
-@media (max-width: 1023px) {
-  .wrap {
-    height: 100svh !important;
-  }
 }
 
 .sticky {
@@ -28,8 +22,12 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  /* Respaldo mientras carga el póster y en móvil, donde no se pinta secuencia */
-  background: var(--black-900) url('/hero-frames/poster.webp') center / cover no-repeat;
+  /* El póster va como background (lo fija el componente según variante):
+     se ve mientras carga la secuencia y si esta se omite. */
+  background-color: var(--black-900);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   animation: mediaIn var(--t-slower) var(--ease) both;
 }
 
@@ -161,6 +159,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Sin secuencia: no tiene sentido reservar 3 pantallas de recorrido. */
   .wrap {
     height: 100svh !important;
   }

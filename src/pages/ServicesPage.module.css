@@ -9,7 +9,9 @@
   gap: var(--sp-6);
 }
 
-@media (min-width: 640px) {
+/* Tres columnas sólo cuando hay ancho de sobra: por debajo, la frase de cada
+   tarjeta queda demasiado apretada. */
+@media (min-width: 900px) {
   .featuredGrid {
     grid-template-columns: repeat(3, 1fr);
     gap: var(--sp-4);

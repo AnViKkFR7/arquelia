@@ -18,6 +18,23 @@
   transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 }
 
+/* En táctil se agranda el área pulsable hasta el mínimo cómodo (44px) sin
+   cambiar el aspecto visual del control. */
+@media (hover: none) {
+  .option {
+    position: relative;
+    padding-block: 0.5rem;
+  }
+
+  .option::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 0 0;
+    height: 44px;
+    transform: translateY(-50%);
+  }
+}
+
 .option:hover {
   color: rgba(255, 255, 255, 0.85);
 }

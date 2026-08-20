@@ -82,6 +82,9 @@ export function Footer() {
           <span>
             &copy; {year} Arquelia. {t('footer.rights')}
           </span>
+          <span>
+            <a href="https://moiraordo.es/" target='_blank' >Developed by Moira Ordo</a>
+          </span>
           <span className={styles.legalName}>P &amp; B Cornellà Construcciones, S.L.</span>
         </div>
       </div>

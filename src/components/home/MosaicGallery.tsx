@@ -35,7 +35,7 @@ export function MosaicGallery({ projects }: MosaicGalleryProps) {
   return (
     <section className={styles.section}>
       <div className={`container ${styles.head}`}>
-        <Reveal variant="fade">
+        <Reveal variant="fade" once={false}>
           <span className="eyebrow">
             <span className={styles.index}>02</span> Proyectos
           </span>
@@ -45,53 +45,55 @@ export function MosaicGallery({ projects }: MosaicGalleryProps) {
       <div className={`container ${styles.mosaic}`}>
         {/* Columna izquierda */}
         <div className={`${styles.col} ${styles.colLeft}`}>
-          <Reveal variant="up" className={styles.tile}>
+          <Reveal variant="up" className={styles.tile} once={false}>
             <span className={styles.tileImg} style={{ backgroundImage: `url(${sideImages[0]})` }} />
           </Reveal>
-          <Reveal variant="up" delay={120} className={`${styles.tile} ${styles.tileWide}`}>
+          <Reveal variant="up" delay={120} once={false} className={`${styles.tile} ${styles.tileWide}`}>
             <span className={styles.tileImg} style={{ backgroundImage: `url(${sideImages[1]})` }} />
           </Reveal>
         </div>
 
         {/* Destacado central */}
-        <div ref={ref} className={styles.featuredWrap}>
-          <button
-            type="button"
-            className={styles.featured}
-            style={{ transform: `scale(${scale})` }}
-            onClick={() => navigate(`/proyectos/${featured.id}`)}
-            aria-label={`Ver ${featured.title}`}
-          >
-            <span
-              className={styles.featuredImg}
-              style={featured.coverUrl ? { backgroundImage: `url(${featured.coverUrl})` } : undefined}
-            />
-            <span className={styles.featuredScrim} />
-
-            <span className={styles.featuredMeta}>
-              <span className={styles.featuredTitle}>{featured.title}</span>
-              {featured.ubicacion && (
-                <span className={styles.featuredLoc}>{featured.ubicacion}</span>
-              )}
-            </span>
-
-            <span className={styles.featuredMarquee}>
-              <Marquee
-                small
-                text="Haz clic para ver la reforma en detalle"
-                separator="◆"
-                speed={48}
+        <Reveal variant='up' delay={140} once={false}>
+          <div ref={ref} className={styles.featuredWrap}>
+            <button
+              type="button"
+              className={styles.featured}
+              style={{ transform: `scale(${scale})` }}
+              onClick={() => navigate(`/proyectos/${featured.id}`)}
+              aria-label={`Ver ${featured.title}`}
+            >
+              <span
+                className={styles.featuredImg}
+                style={featured.coverUrl ? { backgroundImage: `url(${featured.coverUrl})` } : undefined}
               />
-            </span>
-          </button>
-        </div>
+              <span className={styles.featuredScrim} />
+
+              <span className={styles.featuredMeta}>
+                <span className={styles.featuredTitle}>{featured.title}</span>
+                {featured.ubicacion && (
+                  <span className={styles.featuredLoc}>{featured.ubicacion}</span>
+                )}
+              </span>
+
+              <span className={styles.featuredMarquee}>
+                <Marquee
+                  small
+                  text="Haz clic para ver la reforma en detalle"
+                  separator="◆"
+                  speed={48}
+                />
+              </span>
+            </button>
+          </div>
+        </Reveal>
 
         {/* Columna derecha */}
         <div className={`${styles.col} ${styles.colRight}`}>
-          <Reveal variant="up" delay={80} className={`${styles.tile} ${styles.tileWide}`}>
+          <Reveal variant="up" delay={80} once={false} className={`${styles.tile} ${styles.tileWide}`}>
             <span className={styles.tileImg} style={{ backgroundImage: `url(${sideImages[2]})` }} />
           </Reveal>
-          <Reveal variant="up" delay={180} className={styles.tile}>
+          <Reveal variant="up" delay={180} once={false} className={styles.tile}>
             <span className={styles.tileImg} style={{ backgroundImage: `url(${sideImages[3]})` }} />
           </Reveal>
         </div>

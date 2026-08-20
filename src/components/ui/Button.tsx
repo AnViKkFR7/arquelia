@@ -22,6 +22,8 @@ interface ButtonProps extends BaseProps, Omit<ButtonHTMLAttributes<HTMLButtonEle
 interface LinkProps extends BaseProps {
   to: string
   href?: never
+  /** Útil, p. ej., para cerrar un modal al navegar. */
+  onClick?: () => void
 }
 
 interface AnchorProps extends BaseProps {
@@ -29,6 +31,7 @@ interface AnchorProps extends BaseProps {
   to?: never
   target?: string
   rel?: string
+  onClick?: () => void
 }
 
 type Props = ButtonProps | LinkProps | AnchorProps

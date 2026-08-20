@@ -1,9 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 
-const FRAME_COUNT = 61
-const FRAME_PATH = (i: number) => `/hero-frames/hero-${String(i).padStart(4, '0')}.webp`
-const POSTER = '/hero-frames/poster.webp'
-/** Cuántos fotogramas se cargan antes de considerar la secuencia utilizable. */
+type Variant = 'desktop' | 'mobile'
+
+interface VariantInfo {
+  count: number
+  width: number
+  height: number
+}
+
+const MANIFEST_URL = '/hero-frames/manifest.json'
+const framePath = (variant: Variant, i: number) =>
+  `/hero-frames/${variant}/hero-${String(i).padStart(4, '0')}.webp`
+const posterPath = (variant: Variant) => `/hero-frames/poster-${variant}.webp`
+
+/** Cuántos fotogramas se cargan en paralelo antes de seguir con el resto. */
 const EAGER = 8
 
 interface HeroCanvasProps {
@@ -17,13 +27,13 @@ interface HeroCanvasProps {
  * Misma técnica que modusprojects.nl (verificado: usan canvas, no <video>),
  * porque hacer scrub de un <video> con `currentTime` va a tirones en Safari/iOS.
  *
- * Estrategia de carga:
- *   1. Se pinta el póster en cuanto está (una sola imagen, ~40 KB).
- *   2. Se cargan los primeros EAGER fotogramas para que el efecto arranque ya.
- *   3. El resto entra en segundo plano mientras el usuario lee el titular.
+ * Hay dos secuencias: `desktop` (16:9) y `mobile` (3:4 recortado al centro).
+ * El número de fotogramas se lee de `manifest.json`, así que regenerar las
+ * imágenes no obliga a tocar este archivo.
  *
- * En móvil y con `prefers-reduced-motion` no se descarga la secuencia: se
- * queda el póster como fondo estático.
+ * Carga: póster → primeros EAGER fotogramas en paralelo → el resto en segundo
+ * plano. Con `prefers-reduced-motion` o ahorro de datos activo se queda el
+ * póster estático y no se descarga nada más.
  */
 export function HeroCanvas({ progress, className }: HeroCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
@@ -31,16 +41,49 @@ export function HeroCanvas({ progress, className }: HeroCanvasProps) {
   const posterRef = useRef<HTMLImageElement | null>(null)
   const rafRef = useRef(0)
   const lastDrawn = useRef(-1)
-  const [enabled, setEnabled] = useState(false)
 
-  // ¿Cargamos la secuencia completa o nos quedamos con el póster?
+  const [variant, setVariant] = useState<Variant | null>(null)
+  const [info, setInfo] = useState<VariantInfo | null>(null)
+  const [allowSequence, setAllowSequence] = useState(false)
+
+  // Qué variante toca, y si procede cargar la secuencia completa.
   useEffect(() => {
-    const wide = window.matchMedia('(min-width: 1024px)').matches
+    const pick = () => (window.matchMedia('(min-width: 1024px)').matches ? 'desktop' : 'mobile')
+    setVariant(pick())
+
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    // `saveData` no está en el tipado estándar de Navigator.
     const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
-    setEnabled(wide && !reduce && !conn?.saveData)
+    setAllowSequence(!reduce && !conn?.saveData)
+
+    // Si se cruza el umbral (girar tablet, redimensionar) se cambia de set.
+    const mq = window.matchMedia('(min-width: 1024px)')
+    const onChange = () => {
+      framesRef.current = []
+      lastDrawn.current = -1
+      setVariant(pick())
+    }
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
   }, [])
+
+  // Manifiesto: cuántos fotogramas tiene la variante activa.
+  useEffect(() => {
+    if (!variant) return
+    let cancelled = false
+
+    fetch(MANIFEST_URL)
+      .then((r) => r.json())
+      .then((data: Record<Variant, VariantInfo>) => {
+        if (!cancelled) setInfo(data[variant] ?? null)
+      })
+      .catch(() => {
+        /* sin manifiesto se queda el póster: degradación aceptable */
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [variant])
 
   // Dibuja una imagen cubriendo el canvas (equivalente a object-fit: cover).
   const paint = (img: HTMLImageElement) => {
@@ -57,7 +100,7 @@ export function HeroCanvas({ progress, className }: HeroCanvasProps) {
     ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h)
   }
 
-  // Ajusta el tamaño real del canvas al del elemento (con densidad de pantalla).
+  // Tamaño real del canvas según el elemento y la densidad de pantalla.
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -65,6 +108,7 @@ export function HeroCanvas({ progress, className }: HeroCanvasProps) {
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
       const { width, height } = canvas.getBoundingClientRect()
+      if (!width || !height) return
       canvas.width = Math.round(width * dpr)
       canvas.height = Math.round(height * dpr)
       lastDrawn.current = -1
@@ -75,28 +119,29 @@ export function HeroCanvas({ progress, className }: HeroCanvasProps) {
     resize()
     window.addEventListener('resize', resize)
     return () => window.removeEventListener('resize', resize)
-  }, [])
+  }, [variant])
 
   // Póster: primer pintado.
   useEffect(() => {
+    if (!variant) return
     const img = new Image()
-    img.src = POSTER
+    img.src = posterPath(variant)
     img.decoding = 'async'
     img.onload = () => {
       posterRef.current = img
       if (lastDrawn.current === -1) paint(img)
     }
-  }, [])
+  }, [variant])
 
   // Carga de la secuencia.
   useEffect(() => {
-    if (!enabled) return
+    if (!variant || !info || !allowSequence) return
     let cancelled = false
 
     const load = (i: number) =>
       new Promise<void>((resolve) => {
         const img = new Image()
-        img.src = FRAME_PATH(i + 1)
+        img.src = framePath(variant, i + 1)
         img.decoding = 'async'
         img.onload = () => {
           if (!cancelled) framesRef.current[i] = img
@@ -106,11 +151,10 @@ export function HeroCanvas({ progress, className }: HeroCanvasProps) {
       })
 
     const run = async () => {
-      // Primeros fotogramas en paralelo: el efecto arranca cuanto antes.
-      await Promise.all(Array.from({ length: EAGER }, (_, i) => load(i)))
+      const eager = Math.min(EAGER, info.count)
+      await Promise.all(Array.from({ length: eager }, (_, i) => load(i)))
       if (cancelled) return
-      // El resto, de uno en uno, para no saturar la conexión.
-      for (let i = EAGER; i < FRAME_COUNT; i++) {
+      for (let i = eager; i < info.count; i++) {
         if (cancelled) return
         await load(i)
       }
@@ -120,22 +164,22 @@ export function HeroCanvas({ progress, className }: HeroCanvasProps) {
     return () => {
       cancelled = true
     }
-  }, [enabled])
+  }, [variant, info, allowSequence])
 
-  // Pinta el fotograma que toca según el progreso.
+  // Pinta el fotograma correspondiente al progreso.
   useEffect(() => {
-    if (!enabled) return
+    if (!info || !allowSequence) return
 
     if (rafRef.current) cancelAnimationFrame(rafRef.current)
     rafRef.current = requestAnimationFrame(() => {
       const clamped = Math.min(Math.max(progress, 0), 1)
-      const target = Math.round(clamped * (FRAME_COUNT - 1))
+      const target = Math.round(clamped * (info.count - 1))
       if (target === lastDrawn.current) return
 
       // Si el fotograma exacto aún no está, usa el más cercano ya cargado.
       let img = framesRef.current[target]
       if (!img) {
-        for (let d = 1; d < FRAME_COUNT; d++) {
+        for (let d = 1; d < info.count; d++) {
           img = framesRef.current[target - d] ?? framesRef.current[target + d]
           if (img) break
         }
@@ -149,7 +193,14 @@ export function HeroCanvas({ progress, className }: HeroCanvasProps) {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current)
     }
-  }, [progress, enabled])
+  }, [progress, info, allowSequence])
 
-  return <canvas ref={canvasRef} className={className} aria-hidden="true" />
+  return (
+    <canvas
+      ref={canvasRef}
+      className={className}
+      style={variant ? { backgroundImage: `url(${posterPath(variant)})` } : undefined}
+      aria-hidden="true"
+    />
+  )
 }

@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Reveal } from '../ui/Reveal'
 import { Button } from '../ui/Button'
 import styles from './IntroSection.module.css'
+import ButtonSlider from '../ui/ButtonSlider'
 
 const facts = [
   { value: '15+', label: 'Años de oficio' },
@@ -22,7 +23,7 @@ export function IntroSection() {
             </span>
           </Reveal>
 
-          <Reveal variant="up" delay={60}>
+          <Reveal variant="up" delay={60} once={false}>
             <h2 className={styles.title}>
               Donde la arquitectura <em>se convierte</em> en hogar
             </h2>
@@ -44,8 +45,14 @@ export function IntroSection() {
               ))}
             </div>
           </Reveal>
+          <Reveal variant='up' delay={215} once={false}>
+            <div className={styles.btn_arrow_wrapper}>
+              <ButtonSlider text='Solicita presupuesto'></ButtonSlider>
+            </div>
+            
+          </Reveal>
 
-          <Reveal variant="up" delay={240}>
+          <Reveal variant="up" delay={240} once={false}>
             <Button to="/sobre-nosotros" variant="link" arrow className={styles.cta}>
               Conoce Arquelia
             </Button>

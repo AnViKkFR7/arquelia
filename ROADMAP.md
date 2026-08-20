@@ -87,6 +87,35 @@
 
 ## Registro de trabajo
 
+**2026-08-19 — Pasada responsive + formulario**
+
+- **Zoom del hero también en móvil.** Se generan dos secuencias: `desktop` (16:9,
+  61 fotogramas, 3,2 MB) y `mobile` (3:4 recortado al centro, 41 fotogramas, 1,6 MB).
+  El recorte vertical es necesario: con la fuente 16:9 en pantalla vertical, un `cover`
+  obligaba a ampliar ~4× y quedaba borroso; recortando al centro —justo hacia donde
+  avanza la cámara— la ampliación baja a ~1,35×. El recorrido anclado se acorta a
+  2,2 pantallas en móvil (el dedo avanza mucho menos que la rueda del ratón).
+  `HeroCanvas` ahora lee `manifest.json`, así que regenerar imágenes no obliga a tocar código.
+- **Formulario rehecho.** Pasos con chips numerados y marca de completado, barra de
+  progreso, tarjetas de servicio con icono y avance automático al elegir, validación real
+  de email y teléfono con mensajes y `aria-invalid`, resumen con botón "Editar" por campo,
+  contador de caracteres, y confirmación con acciones. Los `input` van a 16px para evitar
+  el zoom automático de iOS al enfocar.
+- **Modal por plataforma**: pantalla completa en móvil, hoja centrada en tablet, panel
+  lateral en escritorio. Con captura de foco (Tab circula dentro), cierre con Escape,
+  bloqueo de scroll de fondo compensando la barra de desplazamiento, y `safe-area-inset`.
+- **Bug corregido**: en tablet (768px) las tarjetas de Servicios desbordaban hasta 991px.
+  Los elementos de grid no bajan de su ancho de contenido y la frase con `nowrap` los
+  ensanchaba. Solución: `min-width: 0`, frase que puede fluir a varias líneas, y tres
+  columnas sólo a partir de 900px.
+- **Bug corregido**: la regla de tablet del mosaico no se aplicaba porque estaba escrita
+  antes de la regla base. Una media query no añade especificidad: gana la última. Movida al
+  final del archivo, con el porqué anotado.
+- **Áreas táctiles**: selector de idioma y enlace de teléfono estaban en 26–27px de alto.
+  Ampliados al mínimo cómodo de 44px sin alterar su aspecto.
+- **Verificado**: sin desbordamiento horizontal en las 5 rutas a 375px y 768px; formulario
+  probado entero en móvil incluyendo el caso de datos inválidos.
+
 **2026-08-19 — Rediseño completo (F0→F6)**
 
 Reconstrucción del diseño sobre una base nueva. Lo relevante:

@@ -1,113 +1,251 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-8);
+  min-height: 0;
+  flex: 1;
 }
 
-/* ── Progreso ────────────────────────────────────────── */
-.progress {
+/* ─── Cabecera de progreso ─────────────────────────────── */
+.head {
+  flex-shrink: 0;
+}
+
+.steps {
   display: flex;
   align-items: center;
-  gap: var(--sp-4);
-}
-
-.bars {
-  display: flex;
-  flex: 1;
   gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
 }
 
-.bar {
-  flex: 1;
-  height: 2px;
-  background: var(--line-strong);
-  transition: background var(--t-base) var(--ease);
-}
-
-.barOn {
-  background: var(--accent-bright);
-}
-
-.counter {
-  font-size: var(--fs-xs);
-  letter-spacing: var(--tracking-wide);
-  color: var(--text-subtle);
-  font-variant-numeric: tabular-nums;
-}
-
-/* ── Paso ────────────────────────────────────────────── */
-.step {
+.stepChip {
   display: flex;
-  flex-direction: column;
-  gap: var(--sp-6);
-  border: none;
-  padding: 0;
-  margin: 0;
-  min-inline-size: 0;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--text-subtle);
+  transition: color var(--t-base) var(--ease);
 }
 
-.stepTitle {
-  font-family: var(--font-display);
-  font-size: clamp(1.35rem, 3vw, 1.75rem);
+/* En pantallas estrechas sólo se ve la etiqueta del paso activo */
+.chipLabel {
+  display: none;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.chipOn .chipLabel {
+  display: inline;
+}
+
+@media (min-width: 560px) {
+  .chipLabel {
+    display: inline;
+  }
+  .stepChip:not(:last-child)::after {
+    content: '';
+    width: 14px;
+    height: 1px;
+    background: var(--line-strong);
+    margin-left: var(--sp-2);
+  }
+}
+
+.chipNum {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  transition:
+    background var(--t-base) var(--ease),
+    border-color var(--t-base) var(--ease),
+    color var(--t-base) var(--ease);
+}
+
+.chipOn {
+  color: var(--text);
+}
+
+.chipOn .chipNum {
+  background: var(--black-950);
+  border-color: var(--black-950);
+  color: var(--white);
+}
+
+.chipDone .chipNum {
+  background: var(--accent-bright);
+  border-color: var(--accent-bright);
+  color: var(--black-950);
+}
+
+.track {
+  height: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.trackFill {
+  display: block;
+  height: 100%;
+  background: var(--accent-bright);
+  transform-origin: left;
+  transition: transform var(--t-slow) var(--ease);
+}
+
+/* ─── Panel del paso ───────────────────────────────────── */
+.panel {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-block: var(--sp-8);
+  animation: panelIn var(--t-base) var(--ease) both;
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.panelHead {
+  margin-bottom: var(--sp-6);
+}
+
+.title {
+  font-size: clamp(1.4rem, 4.5vw, 1.85rem);
   line-height: 1.15;
-  padding: 0;
 }
 
-.stepHint {
-  margin-top: calc(var(--sp-2) * -1);
+.hint {
+  margin-top: var(--sp-2);
   font-size: var(--fs-sm);
   color: var(--text-subtle);
 }
 
-/* ── Selector de servicio ────────────────────────────── */
+/* ─── Selector de servicio ─────────────────────────────── */
 .services {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--sp-2);
 }
 
+@media (min-width: 560px) {
+  .services {
+    gap: var(--sp-3);
+  }
+}
+
 .service {
   position: relative;
-  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  min-height: 104px;
   padding: var(--sp-4);
+  text-align: left;
   border: 1px solid var(--line-strong);
-  font-size: var(--fs-sm);
+  background: var(--bg);
   color: var(--text);
   transition:
     border-color var(--t-fast) var(--ease),
     background var(--t-fast) var(--ease),
     transform var(--t-fast) var(--ease);
+  animation: serviceIn var(--t-base) var(--ease) both;
+}
+
+@keyframes serviceIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .service:hover {
-  border-color: var(--accent);
-  transform: translateY(-1px);
+  border-color: var(--text);
+  transform: translateY(-2px);
 }
 
-.serviceOn {
-  border-color: var(--accent-bright);
-  background: rgba(212, 175, 55, 0.09);
-  font-weight: 500;
+.serviceIcon {
+  color: var(--text-subtle);
+  transition: color var(--t-fast) var(--ease), transform var(--t-base) var(--ease);
 }
 
-.serviceOn::after {
-  content: '';
+.serviceIcon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.service:hover .serviceIcon {
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.serviceLabel {
+  font-size: var(--fs-sm);
+  line-height: 1.25;
+}
+
+/* Marca de selección */
+.serviceTick {
   position: absolute;
   top: var(--sp-3);
   right: var(--sp-3);
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   background: var(--accent-bright);
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity var(--t-fast) var(--ease), transform var(--t-base) var(--ease);
 }
 
-/* ── Campos ──────────────────────────────────────────── */
+.serviceOn {
+  border-color: var(--black-950);
+  background: var(--bg-alt);
+}
+
+.serviceOn .serviceIcon {
+  color: var(--accent);
+}
+
+.serviceOn .serviceTick {
+  opacity: 1;
+  transform: none;
+}
+
+/* ─── Campos ───────────────────────────────────────────── */
 .fields {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-5);
+  gap: var(--sp-6);
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-6);
+}
+
+@media (min-width: 560px) {
+  .fieldRow {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .field {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--sp-2);
@@ -118,32 +256,98 @@
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--text-subtle);
+  transition: color var(--t-fast) var(--ease);
 }
 
-.field input,
-.field textarea {
+.req {
+  margin-left: 2px;
+  color: var(--accent);
+}
+
+.input,
+.textarea {
+  width: 100%;
   padding: var(--sp-3) 0;
   border: none;
   border-bottom: 1px solid var(--line-strong);
   background: transparent;
-  font-size: var(--fs-body);
+  font-size: 1rem; /* 16px: evita el zoom automático de iOS al enfocar */
   color: var(--text);
-  resize: vertical;
-  transition: border-color var(--t-fast) var(--ease);
 }
 
-.field input::placeholder,
-.field textarea::placeholder {
+.textarea {
+  padding: var(--sp-3);
+  border: 1px solid var(--line-strong);
+  resize: vertical;
+  min-height: 140px;
+  line-height: 1.6;
+}
+
+.input::placeholder,
+.textarea::placeholder {
   color: var(--grey-500);
 }
 
-.field input:focus,
-.field textarea:focus {
+.input:focus,
+.textarea:focus {
   outline: none;
-  border-bottom-color: var(--accent);
+  border-bottom-color: var(--text);
 }
 
-/* ── Resumen ─────────────────────────────────────────── */
+.textarea:focus {
+  border-color: var(--text);
+}
+
+.field:focus-within .label {
+  color: var(--text);
+}
+
+/* Subrayado dorado que crece al enfocar */
+.underline {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--accent-bright);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--t-base) var(--ease);
+}
+
+.field:focus-within .underline {
+  transform: scaleX(1);
+}
+
+.fieldError .input {
+  border-bottom-color: #b4442f;
+}
+
+.error {
+  font-size: var(--fs-xs);
+  color: #b4442f;
+  animation: errorIn var(--t-fast) var(--ease) both;
+}
+
+@keyframes errorIn {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.counterSmall {
+  align-self: flex-end;
+  font-size: var(--fs-xs);
+  color: var(--text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Resumen ──────────────────────────────────────────── */
 .summary {
   display: flex;
   flex-direction: column;
@@ -151,29 +355,58 @@
 
 .summaryRow {
   display: grid;
-  grid-template-columns: 8rem 1fr;
-  gap: var(--sp-4);
-  padding-block: var(--sp-3);
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'key edit'
+    'val val';
+  gap: var(--sp-1) var(--sp-4);
+  padding-block: var(--sp-4);
   border-bottom: 1px solid var(--line);
-  font-size: var(--fs-sm);
+}
+
+@media (min-width: 560px) {
+  .summaryRow {
+    grid-template-columns: 7.5rem 1fr auto;
+    grid-template-areas: 'key val edit';
+    align-items: baseline;
+  }
 }
 
 .summaryKey {
-  color: var(--text-subtle);
-  letter-spacing: var(--tracking-wide);
+  grid-area: key;
   font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  padding-top: 0.15rem;
+  color: var(--text-subtle);
 }
 
 .summaryVal {
+  grid-area: val;
+  margin: 0;
+  font-size: var(--fs-sm);
   color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.summaryEdit {
+  grid-area: edit;
+  font-size: var(--fs-xs);
+  color: var(--text-subtle);
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 1px;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+
+.summaryEdit:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
 }
 
 .privacy {
+  margin-top: var(--sp-6);
   font-size: var(--fs-xs);
-  color: var(--text-subtle);
   line-height: 1.6;
+  color: var(--text-subtle);
 }
 
 .privacy a {
@@ -181,15 +414,26 @@
   border-bottom: 1px solid var(--line-strong);
 }
 
-/* ── Acciones ────────────────────────────────────────── */
+.privacy a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ─── Acciones ─────────────────────────────────────────── */
 .actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-4);
+  flex-shrink: 0;
+  padding-top: var(--sp-6);
+  border-top: 1px solid var(--line);
 }
 
 .back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
   font-size: var(--fs-sm);
   color: var(--text-subtle);
   transition: color var(--t-fast) var(--ease);
@@ -199,48 +443,74 @@
   color: var(--text);
 }
 
-.next {
-  margin-left: auto;
+.backSpacer {
+  display: block;
 }
 
-/* ── Confirmación ────────────────────────────────────── */
+/* ─── Confirmación ─────────────────────────────────────── */
 .done {
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
-  gap: var(--sp-5);
-  padding-block: var(--sp-8);
+  gap: var(--sp-4);
+  padding-block: var(--sp-10);
 }
 
 .doneMark {
   display: grid;
   place-items: center;
-  width: 56px;
-  height: 56px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background: var(--accent-bright);
   color: var(--black-950);
-  font-size: 1.5rem;
+  margin-bottom: var(--sp-2);
   animation: pop var(--t-slow) var(--ease) both;
 }
 
 @keyframes pop {
   from {
-    transform: scale(0.6);
+    transform: scale(0.5);
     opacity: 0;
   }
+  60% {
+    transform: scale(1.06);
+  }
   to {
-    transform: none;
+    transform: scale(1);
     opacity: 1;
   }
 }
 
+.doneEyebrow {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
 .doneTitle {
-  font-size: clamp(1.5rem, 3.4vw, 2rem);
+  font-size: clamp(1.6rem, 5vw, 2.15rem);
 }
 
 .doneText {
-  max-width: 40ch;
+  max-width: 42ch;
   color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.doneText strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.doneActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-3);
+  margin-top: var(--sp-6);
 }
