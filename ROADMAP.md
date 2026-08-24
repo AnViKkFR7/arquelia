@@ -87,32 +87,122 @@
 
 ## Registro de trabajo
 
-**2026-08-24 — Contraste de las tarjetas de servicios en táctil**
+**2026-08-24 — El visor de galería no mostraba la imagen: `position: fixed` roto por `<main>`**
 
-En móvil las palabras laterales de las tarjetas de `/servicios` ("REFORMAS DE … A MEDIDA")
-eran prácticamente ilegibles sobre las imágenes claras.
+Síntoma: al abrir una imagen aparecía el fondo negro a pantalla completa pero **sin
+imagen**, y en móvil el navbar tapaba el botón de cerrar. Las dos cosas tenían la misma
+causa.
 
-- **Causa**: en `(hover: none)` la frase se muestra siempre, pero el velo se quedaba en su
-  valor de reposo (32%). En escritorio eso no molesta porque las palabras sólo aparecen
-  en hover, y el hover aclara la imagen a la vez que las muestra; en táctil no se llega
-  nunca a ese estado, así que el velo en reposo tiene que cargar él solo con todo el
-  contraste. La etiqueta central nunca sufrió porque lleva fondo blanco sólido.
-- **Medido** en [`ServiceCard.module.css`](src/components/services/ServiceCard.module.css)
-  componiendo la imagen real con el velo y comparando contra el texto blanco:
+- **Causa**: `<main>` lleva la animación de entrada de página con
+  `animation-fill-mode: both`. Ese relleno deja aplicado el `transform` del fotograma
+  inicial de forma permanente, y un ancestro con `transform`:
+  1. pasa a ser el bloque contenedor de cualquier `position: fixed` descendiente — el
+     visor dejaba de medir el viewport y pasaba a medir **toda la página** (3839px), con
+     lo que la imagen, centrada verticalmente, caía en `y=1836`, **fuera de pantalla**;
+  2. crea un contexto de apilamiento, así que el `z-index: 200` del visor quedaba
+     encerrado dentro de `<main>` y no podía superar al header (`z-index: 100`).
 
-  | tarjeta | antes | ahora |
-  |---|---|---|
-  | cocina_abierta | 3.84:1 | 6.53:1 |
-  | baño_03 | 4.40:1 | 7.27:1 |
-  | salon_01 | 5.39:1 | 8.48:1 |
+  La imagen siempre se había cargado bien (`naturalWidth: 1920`, `complete: true`): sólo
+  estaba colocada donde no se veía.
+- **Solución**: el visor se renderiza con `createPortal` a `<body>`, fuera de `<main>`.
+  Es la solución robusta — no depende de qué haga la animación de página.
+- **Corregido además**: `animation-fill-mode` de `.main` pasa de `both` a `backwards`.
+  El fotograma final ya era idéntico a los estilos base, así que rellenar hacia delante no
+  aportaba nada visualmente pero dejaba a `<main>` con `transform` y contexto de
+  apilamiento para siempre — una trampa latente para cualquier `position: fixed` futuro.
+- **Verificado**: el visor cuelga de `BODY`, cero ancestros con `transform`, su alto pasa
+  de 3839px a coincidir con el viewport, y `elementFromPoint` sobre el centro del botón de
+  cerrar devuelve el propio botón y no el navbar (44×44px, tamaño táctil correcto).
 
-  La cocina estaba por debajo del mínimo AA (4.5:1) — y eso es la media de la banda: sobre
-  la encimera blanca el caso real era peor.
-- **Solución**: sólo dentro de `@media (hover: none)`, velo al 52% y `text-shadow` reforzada
-  (0.75 / 10px). El escritorio no se toca: velo 0.32 en reposo y 0.16 en hover, igual que antes.
+**2026-08-24 — Cabecera de proyecto en móvil: sin revelado y con aviso de deslizar**
+
+- Las tarjetas de datos ya no llevan `Reveal` por debajo de 560px: la tira se recorre en
+  **horizontal** y el revelado va ligado al scroll **vertical**, así que quedaban tarjetas
+  a medio aparecer que nunca terminaban de resolverse. Se decide en JS (`matchMedia`) y no
+  sólo en CSS, porque el ticker escribe estilos en línea y no se puede anular desde la hoja.
+- Añadido un aviso "Desliza para ver más" con una flecha que se mueve, visible sólo en
+  móvil y sólo si hay más de una tarjeta. Sin él, con una tarjeta y media a la vista, no
+  quedaba claro que hubiera más al lado.
+- **Verificado** a 375px: 4 tarjetas, ninguna con estilo de revelado, aviso visible y la
+  tira con `overflow-x: auto` + `scroll-snap-type: x mandatory`.
+
+**2026-08-24 — Catálogo de servicios, cabecera móvil de proyecto y galería con visor**
+
+- **Catálogo de `/servicios` rehecho**. Era un bloque negro a pantalla completa con
+  iconos de línea en cajas de 1px — repetía el lenguaje del grid oscuro de la referencia
+  `03-icons-process-list` y chocaba con el resto de la página, que es clara. Ahora es una
+  **rejilla editorial sobre `--bg-alt`**: sin iconos y sin cajas, sólo un filete superior
+  por ficha, índice en dorado, título en la serif de display y descripción. El único
+  movimiento es una barra dorada que recorre el filete al pasar por encima. Se eligió a
+  propósito un patrón que no estuviese ya en la web (no es mosaico de imágenes, ni lista
+  numerada con sangría, ni tarjeta con revelado al hover).
+- **Cabecera de `/proyectos/:id` en móvil**. Las cuatro tarjetas de datos se apilaban
+  (~560px), lo que tapaba casi toda la foto y empujaba la marquesina del título hasta la
+  franja del header flotante, que la ocultaba. Pasan a ser una **tira deslizable de una
+  sola fila** con `scroll-snap`, sangrada hasta los bordes de pantalla. La cabecera vuelve
+  a medir lo razonable: se ve la imagen y el título queda muy por debajo del navbar.
+  Sólo aplica por debajo de 560px; escritorio intacto.
+- **Galería con visor ampliable** ([`ProjectGallery`](src/components/projects/ProjectGallery.tsx)).
+  Mosaico donde cada imagen abre un visor a pantalla completa, con flechas, teclado
+  (`←` `→` `Esc`), contador y cierre por fondo. Ahora entran **todas** las imágenes,
+  incluida la portada, para que ninguna quede sin poder verse.
+  - **Bug corregido**: la galería anterior ponía `height: 100%` en la `<img>` dentro de un
+    contenedor que se dimensiona por su contenido. La referencia es circular y el navegador
+    la resuelve a 0, así que la sección se quedaba plana. El alto definido vive ahora en el
+    botón (`aspect-ratio`), no en la imagen.
+  - **Bug corregido antes de publicar**: el visor usaba un token `--z-modal` inexistente
+    con reserva 60, por debajo de `--z-header: 100` — el navbar se habría dibujado encima.
+    Cambiado a `--z-overlay`.
+  - El scroll se bloquea en `<html>`, no en `<body>`: como `overflow-x: hidden` vive en
+    `<html>`, es `<html>` quien scrollea y bloquear `<body>` no habría hecho nada.
+  - Los `title`/`alt` de media vienen del CMS y suelen ser el nombre del archivo
+    ("Blog1-imagen1_894df…webp"); se descartan y se cae al título del proyecto.
+- **Hueco vacío tras "Trabajos realizados"**. El banner de "siguiente proyecto" ocupaba
+  media pantalla para enlazar a un único sitio. Sustituido por una sección **"Otros
+  proyectos"** con tarjetas (`ProjectCard`, reutilizado) a todos los demás.
+- **Verificado**: `tsc` y `npm run build` limpios; visor comprobado en el navegador
+  (abre con `z-index: 200`, avanza con `→` de 01/02 a 02/02, `Esc` cierra, el bloqueo de
+  scroll se aplica y se restaura); catálogo con 8 fichas sobre fondo claro y cero iconos.
+  **No verificado visualmente**: el panel de previsualización no compone fotogramas y
+  reporta `innerWidth: 0`, así que las media queries evalúan como móvil y no se puede
+  juzgar ni el aspecto ni el layout de escritorio. Pendiente de revisión en local,
+  especialmente la tira deslizable en un móvil real.
+
+**2026-08-24 — Tarjetas de servicios: revelado por toque y contraste del estado activo**
+
+En móvil la frase completa ("REFORMAS DE … A MEDIDA") aparecía siempre y encima
+ilegible sobre las imágenes claras. Eran dos problemas distintos encadenados.
+
+- **Problema 1 — se mostraba cuando no debía**. Había un bloque `@media (hover: none)`
+  que forzaba `opacity: 1` en las palabras laterales "porque en táctil no hay hover".
+  Pero el diseño quiere lo contrario: en reposo sólo la etiqueta en blanco, y al
+  activarla la etiqueta pasa a dorado y aparece la frase. Sustituido por un interruptor
+  real: [`ServiceCard`](src/components/services/ServiceCard.tsx) lleva estado `isActive`
+  que se alterna al tocar, y las reglas que lo pintan viven dentro de
+  `@media (hover: none)` — así en escritorio la clase puede activarse pero no pinta nada
+  y sigue mandando el `:hover`, sin tocar el comportamiento existente.
+- **Problema 2 — el estado revelado era el menos legible de los dos**. Al hacer hover el
+  velo se *aclaraba* del 32% al 16%, justo cuando aparece el texto blanco. Componiendo las
+  imágenes reales con el velo y midiendo contra blanco:
+
+  | velo | cocina | baño | salón |
+  |---|---|---|---|
+  | 0.16 (estado revelado, antes) | **2.64:1** | 3.07:1 | 3.85:1 |
+  | 0.32 (reposo) | 3.84:1 | 4.40:1 | 5.39:1 |
+  | 0.44 (estado revelado, ahora) | 5.24:1 | 5.91:1 | 7.05:1 |
+
+  Hacía falta ≥0.40 para pasar el mínimo AA de 4.5:1. Ahora el velo **se oscurece** al
+  revelar en vez de aclararse; la sensación de que la imagen "despierta" la siguen dando
+  el zoom y la saturación, que no dependen del velo. Añadida además una `text-shadow` de
+  dos capas (halo corto + difuso ancho) para las zonas más claras de cada foto.
+  Esto afectaba también al hover de escritorio, no sólo a móvil.
+- **Corregido de paso en [`ContactPage.tsx`](src/pages/ContactPage.tsx)**: quedaba un
+  import de `Reveal` sin usar y un `.map()` que devolvía un fragmento corto `<>` sin `key`
+  (emite dos hermanos `dt`+`dd` por vuelta, así que necesita `<Fragment key>`). Los dos
+  `TS6133` bloqueaban la compilación.
 - **Nota de verificación**: el dev server acumulaba 29 hojas de estilo por HMR y los
-  `getComputedStyle` se contradecían entre lecturas. Se verificó contra el CSS compilado
-  (`npm run build`), donde aparecen las tres reglas en el orden correcto.
+  `getComputedStyle` se contradecían entre lecturas — inservible para comprobar cascada.
+  Verificado contra el CSS compilado (`npm run build`).
 
 **2026-08-24 — Mosaico sin zoom+scroll; Reveal "up" más intenso**
 

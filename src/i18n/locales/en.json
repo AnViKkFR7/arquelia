@@ -163,7 +163,8 @@
       "locationDesc": "Location of the renovated home or premises.",
       "deliveryValue": "Move-in ready",
       "deliveryLabel": "Handover",
-      "deliveryDesc": "Project completed and delivered with post-works warranty."
+      "deliveryDesc": "Project completed and delivered with post-works warranty.",
+      "swipe": "Swipe to see more"
     },
     "workDone": "Work carried out",
     "aside": {
@@ -171,7 +172,18 @@
       "text": "If this style fits what you're after, we can look at your space and tell you what's possible and at what budget.",
       "cta": "Let's talk"
     },
-    "next": "Next project"
+    "description" : "Description",
+    "gallery": {
+      "eyebrow": "Gallery",
+      "openAria": "Enlarge image {{n}} of {{total}}",
+      "prev": "Previous image",
+      "next": "Next image",
+      "close": "Close the gallery"
+    },
+    "more": {
+      "eyebrow": "More work",
+      "title": "Other projects"
+    }
   },
   "about": {
     "hero": {

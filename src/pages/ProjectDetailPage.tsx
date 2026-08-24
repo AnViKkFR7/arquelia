@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getProjectById, getPublishedProjects } from '../lib/projects'
 import { Marquee } from '../components/ui/Marquee'
 import { Reveal } from '../components/ui/Reveal'
 import { Button } from '../components/ui/Button'
+import { SectionHeader } from '../components/ui/SectionHeader'
+import { ProjectCard } from '../components/projects/ProjectCard'
+import { ProjectGallery } from '../components/projects/ProjectGallery'
 import { CtaBand } from '../components/home/CtaBand'
 import type { Project } from '../types/project'
 import styles from './ProjectDetailPage.module.css'
@@ -13,10 +16,21 @@ import ButtonSlider from '../components/ui/ButtonSlider'
 export function ProjectDetailPage() {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
   const [project, setProject] = useState<Project | null>(null)
-  const [next, setNext] = useState<Project | null>(null)
+  const [others, setOthers] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
+
+  // En móvil la cabecera cambia de forma (tira deslizable en horizontal), y eso
+  // hay que saberlo también en JS: ahí las tarjetas no llevan revelado, porque
+  // se recorren en horizontal y el revelado va ligado al scroll vertical.
+  const [isNarrow, setIsNarrow] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 559px)')
+    const apply = () => setIsNarrow(mq.matches)
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
+  }, [])
 
   useEffect(() => {
     if (!id) return
@@ -25,8 +39,7 @@ export function ProjectDetailPage() {
     Promise.all([getProjectById(id), getPublishedProjects()])
       .then(([current, all]) => {
         setProject(current)
-        const i = all.findIndex((p) => p.id === id)
-        setNext(i >= 0 && all.length > 1 ? all[(i + 1) % all.length] : null)
+        setOthers(all.filter((p) => p.id !== id).slice(0, 3))
       })
       .catch((err) => console.error('Error loading project', err))
       .finally(() => setLoading(false))
@@ -74,8 +87,6 @@ export function ProjectDetailPage() {
     },
   ].filter(Boolean) as { value: string; label: string; desc: string }[]
 
-  const gallery = project.media.filter((m) => m.url !== project.coverUrl)
-
   return (
     <>
       {/* Hero: imagen + marquesina con el título */}
@@ -90,20 +101,43 @@ export function ProjectDetailPage() {
             <Marquee text={project.title} separator="◆" speed={52} />
           </div>
 
+          {isNarrow && stats.length > 1 && (
+            <div className="container">
+              <span className={styles.swipeHint}>
+                {t('projectDetail.stats.swipe')}
+                <span className={styles.swipeArrow} aria-hidden="true" />
+              </span>
+            </div>
+          )}
+
           <div className={`container ${styles.stats}`}>
-            {stats.map((s, i) => (
-              <Reveal key={s.label} variant="up" delay={i * 80} className={styles.stat}>
-                <span className={styles.statValue}>{s.value}</span>
-                <span className={styles.statLabel}>{s.label}</span>
-                <span className={styles.statDesc}>{s.desc}</span>
-              </Reveal>
-            ))}
+            {stats.map((s, i) => {
+              const content = (
+                <>
+                  <span className={styles.statValue}>{s.value}</span>
+                  <span className={styles.statLabel}>{s.label}</span>
+                  <span className={styles.statDesc}>{s.desc}</span>
+                </>
+              )
+              return isNarrow ? (
+                <div key={s.label} className={styles.stat}>
+                  {content}
+                </div>
+              ) : (
+                <Reveal key={s.label} variant="up" delay={i * 80} className={styles.stat}>
+                  {content}
+                </Reveal>
+              )
+            })}
           </div>
         </div>
       </section>
 
       {/* Cuerpo */}
       <section className={`section ${styles.body}`}>
+        <div className={`container ${styles.descriptionHead}`}>
+          <SectionHeader eyebrow={t('projectDetail.description')} />
+        </div>
         <div className={`container ${styles.bodyGrid}`}>
           <div>
             {project.description && (
@@ -141,41 +175,32 @@ export function ProjectDetailPage() {
         </div>
       </section>
 
-      {/* Galería */}
-      {gallery.length > 0 && (
+      {/* Galería: todas las imágenes, incluida la portada, para que no quede
+          ninguna sin poder verse a tamaño completo. */}
+      {project.media.length > 0 && (
         <section className={styles.gallery}>
-          <div className={`container ${styles.galleryGrid}`}>
-            {gallery.map((m, i) => (
-              <Reveal
-                key={m.id}
-                variant="clip"
-                delay={i * 70}
-                className={`${styles.shot} ${i % 3 === 0 ? styles.shotWide : ''}`}
-              >
-                <img src={m.url} alt={m.altText ?? project.title} loading="lazy" />
-              </Reveal>
-            ))}
+          <div className={`container ${styles.galleryHead}`}>
+            <SectionHeader eyebrow={t('projectDetail.gallery.eyebrow')} />
           </div>
+          <ProjectGallery media={project.media} title={project.title} />
         </section>
       )}
 
-      {/* Siguiente proyecto */}
-      {next && (
-        <button
-          type="button"
-          className={styles.next}
-          onClick={() => navigate(`/proyectos/${next.id}`)}
-        >
-          <span
-            className={styles.nextImg}
-            style={next.coverUrl ? { backgroundImage: `url(${next.coverUrl})` } : undefined}
-          />
-          <span className={styles.nextScrim} />
-          <span className={styles.nextInner}>
-            <span className={`eyebrow ${styles.nextLabel}`}>{t('projectDetail.next')}</span>
-            <span className={styles.nextTitle}>{next.title}</span>
-          </span>
-        </button>
+      {/* Otros proyectos */}
+      {others.length > 0 && (
+        <section className={`section ${styles.more}`}>
+          <div className="container">
+            <SectionHeader
+              eyebrow={t('projectDetail.more.eyebrow')}
+              title={t('projectDetail.more.title')}
+            />
+            <div className={styles.moreGrid}>
+              {others.map((p, i) => (
+                <ProjectCard key={p.id} project={p} index={i} />
+              ))}
+            </div>
+          </div>
+        </section>
       )}
 
       <CtaBand plain />

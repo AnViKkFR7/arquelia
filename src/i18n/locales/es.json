@@ -163,7 +163,8 @@
       "locationDesc": "Localización de la vivienda o local reformado.",
       "deliveryValue": "Llave en mano",
       "deliveryLabel": "Entrega",
-      "deliveryDesc": "Proyecto finalizado y entregado con garantía post-obra."
+      "deliveryDesc": "Proyecto finalizado y entregado con garantía post-obra.",
+      "swipe": "Desliza para ver más"
     },
     "workDone": "Trabajos realizados",
     "aside": {
@@ -171,7 +172,18 @@
       "text": "Si te encaja este estilo, podemos estudiar tu espacio y decirte qué es viable y con qué presupuesto.",
       "cta": "Hablemos"
     },
-    "next": "Siguiente proyecto"
+    "description" : "Descripción",
+    "gallery": {
+      "eyebrow": "Galería",
+      "openAria": "Ampliar imagen {{n}} de {{total}}",
+      "prev": "Imagen anterior",
+      "next": "Imagen siguiente",
+      "close": "Cerrar la galería"
+    },
+    "more": {
+      "eyebrow": "Más trabajo",
+      "title": "Otros proyectos"
+    }
   },
   "about": {
     "hero": {

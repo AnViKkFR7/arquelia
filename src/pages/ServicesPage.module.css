@@ -24,63 +24,85 @@
   }
 }
 
-/* ── Catálogo ────────────────────────────────────────── */
+/* ── Catálogo ────────────────────────────────────────────
+   Rejilla editorial sobre fondo claro: sin iconos y sin cajas, sólo filetes
+   de 1px que dibujan la retícula. Antes era un bloque negro con iconos de
+   línea, que además repetía el lenguaje del grid oscuro de la referencia.
+   Aquí manda la tipografía y el aire; el único adorno es la barra dorada
+   que recorre el filete superior al pasar por encima. */
 .catalog {
-  background: var(--bg-inverse);
-  padding-block: var(--section-y);
-  color: var(--text-inverse);
+  background: var(--bg-alt);
 }
 
-.iconGrid {
+.catalogGrid {
+  margin-top: var(--sp-14);
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1px;
-  background: var(--line-inverse);
-  border: 1px solid var(--line-inverse);
+  column-gap: var(--sp-10);
 }
 
-@media (min-width: 560px) {
-  .iconGrid {
+@media (min-width: 640px) {
+  .catalogGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1024px) {
-  .iconGrid {
+  .catalogGrid {
     grid-template-columns: repeat(4, 1fr);
+    column-gap: var(--sp-8);
   }
 }
 
-.iconCard {
-  background: var(--bg-inverse);
-  padding: var(--sp-8) var(--sp-6);
-  transition: background var(--t-base) var(--ease);
+.catalogItem {
+  position: relative;
+  padding: var(--sp-7) 0 var(--sp-9);
+  border-top: 1px solid var(--line);
 }
 
-.iconCard:hover {
-  background: var(--black-850);
+/* La barra dorada nace sobre el filete, no lo desplaza: por eso va en
+   `top: -1px` y con la misma altura que el borde que tapa. */
+.catalogItem::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width var(--t-slow) var(--ease);
 }
 
-.iconWrap {
+.catalogItem:hover::after {
+  width: 100%;
+}
+
+.catalogIndex {
   display: block;
-  color: var(--accent-bright);
-  transition: transform var(--t-base) var(--ease);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wider);
+  color: var(--accent);
 }
 
-.iconCard:hover .iconWrap {
-  transform: translateY(-3px);
+.catalogTitle {
+  margin-top: var(--sp-5);
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 1.5vw, 1.35rem);
+  line-height: 1.15;
+  color: var(--text);
 }
 
-.iconTitle {
-  margin-top: var(--sp-8);
-  font-size: 1.05rem;
-  color: var(--text-inverse);
-}
-
-.iconDesc {
+.catalogDesc {
   margin-top: var(--sp-3);
+  max-width: 34ch;
   font-size: var(--fs-sm);
-  color: var(--text-inverse-muted);
+  line-height: 1.55;
+  color: var(--text-muted);
+  transition: color var(--t-base) var(--ease);
+}
+
+.catalogItem:hover .catalogDesc {
+  color: var(--text);
 }
 
 /* ── Proceso ─────────────────────────────────────────── */

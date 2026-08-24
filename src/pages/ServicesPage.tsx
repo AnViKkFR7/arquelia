@@ -6,16 +6,6 @@ import { Reveal } from '../components/ui/Reveal'
 import { ServiceCard } from '../components/services/ServiceCard'
 import { ProcessTimeline, type ProcessStep } from '../components/services/ProcessTimeline'
 import { CtaBand } from '../components/home/CtaBand'
-import {
-  IconIntegral,
-  IconKitchen,
-  IconBathroom,
-  IconInterior,
-  IconRehab,
-  IconCommercial,
-  IconOffice,
-  IconFinishes,
-} from '../components/icons/ServiceIcons'
 import styles from './ServicesPage.module.css'
 
 import heroImg from '../assets/pasillo_01.jpg'
@@ -24,16 +14,6 @@ import banoImg from '../assets/baño_03.avif'
 import salonImg from '../assets/salon_01.avif'
 
 const FEATURED_IMAGES: Record<string, string> = { cocina: cocinaImg, bano: banoImg, integral: salonImg }
-const CATALOG_ICONS: Record<string, () => React.JSX.Element> = {
-  integral: IconIntegral,
-  cocina: IconKitchen,
-  bano: IconBathroom,
-  interiorismo: IconInterior,
-  rehabilitacion: IconRehab,
-  local: IconCommercial,
-  oficina: IconOffice,
-  acabados: IconFinishes,
-}
 
 interface FeaturedCard {
   id: string
@@ -83,30 +63,24 @@ export function ServicesPage() {
       </section>
 
       {/* Catálogo completo */}
-      <section className={styles.catalog}>
+      <section className={`section ${styles.catalog}`}>
         <div className="container">
           <SectionHeader
             index="01"
             eyebrow={t('services.catalog.eyebrow')}
             title={t('services.catalog.title')}
             lead={t('services.catalog.lead')}
-            inverse
           />
         </div>
 
-        <div className={`container ${styles.iconGrid}`}>
-          {catalog.map(({ id, title, desc }, i) => {
-            const Icon = CATALOG_ICONS[id]
-            return (
-              <Reveal key={id} variant="fade" delay={i * 50} className={styles.iconCard}>
-                <span className={styles.iconWrap}>
-                  <Icon />
-                </span>
-                <h3 className={styles.iconTitle}>{title}</h3>
-                <p className={styles.iconDesc}>{desc}</p>
-              </Reveal>
-            )
-          })}
+        <div className={`container ${styles.catalogGrid}`}>
+          {catalog.map(({ id, title, desc }, i) => (
+            <Reveal key={id} variant="up" delay={i * 60} className={styles.catalogItem}>
+              <span className={styles.catalogIndex}>{String(i + 1).padStart(2, '0')}</span>
+              <h3 className={styles.catalogTitle}>{title}</h3>
+              <p className={styles.catalogDesc}>{desc}</p>
+            </Reveal>
+          ))}
         </div>
       </section>
 

@@ -1,6 +1,6 @@
+import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PageHero } from '../components/ui/PageHero'
-import { Reveal } from '../components/ui/Reveal'
 import { CTAForm } from '../components/forms/CTAForm'
 import styles from './ContactPage.module.css'
 
@@ -40,9 +40,12 @@ export function ContactPage() {
               <p className={styles.infoText}>{t('contact.talkText')}</p>
 
             <dl className={styles.details}>
-              {details.map((d, i) => {
+              {details.map((d) => {
                 const href = HREFS[d.label]
-                return (<>
+                // Fragment con nombre en vez de `<>`: cada vuelta emite dos
+                // hermanos (dt + dd) y el shorthand no admite `key`.
+                return (
+                  <Fragment key={d.label}>
                     <dt className={styles.detailLabel}>{d.label}</dt>
                     <dd className={styles.detailValue}>
                       {href ? (
@@ -52,7 +55,8 @@ export function ContactPage() {
                       ) : (
                         d.value
                       )}
-                    </dd></>
+                    </dd>
+                  </Fragment>
                 )
               })}
             </dl>

@@ -1,5 +1,10 @@
+/* `backwards`, no `both`: el fotograma final ya es idéntico a los estilos base
+   (opacidad 1, sin transform), así que rellenar hacia delante no cambia nada
+   visualmente pero deja la animación aplicada para siempre — y eso mantiene a
+   <main> con contexto de apilamiento y `transform`, lo que rompe cualquier
+   `position: fixed` que cuelgue de él. */
 .main {
-  animation: pageIn var(--t-slow) var(--ease) both;
+  animation: pageIn var(--t-slow) var(--ease) backwards;
 }
 
 @keyframes pageIn {

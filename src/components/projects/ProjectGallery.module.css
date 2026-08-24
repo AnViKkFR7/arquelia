@@ -1,0 +1,228 @@
+/* ── Mosaico ─────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-4);
+}
+
+@media (min-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-6);
+  }
+
+  .cellWide {
+    grid-column: 1 / -1;
+  }
+}
+
+/* El alto definido vive aquí, en el botón, no en la <img>. Con `height: 100%`
+   sobre una imagen cuyo padre se dimensiona por contenido la referencia es
+   circular y el navegador la resuelve a 0: la galería se quedaba plana. */
+.shot {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--grey-200);
+  cursor: pointer;
+}
+
+.cellWide .shot {
+  aspect-ratio: 16 / 9;
+}
+
+.shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--t-slower) var(--ease);
+}
+
+.shot:hover img {
+  transform: scale(1.04);
+}
+
+/* Botón "+" que gira al pasar por encima, igual que en las tarjetas de proyecto. */
+.plus {
+  position: absolute;
+  right: var(--sp-4);
+  bottom: var(--sp-4);
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: rgba(6, 6, 6, 0.55);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity var(--t-base) var(--ease), transform var(--t-slow) var(--ease);
+}
+
+.shot:hover .plus,
+.shot:focus-visible .plus {
+  opacity: 1;
+  transform: scale(1) rotate(45deg);
+}
+
+.plusBar {
+  position: absolute;
+  width: 0.9rem;
+  height: 1px;
+  background: var(--white);
+}
+
+.plusBarV {
+  transform: rotate(90deg);
+}
+
+/* ── Visor ───────────────────────────────────────────── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  /* Por encima del header flotante (--z-header: 100), o el navbar se
+     dibujaría sobre el visor. */
+  z-index: var(--z-overlay);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  background: rgba(6, 6, 6, 0.94);
+  animation: fade var(--t-base) var(--ease);
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  min-width: 0;
+}
+
+.stage img {
+  max-width: 100%;
+  max-height: 78svh;
+  object-fit: contain;
+}
+
+.caption {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-5);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-inverse-muted);
+}
+
+.counter {
+  color: var(--accent-bright);
+}
+
+/* ── Controles ───────────────────────────────────────── */
+.nav {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: transparent;
+  transition: background var(--t-base) var(--ease), border-color var(--t-base) var(--ease);
+}
+
+.nav:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--accent-bright);
+}
+
+.arrow {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-top: 1px solid var(--white);
+  border-right: 1px solid var(--white);
+}
+
+.navPrev .arrow {
+  transform: rotate(-135deg);
+  margin-left: 0.2rem;
+}
+
+.navNext .arrow {
+  transform: rotate(45deg);
+  margin-right: 0.2rem;
+}
+
+.close {
+  position: absolute;
+  /* `env()` deja sitio a la muesca/barra de estado en móviles con notch. */
+  top: calc(var(--sp-4) + env(safe-area-inset-top, 0px));
+  right: calc(var(--sp-4) + env(safe-area-inset-right, 0px));
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  transition: background var(--t-base) var(--ease), border-color var(--t-base) var(--ease);
+}
+
+.close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--accent-bright);
+}
+
+.closeBar {
+  position: absolute;
+  width: 0.95rem;
+  height: 1px;
+  background: var(--white);
+  transform: rotate(45deg);
+}
+
+.closeBarAlt {
+  transform: rotate(-45deg);
+}
+
+/* En móvil las flechas estorban al lado de la imagen: pasan debajo y el
+   recorrido principal es deslizar/tocar. */
+@media (max-width: 700px) {
+  .lightbox {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'stage';
+    padding: var(--sp-4) var(--gutter) var(--sp-16);
+  }
+
+  .stage {
+    grid-area: stage;
+  }
+
+  .nav {
+    position: absolute;
+    bottom: var(--sp-5);
+  }
+
+  .navPrev {
+    left: var(--gutter);
+  }
+
+  .navNext {
+    right: var(--gutter);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox {
+    animation: none;
+  }
+}

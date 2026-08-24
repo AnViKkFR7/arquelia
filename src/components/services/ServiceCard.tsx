@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import styles from './ServiceCard.module.css'
 
 interface ServiceCardProps {
@@ -16,8 +17,16 @@ interface ServiceCardProps {
  * está siempre visible y el resto de la frase aparece a los lados.
  */
 export function ServiceCard({ label, prefix, suffix, image, offset = 0 }: ServiceCardProps) {
+  // En táctil no hay hover, así que el toque hace de interruptor. Quién puede
+  // usarlo lo decide el CSS (`@media (hover: none)`), no este estado: en
+  // escritorio la clase se puede activar pero no pinta nada, manda el :hover.
+  const [active, setActive] = useState(false)
+
   return (
-    <article className={`${styles.card} ${styles[`offset${offset}`]}`}>
+    <article
+      className={`${styles.card} ${styles[`offset${offset}`]} ${active ? styles.isActive : ''}`}
+      onClick={() => setActive((a) => !a)}
+    >
       <span className={styles.image} style={{ backgroundImage: `url(${image})` }} />
       <span className={styles.veil} />
 
