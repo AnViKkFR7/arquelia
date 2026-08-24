@@ -1,23 +1,309 @@
 {
+  "meta": {
+    "title": "Arquelia — Construcción y reformas premium en Cataluña",
+    "description": "Arquelia. Reformas integrales, cocinas, baños e interiorismo de alta gama en Cataluña. Acabados al milímetro y un único interlocutor de principio a fin.",
+    "ogTitle": "Arquelia — Construcción y reformas premium",
+    "ogDescription": "Reformas integrales e interiorismo de alta gama en Cataluña.",
+    "locale": "es_ES"
+  },
   "nav": {
     "home": "Inicio",
     "services": "Servicios",
     "projects": "Proyectos",
     "about": "Sobre Nosotros",
     "contact": "Contacto",
-    "cta": "Solicitar presupuesto"
+    "cta": "Solicitar presupuesto",
+    "homeAria": "Arquelia — inicio",
+    "mainAria": "Principal",
+    "mobileAria": "Móvil",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
   },
   "footer": {
     "rights": "Todos los derechos reservados.",
     "legal": "Aviso legal",
     "cookies": "Política de cookies",
-    "privacy": "Política de privacidad"
+    "privacy": "Política de privacidad",
+    "claim": "Construcción y reformas premium en Cataluña.",
+    "navigation": "Navegación",
+    "legalHeading": "Legal",
+    "location": "Cornellà de Llobregat, Barcelona",
+    "developedBy": "Desarrollado por Moira Ordo",
+    "serviceLinks": [
+      "Reformas integrales",
+      "Cocinas",
+      "Baños",
+      "Interiorismo",
+      "Rehabilitación"
+    ]
+  },
+  "common": {
+    "close": "Cerrar",
+    "back": "Atrás",
+    "loading": "Cargando…",
+    "seeMore": "Haz clic para saber más",
+    "seeProject": "Ver proyecto",
+    "seeProjectAria": "Ver proyecto: {{title}}",
+    "seeAria": "Ver {{title}}"
   },
   "home": {
     "heroTitle": "Arquitectura que se vive",
     "heroSubtitle": "Reformas y construcciones premium en Cataluña",
+    "heroBrand": "P & B Cornellà Construcciones",
+    "heroStrip": "Reformas integrales · Cocinas · Baños · Interiorismo · Rehabilitación",
     "aboutTeaser": "En Arquelia transformamos espacios con precisión milimétrica y un acabado de altísima calidad, cuidando cada detalle desde el primer boceto hasta la última junta.",
     "featuredProjects": "Proyectos destacados",
-    "ctaTitle": "¿Tienes un proyecto en mente?"
+    "ctaTitle": "¿Tienes un proyecto en mente?",
+    "intro": {
+      "eyebrow": "Sobre nosotros",
+      "titlePre": "Donde la arquitectura",
+      "titleEm": "se convierte",
+      "titlePost": "en hogar",
+      "requestBudget": "Solicita presupuesto",
+      "knowUs": "Conoce Arquelia",
+      "facts": [
+        { "value": "15+", "label": "Años de oficio" },
+        { "value": "120+", "label": "Proyectos entregados" },
+        { "value": "1", "label": "Interlocutor por obra" }
+      ]
+    },
+    "mosaic": {
+      "eyebrow": "Proyectos",
+      "clickToSee": "Haz clic para ver la reforma en detalle"
+    },
+    "showcase": {
+      "seeAll": "Ver todos los proyectos"
+    },
+    "services": {
+      "eyebrow": "Servicios",
+      "title": "Lo que hacemos",
+      "seeAll": "Todos los servicios",
+      "items": [
+        { "title": "Reformas integrales", "note": "De la estructura al último acabado" },
+        { "title": "Cocinas", "note": "Diseño, mobiliario y encimeras a medida" },
+        { "title": "Baños", "note": "Materiales nobles y grifería de diseño" },
+        { "title": "Interiorismo", "note": "Proyecto completo, llave en mano" },
+        { "title": "Rehabilitación", "note": "Recuperar sin perder el carácter" }
+      ]
+    },
+    "cta": {
+      "title": "¿Tienes un proyecto en mente?",
+      "text": "Cuéntanos qué quieres transformar. Te visitamos, lo estudiamos y te damos un presupuesto cerrado, sin compromiso.",
+      "request": "Solicitar presupuesto",
+      "callUs": "o llámanos: +34 600 000 000"
+    }
+  },
+  "services": {
+    "hero": {
+      "eyebrow": "Servicios",
+      "title": "Cada reforma, un oficio de precisión",
+      "lead": "Desde una intervención puntual hasta una rehabilitación completa: mismo nivel de exigencia en diseño, materiales y ejecución."
+    },
+    "featured": [
+      { "id": "cocina", "label": "Cocinas", "prefix": "Reformas de", "suffix": "a medida" },
+      { "id": "bano", "label": "Baños", "prefix": "Reformas de", "suffix": "de autor" },
+      { "id": "integral", "label": "Integral", "prefix": "Reforma", "suffix": "llave en mano" }
+    ],
+    "catalog": {
+      "eyebrow": "Catálogo",
+      "title": "Todo lo que cubrimos",
+      "lead": "Un único equipo para todo el proyecto: sin subcontratas descoordinadas ni responsabilidades diluidas.",
+      "items": [
+        { "id": "integral", "title": "Reforma integral", "desc": "Transformación completa de la vivienda, de la estructura a los últimos acabados." },
+        { "id": "cocina", "title": "Reforma de cocina", "desc": "Diseño funcional y materiales de alta gama para el corazón de la casa." },
+        { "id": "bano", "title": "Reforma de baño", "desc": "Espacios de bienestar con acabados exclusivos y grifería de diseño." },
+        { "id": "interiorismo", "title": "Interiorismo", "desc": "Del concepto a la última pieza de mobiliario, con dirección de proyecto." },
+        { "id": "rehabilitacion", "title": "Rehabilitación", "desc": "Recuperación integral de edificios y viviendas respetando su carácter." },
+        { "id": "local", "title": "Local comercial", "desc": "Espacios que combinan identidad de marca, normativa y funcionalidad." },
+        { "id": "oficina", "title": "Oficinas", "desc": "Entornos de trabajo eficientes, luminosos y con acabados de nivel premium." },
+        { "id": "acabados", "title": "Acabados y calidades", "desc": "Selección de materiales nobles y ejecución al milímetro en cada detalle." }
+      ]
+    },
+    "process": {
+      "eyebrow": "Nuestro proceso",
+      "title": "Seis pasos, cero sorpresas",
+      "lead": "Un método probado que mantiene el proyecto dentro de plazo y presupuesto.",
+      "steps": [
+        { "n": "01", "title": "Primera visita", "desc": "Visitamos el espacio, escuchamos qué necesitas y valoramos el alcance real del proyecto. Sin coste ni compromiso." },
+        { "n": "02", "title": "Proyecto y presupuesto", "desc": "Elaboramos la propuesta de diseño y un presupuesto cerrado y detallado por partidas: sabes exactamente qué incluye cada euro." },
+        { "n": "03", "title": "Materiales", "desc": "Te acompañamos en la elección de acabados con proveedores de confianza y relación directa de fabricante, para acceder a primera calidad al precio justo." },
+        { "n": "04", "title": "Planificación", "desc": "Definimos un calendario realista por fases y asignamos un único interlocutor que te acompaña durante toda la obra." },
+        { "n": "05", "title": "Ejecución", "desc": "Nuestro equipo ejecuta con control de calidad en cada fase y te mantiene informado del avance semana a semana." },
+        { "n": "06", "title": "Entrega de llaves", "desc": "Revisión final al milímetro, repaso conjunto contigo y entrega de un espacio listo para vivir, con garantía post-obra." }
+      ]
+    },
+    "cta": {
+      "title": "¿Listo para transformar tu espacio?",
+      "text": "Cuéntanos qué tienes en mente. La primera visita y el presupuesto son gratuitos."
+    }
+  },
+  "projects": {
+    "hero": {
+      "eyebrow": "Proyectos",
+      "title": "Reformas que hablan por sí solas",
+      "lead": "Una selección de obras entregadas en Barcelona y alrededores. Cada una con su propio carácter, todas con el mismo estándar de ejecución."
+    },
+    "loading": "Cargando proyectos…",
+    "empty": "Aún no hay proyectos publicados. Vuelve pronto.",
+    "cta": {
+      "title": "¿Quieres algo así en tu casa?",
+      "text": "Cada proyecto empieza con una visita. Cuéntanos qué tienes en mente y te preparamos una propuesta a medida."
+    }
+  },
+  "projectDetail": {
+    "loading": "Cargando proyecto…",
+    "notFound": "Proyecto no encontrado",
+    "seeAll": "Ver todos los proyectos",
+    "stats": {
+      "typeLabel": "Tipo de proyecto",
+      "typeDesc": "Categoría de la intervención realizada.",
+      "surfaceLabel": "Superficie",
+      "surfaceDesc": "Superficie total intervenida en el proyecto.",
+      "locationLabel": "Ubicación",
+      "locationDesc": "Localización de la vivienda o local reformado.",
+      "deliveryValue": "Llave en mano",
+      "deliveryLabel": "Entrega",
+      "deliveryDesc": "Proyecto finalizado y entregado con garantía post-obra."
+    },
+    "workDone": "Trabajos realizados",
+    "aside": {
+      "label": "Un proyecto parecido",
+      "text": "Si te encaja este estilo, podemos estudiar tu espacio y decirte qué es viable y con qué presupuesto.",
+      "cta": "Hablemos"
+    },
+    "next": "Siguiente proyecto"
+  },
+  "about": {
+    "hero": {
+      "eyebrow": "Sobre nosotros",
+      "titleLine1": "Construimos con la dedicación",
+      "titleLine2": "que pondríamos en nuestra casa"
+    },
+    "intro": {
+      "lead": "Arquelia nace de la voluntad de hacer las cosas bien, sin atajos.",
+      "p1": "Detrás de cada proyecto hay un equipo que entiende la construcción como un oficio de precisión, donde el trato con el cliente pesa tanto como el último acabado de obra. Reformamos hogares, locales y oficinas en toda Cataluña bajo la razón social",
+      "p1Strong": "P & B Cornellà Construcciones, S.L.",
+      "p2": "No trabajamos por volumen. Aceptamos los proyectos que podemos atender de verdad, con el equipo propio y el tiempo que cada obra merece. Eso significa menos obras a la vez y más atención en cada una."
+    },
+    "band": "Precisión · Materiales nobles · Palabra dada",
+    "pillars": {
+      "eyebrow": "Tres pilares",
+      "title": "Una forma de trabajar",
+      "lead": "No es un eslogan: es lo que revisamos en cada obra antes de dar una fase por cerrada.",
+      "items": [
+        { "n": "01", "title": "Maestría", "desc": "Años de oficio aplicados a cada detalle, sin margen para la improvisación. Cada trabajo, en manos de quien lo domina: no repartimos la obra entre subcontratas descoordinadas." },
+        { "n": "02", "title": "Materiales", "desc": "Seleccionamos materiales nobles y proveedores de confianza. La relación directa con fabricante nos permite acceder a primera calidad a un precio que tiene sentido." },
+        { "n": "03", "title": "Método", "desc": "Un único interlocutor y un proceso claro, de la primera visita a la entrega de llaves. Presupuesto cerrado, calendario realista y comunicación semanal." }
+      ]
+    },
+    "numbers": {
+      "eyebrow": "En cifras",
+      "imageAlt": "Detalle de una reforma de Arquelia",
+      "items": [
+        { "value": "15+", "label": "Años de experiencia" },
+        { "value": "120+", "label": "Proyectos entregados" },
+        { "value": "100%", "label": "Presupuestos cerrados" },
+        { "value": "2 años", "label": "Garantía post-obra" }
+      ]
+    }
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "Contacto",
+      "title": "Empecemos por una conversación",
+      "lead": "Cuéntanos qué tienes en mente. La primera visita y el presupuesto son gratuitos y sin compromiso."
+    },
+    "formEyebrow": "Solicitud de presupuesto",
+    "talk": "Hablemos",
+    "talkText": "Si prefieres el trato directo, escríbenos o llámanos. Respondemos en menos de 24 h laborables.",
+    "details": [
+      { "label": "Email", "value": "info@arquelia.es" },
+      { "label": "Teléfono", "value": "+34 600 000 000" },
+      { "label": "Oficina", "value": "Cornellà de Llobregat, Barcelona" },
+      { "label": "Horario", "value": "Lunes a viernes, 9:00 – 18:00" }
+    ],
+    "zone": {
+      "label": "Zona de trabajo",
+      "text": "Barcelona ciudad y área metropolitana: Cornellà, Sant Just, Esplugues, Sant Cugat, Sitges y alrededores."
+    }
+  },
+  "ctaModal": {
+    "title": "Solicitar presupuesto"
+  },
+  "ctaForm": {
+    "steps": {
+      "project": { "label": "Proyecto", "title": "¿Qué quieres reformar?", "hint": "Elige la opción que más se acerque." },
+      "contact": { "label": "Contacto", "title": "¿Cómo te contactamos?", "hint": "Solo lo imprescindible para poder responderte." },
+      "details": { "label": "Detalles", "title": "Cuéntanos tu proyecto", "hint": "Opcional, pero nos ayuda a preparar mejor la visita." },
+      "summary": { "label": "Resumen", "title": "Revisa y envía", "hint": "Comprueba que todo esté correcto." }
+    },
+    "services": {
+      "integral": "Reforma integral",
+      "cocina": "Reforma Cocina",
+      "bano": "Reforma Baño",
+      "interiorismo": "Interiorismo",
+      "rehabilitacion": "Rehabilitación",
+      "local": "Local Comercial",
+      "oficina": "Oficina",
+      "otros": "Otros"
+    },
+    "servicesAria": "Tipo de proyecto",
+    "fields": {
+      "name": "Nombre completo",
+      "namePlaceholder": "Nombre y apellidos",
+      "email": "Email",
+      "emailPlaceholder": "tu@email.com",
+      "phone": "Teléfono",
+      "phonePlaceholder": "+34 600 000 000",
+      "city": "Población",
+      "cityPlaceholder": "Barcelona",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Superficie aproximada, qué espacios, plazos, referencias que te gusten…"
+    },
+    "errors": {
+      "name": "Dinos cómo te llamas.",
+      "emailRequired": "Necesitamos un email para responderte.",
+      "emailInvalid": "Ese email no parece válido.",
+      "phoneRequired": "Necesitamos un teléfono de contacto.",
+      "phoneInvalid": "Ese teléfono no parece válido."
+    },
+    "summary": {
+      "project": "Proyecto",
+      "name": "Nombre",
+      "email": "Email",
+      "phone": "Teléfono",
+      "city": "Población",
+      "details": "Detalles",
+      "edit": "Editar",
+      "empty": "—"
+    },
+    "privacyPre": "Al enviar aceptas la",
+    "privacyLink": "política de privacidad",
+    "privacyPost": ". Usaremos tus datos únicamente para responder a esta solicitud.",
+    "back": "Atrás",
+    "continue": "Continuar",
+    "submit": "Enviar solicitud",
+    "done": {
+      "eyebrow": "Solicitud enviada",
+      "thanks": "Gracias{{name}}.",
+      "textPre": "Hemos recibido tu solicitud de",
+      "textPost": ". Revisaremos el proyecto y te contactaremos en menos de 24 h laborables.",
+      "close": "Cerrar",
+      "seeProjects": "Ver proyectos"
+    }
+  },
+  "legal": {
+    "notice": {
+      "title": "Aviso Legal",
+      "text": "Texto legal pendiente de completar con los datos reales de la empresa: [NOMBRE DE LA EMPRESA], CIF [CIF], con domicilio en [DIRECCIÓN], y email de contacto [EMAIL]."
+    },
+    "cookies": {
+      "title": "Política de Cookies",
+      "text": "Texto legal pendiente de completar con los datos reales de la empresa: [NOMBRE DE LA EMPRESA], CIF [CIF], con domicilio en [DIRECCIÓN], y email de contacto [EMAIL]."
+    },
+    "privacy": {
+      "title": "Política de Privacidad",
+      "text": "Texto legal pendiente de completar con los datos reales de la empresa: [NOMBRE DE LA EMPRESA], CIF [CIF], con domicilio en [DIRECCIÓN], y email de contacto [EMAIL]."
+    }
   }
 }

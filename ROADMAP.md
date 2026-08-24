@@ -1,7 +1,7 @@
 # ROADMAP — Web Arquelia
 
-> Estado: **F0–F6 completadas · F7 pendiente**
-> Última actualización: 2026-08-19
+> Estado: **F0–F6 completadas · i18n ES/EN completo · F7 pendiente**
+> Última actualización: 2026-08-20
 > Material de referencia: [`design-refs/REFS.md`](design-refs/REFS.md)
 
 ## Principios de diseño
@@ -36,7 +36,7 @@
 ### F2 · Landing ✅
 - [x] Hero — **canvas + secuencia de 61 fotogramas controlada por scroll** (zoom exterior→interior)
 - [x] `01 / Sobre nosotros` — texto + enlace
-- [x] Galería mosaico con revelado escalonado y escala por scroll (ref. vídeo 01)
+- [x] Galería mosaico con revelado escalonado (`Reveal variant="up"`)
 - [x] Franja de datos con marquesina (ref. vídeo 01, tramo 4.5–7s)
 - [x] `02 / Proyectos destacados` — tarjetas con círculo "+"
 - [x] CTA final
@@ -86,6 +86,66 @@
 | Cifras reales (años, nº de proyectos) | Cliente | Franja de datos de la landing |
 
 ## Registro de trabajo
+
+**2026-08-24 — Mosaico sin zoom+scroll; Reveal "up" más intenso**
+
+Quitado el efecto de anclar-y-crecer (`usePinProgress`) de `MosaicGallery` (sección
+`02 / Proyectos` de la landing): tras verlo en funcionamiento, se decidió que no encajaba
+y que las animaciones de entrada básicas ya bastan.
+
+- **`MosaicGallery.tsx` simplificado**: fuera `usePinProgress`, el estado `pinEnabled`
+  (media query ≥900px), la medición de `targetScale` y el cálculo de `scale`/`growProgress`.
+  Ya no hay dos ramas de render (`pinSection`/`stage` vs. sección normal) — siempre es la
+  sección estática, con las mismas animaciones `Reveal variant="up"` y `once={false}`
+  (reversibles al hacer scroll hacia arriba) que ya tenía cada tarjeta.
+- **`MosaicGallery.module.css` limpiado**: eliminadas `.pinSection`/`.stage` (ya sin uso),
+  el `z-index: 4` de `.featuredWrap` (existía solo para que la tarjeta creciendo tapara las
+  columnas laterales) y el `transition: none` de `.featured` (existía para que el escalado
+  por JS no fuera a remolque de una transición CSS).
+- **`usePinProgress.ts` se mantiene** — lo sigue usando `Hero.tsx` para el zoom del canvas
+  con la secuencia de fotogramas; ese efecto no se ha tocado.
+- **`Reveal` variant `up` más intenso**: `translateY(28px)` → `translateY(38px)` (~36% más
+  desplazamiento) en `Reveal.module.css`, a petición explícita — afecta a todo el sitio, no
+  solo al mosaico.
+- **Verificado**: sin `.pinSection`/`.stage` en el DOM a ningún ancho, sin errores de
+  consola, `getComputedStyle` confirma `translateY(38px)` en el estado inicial de `.up`,
+  `tsc -p tsconfig.app.json --noEmit` limpio.
+
+**2026-08-20 — i18n ES/EN completo**
+
+Auditoría de los 33 archivos `.tsx` del proyecto y traducción de todo el texto estático
+a `src/i18n/locales/{es,en}.json`. Antes solo estaban en el sistema el menú, el pie y dos
+frases del hero — el resto (formulario, las 6 páginas, los 20 componentes) estaba en
+español fijo en el código.
+
+- **`SERVICE_OPTIONS` rehecho como IDs estables** (`integral`, `cocina`, `bano`…) en vez de
+  las etiquetas en español. Antes el texto mostrado, la clave del diccionario de iconos y
+  el valor guardado en `CTAFormData.servicio` eran la misma cadena — traducir la etiqueta
+  habría roto la selección. Ahora el ID es estable y la etiqueta sale de
+  `ctaForm.services.<id>`.
+- **El email interno siempre en español** (`buildMessageBody` en `types/ctaForm.ts`): lo
+  lee el equipo de Arquelia, así que no depende del idioma en que el visitante rellenó el
+  formulario — con una tabla `SERVICE_LABELS_ES` aparte de las etiquetas que ve el usuario.
+- **`<title>`, meta description y Open Graph ahora cambian con el idioma** — no existía
+  antes. Nuevo componente `DocumentMeta` (en `Layout`) que sincroniza `document.title`,
+  las meta de descripción/OG y el `lang` del `<html>` cada vez que cambia `i18n.language`.
+- **Bug corregido de paso**: dos `aria-label` en `ProjectCard`/`ProjectRow` estaban puestos
+  en un `<span aria-hidden="true">` — contradictorio y sin efecto, porque `aria-hidden`
+  hace que un lector de pantalla ignore todo el subárbol. Eliminados.
+- **Bug corregido durante la verificación**: en la pantalla de confirmación del formulario,
+  el español necesita un punto entre el servicio en negrita y la frase siguiente
+  ("de cocina**. **Revisaremos…") pero el inglés no ("kitchen renovation** request.**",
+  sin punto en medio). Tenía la puntuación fija en el JSX, igual para los dos idiomas, y
+  en inglés salía "kitchen renovation. request." con un punto de más. Solución: la
+  puntuación vive en el propio JSON de cada idioma (`textPost` empieza por ". " en
+  español y por " request." en inglés), no en el componente.
+- **Limitación conocida, no resuelta aquí**: los títulos, descripciones, ubicaciones y
+  categorías de los proyectos vienen de Supabase (contenido del cliente) y se quedan en
+  el idioma en que se escribieron en la base de datos — traducirlos requeriría guardar
+  campos por idioma en el CMS, que es un cambio de esquema, no de i18n de interfaz.
+- **Verificado**: cambio de idioma probado en las 8 rutas (incluidas las 3 legales) sin
+  errores de consola; formulario completado de principio a fin en ambos idiomas con el
+  cuerpo del email y el texto de confirmación correctos; `tsc` y `npm run build` limpios.
 
 **2026-08-19 — Pasada responsive + formulario**
 

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useCTAForm } from '../../context/CTAFormContext'
 import { Reveal } from '../ui/Reveal'
 import { Button } from '../ui/Button'
@@ -11,11 +12,8 @@ interface CtaBandProps {
   plain?: boolean
 }
 
-export function CtaBand({
-  title = '¿Tienes un proyecto en mente?',
-  text = 'Cuéntanos qué quieres transformar. Te visitamos, lo estudiamos y te damos un presupuesto cerrado, sin compromiso.',
-  plain,
-}: CtaBandProps) {
+export function CtaBand({ title, text, plain }: CtaBandProps) {
+  const { t } = useTranslation()
   const { openForm } = useCTAForm()
 
   return (
@@ -27,20 +25,20 @@ export function CtaBand({
 
       <div className={`container-narrow ${styles.inner}`}>
         <Reveal variant="up">
-          <h2 className={styles.title}>{title}</h2>
+          <h2 className={styles.title}>{title ?? t('home.cta.title')}</h2>
         </Reveal>
 
         <Reveal variant="up" delay={80}>
-          <p className={styles.text}>{text}</p>
+          <p className={styles.text}>{text ?? t('home.cta.text')}</p>
         </Reveal>
 
         <Reveal variant="up" delay={160}>
           <div className={styles.actions}>
             <Button variant="gold" size="lg" onClick={openForm} arrow>
-              Solicitar presupuesto
+              {t('home.cta.request')}
             </Button>
             <a href="tel:+34600000000" className={styles.phone}>
-              o llámanos: +34 600 000 000
+              {t('home.cta.callUs')}
             </a>
           </div>
         </Reveal>

@@ -44,7 +44,7 @@ export function Hero() {
             pointerEvents: titleOut > 0.8 ? 'none' : undefined,
           }}
         >
-          <span className={`eyebrow ${styles.eyebrow}`}>P &amp; B Cornellà Construcciones</span>
+          <span className={`eyebrow ${styles.eyebrow}`}>{t('home.heroBrand')}</span>
 
           {/* Título accesible completo; la versión animada por palabras se
               oculta a la API de accesibilidad para no leer fragmentos sueltos. */}
@@ -65,12 +65,7 @@ export function Hero() {
         </div>
 
         <div className={styles.strip} style={{ opacity: 1 - titleOut * 0.85 }}>
-          <Marquee
-            small
-            text="Reformas integrales · Cocinas · Baños · Interiorismo · Rehabilitación"
-            separator="◆"
-            speed={70}
-          />
+          <Marquee small text={t('home.heroStrip')} separator="◆" speed={70} />
         </div>
 
         <span className={styles.cue} style={{ opacity: 1 - titleOut }} aria-hidden="true">

@@ -1,23 +1,309 @@
 {
+  "meta": {
+    "title": "Arquelia — Premium construction and renovations in Catalonia",
+    "description": "Arquelia. Full renovations, kitchens, bathrooms and high-end interior design in Catalonia. Millimetre-precise finishes and a single point of contact from start to finish.",
+    "ogTitle": "Arquelia — Premium construction and renovations",
+    "ogDescription": "Full renovations and high-end interior design in Catalonia.",
+    "locale": "en_US"
+  },
   "nav": {
     "home": "Home",
     "services": "Services",
     "projects": "Projects",
     "about": "About Us",
     "contact": "Contact",
-    "cta": "Request a quote"
+    "cta": "Request a quote",
+    "homeAria": "Arquelia — home",
+    "mainAria": "Main",
+    "mobileAria": "Mobile",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "footer": {
     "rights": "All rights reserved.",
     "legal": "Legal notice",
     "cookies": "Cookie policy",
-    "privacy": "Privacy policy"
+    "privacy": "Privacy policy",
+    "claim": "Premium construction and renovations in Catalonia.",
+    "navigation": "Navigation",
+    "legalHeading": "Legal",
+    "location": "Cornellà de Llobregat, Barcelona",
+    "developedBy": "Developed by Moira Ordo",
+    "serviceLinks": [
+      "Full renovations",
+      "Kitchens",
+      "Bathrooms",
+      "Interior design",
+      "Restoration"
+    ]
+  },
+  "common": {
+    "close": "Close",
+    "back": "Back",
+    "loading": "Loading…",
+    "seeMore": "Click to find out more",
+    "seeProject": "View project",
+    "seeProjectAria": "View project: {{title}}",
+    "seeAria": "View {{title}}"
   },
   "home": {
     "heroTitle": "Architecture you live in",
     "heroSubtitle": "Premium renovations and construction in Catalonia",
-    "aboutTeaser": "At Arquelia we transform spaces with millimetric precision and the highest quality finishes, taking care of every detail from the first sketch to the last joint.",
+    "heroBrand": "P & B Cornellà Construcciones",
+    "heroStrip": "Full renovations · Kitchens · Bathrooms · Interior design · Restoration",
+    "aboutTeaser": "At Arquelia we transform spaces with millimetre precision and top-tier finishes, taking care of every detail from the first sketch to the last joint.",
     "featuredProjects": "Featured projects",
-    "ctaTitle": "Have a project in mind?"
+    "ctaTitle": "Have a project in mind?",
+    "intro": {
+      "eyebrow": "About us",
+      "titlePre": "Where architecture",
+      "titleEm": "becomes",
+      "titlePost": "home",
+      "requestBudget": "Request a quote",
+      "knowUs": "Discover Arquelia",
+      "facts": [
+        { "value": "15+", "label": "Years in the trade" },
+        { "value": "120+", "label": "Projects delivered" },
+        { "value": "1", "label": "Point of contact per job" }
+      ]
+    },
+    "mosaic": {
+      "eyebrow": "Projects",
+      "clickToSee": "Click to see the renovation in detail"
+    },
+    "showcase": {
+      "seeAll": "View all projects"
+    },
+    "services": {
+      "eyebrow": "Services",
+      "title": "What we do",
+      "seeAll": "All services",
+      "items": [
+        { "title": "Full renovations", "note": "From the structure to the last finish" },
+        { "title": "Kitchens", "note": "Bespoke design, furniture and worktops" },
+        { "title": "Bathrooms", "note": "Noble materials and designer fittings" },
+        { "title": "Interior design", "note": "Complete project, move-in ready" },
+        { "title": "Restoration", "note": "Restored without losing character" }
+      ]
+    },
+    "cta": {
+      "title": "Have a project in mind?",
+      "text": "Tell us what you want to transform. We'll visit, study it, and give you a fixed quote — no obligation.",
+      "request": "Request a quote",
+      "callUs": "or call us: +34 600 000 000"
+    }
+  },
+  "services": {
+    "hero": {
+      "eyebrow": "Services",
+      "title": "Every renovation, a craft of precision",
+      "lead": "From a single-room job to a full restoration: the same level of care in design, materials and execution."
+    },
+    "featured": [
+      { "id": "cocina", "label": "Kitchens", "prefix": "Bespoke", "suffix": "renovations" },
+      { "id": "bano", "label": "Bathrooms", "prefix": "Designer", "suffix": "renovations" },
+      { "id": "integral", "label": "Full reno", "prefix": "Move-in ready", "suffix": "renovation" }
+    ],
+    "catalog": {
+      "eyebrow": "Catalogue",
+      "title": "Everything we cover",
+      "lead": "A single team for the whole project: no uncoordinated subcontractors, no diluted responsibility.",
+      "items": [
+        { "id": "integral", "title": "Full renovation", "desc": "Complete transformation of the home, from structure to the last finish." },
+        { "id": "cocina", "title": "Kitchen renovation", "desc": "Functional design and top-tier materials for the heart of the house." },
+        { "id": "bano", "title": "Bathroom renovation", "desc": "Wellness spaces with exclusive finishes and designer fittings." },
+        { "id": "interiorismo", "title": "Interior design", "desc": "From concept to the last piece of furniture, with full project direction." },
+        { "id": "rehabilitacion", "title": "Restoration", "desc": "Full restoration of buildings and homes, respecting their character." },
+        { "id": "local", "title": "Commercial premises", "desc": "Spaces that combine brand identity, compliance and functionality." },
+        { "id": "oficina", "title": "Offices", "desc": "Efficient, bright workspaces with premium-level finishes." },
+        { "id": "acabados", "title": "Finishes and materials", "desc": "A selection of noble materials, executed down to the millimetre." }
+      ]
+    },
+    "process": {
+      "eyebrow": "Our process",
+      "title": "Six steps, zero surprises",
+      "lead": "A proven method that keeps the project on time and on budget.",
+      "steps": [
+        { "n": "01", "title": "First visit", "desc": "We visit the space, listen to what you need and assess the real scope of the project. No cost, no obligation." },
+        { "n": "02", "title": "Design and quote", "desc": "We put together the design proposal and a fixed, itemised quote: you know exactly what every euro covers." },
+        { "n": "03", "title": "Materials", "desc": "We guide you through choosing finishes, with trusted suppliers and direct manufacturer relationships, for top quality at a fair price." },
+        { "n": "04", "title": "Planning", "desc": "We set a realistic phased schedule and assign a single point of contact who stays with you throughout the works." },
+        { "n": "05", "title": "Execution", "desc": "Our team executes with quality control at every stage, keeping you informed of progress week by week." },
+        { "n": "06", "title": "Handover", "desc": "A final review down to the millimetre, a walkthrough together, and a move-in-ready space with post-works warranty." }
+      ]
+    },
+    "cta": {
+      "title": "Ready to transform your space?",
+      "text": "Tell us what you have in mind. The first visit and the quote are free."
+    }
+  },
+  "projects": {
+    "hero": {
+      "eyebrow": "Projects",
+      "title": "Renovations that speak for themselves",
+      "lead": "A selection of works delivered in Barcelona and the surrounding area. Each with its own character, all with the same standard of execution."
+    },
+    "loading": "Loading projects…",
+    "empty": "No projects published yet. Check back soon.",
+    "cta": {
+      "title": "Want something like this in your home?",
+      "text": "Every project starts with a visit. Tell us what you have in mind and we'll prepare a tailored proposal."
+    }
+  },
+  "projectDetail": {
+    "loading": "Loading project…",
+    "notFound": "Project not found",
+    "seeAll": "View all projects",
+    "stats": {
+      "typeLabel": "Project type",
+      "typeDesc": "Category of the work carried out.",
+      "surfaceLabel": "Surface area",
+      "surfaceDesc": "Total surface area involved in the project.",
+      "locationLabel": "Location",
+      "locationDesc": "Location of the renovated home or premises.",
+      "deliveryValue": "Move-in ready",
+      "deliveryLabel": "Handover",
+      "deliveryDesc": "Project completed and delivered with post-works warranty."
+    },
+    "workDone": "Work carried out",
+    "aside": {
+      "label": "Something similar for you?",
+      "text": "If this style fits what you're after, we can look at your space and tell you what's possible and at what budget.",
+      "cta": "Let's talk"
+    },
+    "next": "Next project"
+  },
+  "about": {
+    "hero": {
+      "eyebrow": "About us",
+      "titleLine1": "We build with the same care",
+      "titleLine2": "we'd put into our own home"
+    },
+    "intro": {
+      "lead": "Arquelia was born from the will to do things properly, with no shortcuts.",
+      "p1": "Behind every project is a team that treats construction as a craft of precision, where how we treat the client matters as much as the last finish on site. We renovate homes, premises and offices across Catalonia under the legal name",
+      "p1Strong": "P & B Cornellà Construcciones, S.L.",
+      "p2": "We don't work by volume. We take on the projects we can genuinely deliver, with our own team and the time each job deserves. That means fewer jobs at once, and more attention on each one."
+    },
+    "band": "Precision · Noble materials · Our word",
+    "pillars": {
+      "eyebrow": "Three pillars",
+      "title": "A way of working",
+      "lead": "It's not a slogan: it's what we check on every job before closing off a phase.",
+      "items": [
+        { "n": "01", "title": "Mastery", "desc": "Years in the trade applied to every detail, with no room for improvisation. Every task, in the hands of someone who has mastered it: we don't split the work between uncoordinated subcontractors." },
+        { "n": "02", "title": "Materials", "desc": "We choose noble materials and trusted suppliers. Direct relationships with manufacturers let us access top quality at a price that makes sense." },
+        { "n": "03", "title": "Method", "desc": "A single point of contact and a clear process, from the first visit to handover. Fixed quote, realistic schedule and weekly communication." }
+      ]
+    },
+    "numbers": {
+      "eyebrow": "By the numbers",
+      "imageAlt": "Detail of an Arquelia renovation",
+      "items": [
+        { "value": "15+", "label": "Years of experience" },
+        { "value": "120+", "label": "Projects delivered" },
+        { "value": "100%", "label": "Fixed quotes" },
+        { "value": "2 years", "label": "Post-works warranty" }
+      ]
+    }
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "Contact",
+      "title": "Let's start with a conversation",
+      "lead": "Tell us what you have in mind. The first visit and the quote are free, with no obligation."
+    },
+    "formEyebrow": "Quote request",
+    "talk": "Let's talk",
+    "talkText": "If you'd rather deal with us directly, write or call us. We reply within 24 business hours.",
+    "details": [
+      { "label": "Email", "value": "info@arquelia.es" },
+      { "label": "Phone", "value": "+34 600 000 000" },
+      { "label": "Office", "value": "Cornellà de Llobregat, Barcelona" },
+      { "label": "Hours", "value": "Monday to Friday, 9:00 – 18:00" }
+    ],
+    "zone": {
+      "label": "Service area",
+      "text": "Barcelona city and metropolitan area: Cornellà, Sant Just, Esplugues, Sant Cugat, Sitges and surroundings."
+    }
+  },
+  "ctaModal": {
+    "title": "Request a quote"
+  },
+  "ctaForm": {
+    "steps": {
+      "project": { "label": "Project", "title": "What do you want to renovate?", "hint": "Pick whichever option is closest." },
+      "contact": { "label": "Contact", "title": "How can we reach you?", "hint": "Just the essentials so we can get back to you." },
+      "details": { "label": "Details", "title": "Tell us about your project", "hint": "Optional, but it helps us prepare for the visit." },
+      "summary": { "label": "Summary", "title": "Review and send", "hint": "Check that everything is correct." }
+    },
+    "services": {
+      "integral": "Full renovation",
+      "cocina": "Kitchen renovation",
+      "bano": "Bathroom renovation",
+      "interiorismo": "Interior design",
+      "rehabilitacion": "Restoration",
+      "local": "Commercial premises",
+      "oficina": "Office",
+      "otros": "Other"
+    },
+    "servicesAria": "Project type",
+    "fields": {
+      "name": "Full name",
+      "namePlaceholder": "First and last name",
+      "email": "Email",
+      "emailPlaceholder": "you@email.com",
+      "phone": "Phone",
+      "phonePlaceholder": "+34 600 000 000",
+      "city": "City",
+      "cityPlaceholder": "Barcelona",
+      "description": "Description",
+      "descriptionPlaceholder": "Approximate size, which spaces, timeline, any references you like…"
+    },
+    "errors": {
+      "name": "Tell us your name.",
+      "emailRequired": "We need an email to get back to you.",
+      "emailInvalid": "That email doesn't look valid.",
+      "phoneRequired": "We need a contact phone number.",
+      "phoneInvalid": "That phone number doesn't look valid."
+    },
+    "summary": {
+      "project": "Project",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "city": "City",
+      "details": "Details",
+      "edit": "Edit",
+      "empty": "—"
+    },
+    "privacyPre": "By submitting you accept our",
+    "privacyLink": "privacy policy",
+    "privacyPost": ". We'll only use your data to respond to this request.",
+    "back": "Back",
+    "continue": "Continue",
+    "submit": "Send request",
+    "done": {
+      "eyebrow": "Request sent",
+      "thanks": "Thank you{{name}}.",
+      "textPre": "We've received your",
+      "textPost": " request. We'll review the project and get back to you within 24 business hours.",
+      "close": "Close",
+      "seeProjects": "View projects"
+    }
+  },
+  "legal": {
+    "notice": {
+      "title": "Legal Notice",
+      "text": "Legal text pending completion with the company's real details: [COMPANY NAME], Tax ID [TAX ID], registered at [ADDRESS], contact email [EMAIL]."
+    },
+    "cookies": {
+      "title": "Cookie Policy",
+      "text": "Legal text pending completion with the company's real details: [COMPANY NAME], Tax ID [TAX ID], registered at [ADDRESS], contact email [EMAIL]."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "text": "Legal text pending completion with the company's real details: [COMPANY NAME], Tax ID [TAX ID], registered at [ADDRESS], contact email [EMAIL]."
+    }
   }
 }

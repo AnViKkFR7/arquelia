@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Button } from '../ui/Button'
 import {
   SERVICE_OPTIONS,
@@ -22,22 +23,17 @@ import styles from './CTAForm.module.css'
 
 const TOTAL = 4
 
-const STEP_META = [
-  { label: 'Proyecto', title: '¿Qué quieres reformar?', hint: 'Elige la opción que más se acerque.' },
-  { label: 'Contacto', title: '¿Cómo te contactamos?', hint: 'Solo lo imprescindible para poder responderte.' },
-  { label: 'Detalles', title: 'Cuéntanos tu proyecto', hint: 'Opcional, pero nos ayuda a preparar mejor la visita.' },
-  { label: 'Resumen', title: 'Revisa y envía', hint: 'Comprueba que todo esté correcto.' },
-]
+const STEP_KEYS = ['project', 'contact', 'details', 'summary'] as const
 
-const SERVICE_ICONS: Record<string, () => React.JSX.Element> = {
-  'Reforma integral': IconIntegral,
-  'Reforma Cocina': IconKitchen,
-  'Reforma Baño': IconBathroom,
-  Interiorismo: IconInterior,
-  Rehabilitación: IconRehab,
-  'Local Comercial': IconCommercial,
-  Oficina: IconOffice,
-  Otros: IconFinishes,
+const SERVICE_ICONS: Record<ServiceOption, () => React.JSX.Element> = {
+  integral: IconIntegral,
+  cocina: IconKitchen,
+  bano: IconBathroom,
+  interiorismo: IconInterior,
+  rehabilitacion: IconRehab,
+  local: IconCommercial,
+  oficina: IconOffice,
+  otros: IconFinishes,
 }
 
 interface CTAFormProps {
@@ -45,6 +41,7 @@ interface CTAFormProps {
 }
 
 export function CTAForm({ onDone }: CTAFormProps) {
+  const { t } = useTranslation()
   const [step, setStep] = useState(0)
   const [data, setData] = useState<CTAFormData>(emptyCTAFormData)
   const [touched, setTouched] = useState<Record<string, boolean>>({})
@@ -63,18 +60,18 @@ export function CTAForm({ onDone }: CTAFormProps) {
   const phoneValid = data.telefono.replace(/\D/g, '').length >= 9
 
   const errors = {
-    nombre: touched.nombre && data.nombre.trim() === '' ? 'Dinos cómo te llamas.' : null,
+    nombre: touched.nombre && data.nombre.trim() === '' ? t('ctaForm.errors.name') : null,
     email:
       touched.email && !emailValid
         ? data.email.trim() === ''
-          ? 'Necesitamos un email para responderte.'
-          : 'Ese email no parece válido.'
+          ? t('ctaForm.errors.emailRequired')
+          : t('ctaForm.errors.emailInvalid')
         : null,
     telefono:
       touched.telefono && !phoneValid
         ? data.telefono.trim() === ''
-          ? 'Necesitamos un teléfono de contacto.'
-          : 'Ese teléfono no parece válido.'
+          ? t('ctaForm.errors.phoneRequired')
+          : t('ctaForm.errors.phoneInvalid')
         : null,
   }
 
@@ -106,36 +103,37 @@ export function CTAForm({ onDone }: CTAFormProps) {
             <path d="M4 12.5l5.5 5.5L20 7" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </span>
-        <p className={styles.doneEyebrow}>Solicitud enviada</p>
+        <p className={styles.doneEyebrow}>{t('ctaForm.done.eyebrow')}</p>
         <h2 className={styles.doneTitle}>
-          Gracias{data.nombre ? `, ${data.nombre.split(' ')[0]}` : ''}.
+          {t('ctaForm.done.thanks', { name: data.nombre ? `, ${data.nombre.split(' ')[0]}` : '' })}
         </h2>
         <p className={styles.doneText}>
-          Hemos recibido tu solicitud de <strong>{data.servicio?.toLowerCase()}</strong>. Revisaremos
-          el proyecto y te contactaremos en menos de 24 h laborables.
+          {t('ctaForm.done.textPre')}{' '}
+          <strong>{data.servicio ? t(`ctaForm.services.${data.servicio}`).toLowerCase() : ''}</strong>
+          {t('ctaForm.done.textPost')}
         </p>
         <div className={styles.doneActions}>
           <Button variant="solid" onClick={onDone}>
-            Cerrar
+            {t('ctaForm.done.close')}
           </Button>
           <Button to="/proyectos" variant="outline" arrow onClick={onDone}>
-            Ver proyectos
+            {t('ctaForm.done.seeProjects')}
           </Button>
         </div>
       </div>
     )
   }
 
-  const meta = STEP_META[step]
+  const stepKey = STEP_KEYS[step]
 
   return (
     <div className={styles.form}>
       {/* ── Cabecera de progreso ── */}
       <header className={styles.head}>
         <ol className={styles.steps}>
-          {STEP_META.map((s, i) => (
+          {STEP_KEYS.map((key, i) => (
             <li
-              key={s.label}
+              key={key}
               className={`${styles.stepChip} ${i === step ? styles.chipOn : ''} ${
                 i < step ? styles.chipDone : ''
               }`}
@@ -149,7 +147,7 @@ export function CTAForm({ onDone }: CTAFormProps) {
                   i + 1
                 )}
               </span>
-              <span className={styles.chipLabel}>{s.label}</span>
+              <span className={styles.chipLabel}>{t(`ctaForm.steps.${key}.label`)}</span>
             </li>
           ))}
         </ol>
@@ -162,14 +160,14 @@ export function CTAForm({ onDone }: CTAFormProps) {
       {/* ── Cuerpo ── */}
       <div key={step} className={styles.panel}>
         <div className={styles.panelHead}>
-          <h2 className={styles.title}>{meta.title}</h2>
-          <p className={styles.hint}>{meta.hint}</p>
+          <h2 className={styles.title}>{t(`ctaForm.steps.${stepKey}.title`)}</h2>
+          <p className={styles.hint}>{t(`ctaForm.steps.${stepKey}.hint`)}</p>
         </div>
 
         {step === 0 && (
-          <div className={styles.services} role="radiogroup" aria-label="Tipo de proyecto">
+          <div className={styles.services} role="radiogroup" aria-label={t('ctaForm.servicesAria')}>
             {SERVICE_OPTIONS.map((option, i) => {
-              const Icon = SERVICE_ICONS[option] ?? IconFinishes
+              const Icon = SERVICE_ICONS[option]
               const active = data.servicio === option
               return (
                 <button
@@ -180,14 +178,14 @@ export function CTAForm({ onDone }: CTAFormProps) {
                   className={`${styles.service} ${active ? styles.serviceOn : ''}`}
                   style={{ animationDelay: `${i * 35}ms` }}
                   onClick={() => {
-                    update('servicio', option as ServiceOption)
+                    update('servicio', option)
                     setStep(1)
                   }}
                 >
                   <span className={styles.serviceIcon}>
                     <Icon />
                   </span>
-                  <span className={styles.serviceLabel}>{option}</span>
+                  <span className={styles.serviceLabel}>{t(`ctaForm.services.${option}`)}</span>
                   <span className={styles.serviceTick} aria-hidden="true" />
                 </button>
               )
@@ -199,11 +197,11 @@ export function CTAForm({ onDone }: CTAFormProps) {
           <div className={styles.fields}>
             <Field
               ref={firstFieldRef}
-              label="Nombre completo"
+              label={t('ctaForm.fields.name')}
               required
               type="text"
               autoComplete="name"
-              placeholder="Nombre y apellidos"
+              placeholder={t('ctaForm.fields.namePlaceholder')}
               value={data.nombre}
               error={errors.nombre}
               onChange={(v) => update('nombre', v)}
@@ -211,22 +209,22 @@ export function CTAForm({ onDone }: CTAFormProps) {
             />
             <div className={styles.fieldRow}>
               <Field
-                label="Email"
+                label={t('ctaForm.fields.email')}
                 required
                 type="email"
                 autoComplete="email"
-                placeholder="tu@email.com"
+                placeholder={t('ctaForm.fields.emailPlaceholder')}
                 value={data.email}
                 error={errors.email}
                 onChange={(v) => update('email', v)}
                 onBlur={() => setTouched((t) => ({ ...t, email: true }))}
               />
               <Field
-                label="Teléfono"
+                label={t('ctaForm.fields.phone')}
                 required
                 type="tel"
                 autoComplete="tel"
-                placeholder="+34 600 000 000"
+                placeholder={t('ctaForm.fields.phonePlaceholder')}
                 value={data.telefono}
                 error={errors.telefono}
                 onChange={(v) => update('telefono', v)}
@@ -234,10 +232,10 @@ export function CTAForm({ onDone }: CTAFormProps) {
               />
             </div>
             <Field
-              label="Población"
+              label={t('ctaForm.fields.city')}
               type="text"
               autoComplete="address-level2"
-              placeholder="Barcelona"
+              placeholder={t('ctaForm.fields.cityPlaceholder')}
               value={data.poblacion}
               onChange={(v) => update('poblacion', v)}
             />
@@ -247,14 +245,14 @@ export function CTAForm({ onDone }: CTAFormProps) {
         {step === 2 && (
           <div className={styles.fields}>
             <label className={styles.field}>
-              <span className={styles.label}>Descripción</span>
+              <span className={styles.label}>{t('ctaForm.fields.description')}</span>
               <textarea
                 className={styles.textarea}
                 rows={6}
                 maxLength={800}
                 value={data.descripcion}
                 onChange={(e) => update('descripcion', e.target.value)}
-                placeholder="Superficie aproximada, qué espacios, plazos, referencias que te gusten…"
+                placeholder={t('ctaForm.fields.descriptionPlaceholder')}
               />
               <span className={styles.counterSmall}>{data.descripcion.length} / 800</span>
             </label>
@@ -264,18 +262,26 @@ export function CTAForm({ onDone }: CTAFormProps) {
         {step === 3 && (
           <>
             <dl className={styles.summary}>
-              <SummaryRow label="Proyecto" value={data.servicio} onEdit={() => setStep(0)} />
-              <SummaryRow label="Nombre" value={data.nombre} onEdit={() => setStep(1)} />
-              <SummaryRow label="Email" value={data.email} onEdit={() => setStep(1)} />
-              <SummaryRow label="Teléfono" value={data.telefono} onEdit={() => setStep(1)} />
-              <SummaryRow label="Población" value={data.poblacion || '—'} onEdit={() => setStep(1)} />
+              <SummaryRow
+                label={t('ctaForm.summary.project')}
+                value={data.servicio ? t(`ctaForm.services.${data.servicio}`) : null}
+                onEdit={() => setStep(0)}
+              />
+              <SummaryRow label={t('ctaForm.summary.name')} value={data.nombre} onEdit={() => setStep(1)} />
+              <SummaryRow label={t('ctaForm.summary.email')} value={data.email} onEdit={() => setStep(1)} />
+              <SummaryRow label={t('ctaForm.summary.phone')} value={data.telefono} onEdit={() => setStep(1)} />
+              <SummaryRow
+                label={t('ctaForm.summary.city')}
+                value={data.poblacion || t('ctaForm.summary.empty')}
+                onEdit={() => setStep(1)}
+              />
               {data.descripcion && (
-                <SummaryRow label="Detalles" value={data.descripcion} onEdit={() => setStep(2)} />
+                <SummaryRow label={t('ctaForm.summary.details')} value={data.descripcion} onEdit={() => setStep(2)} />
               )}
             </dl>
             <p className={styles.privacy}>
-              Al enviar aceptas la <Link to="/privacidad">política de privacidad</Link>. Usaremos tus
-              datos únicamente para responder a esta solicitud.
+              {t('ctaForm.privacyPre')} <Link to="/privacidad">{t('ctaForm.privacyLink')}</Link>
+              {t('ctaForm.privacyPost')}
             </p>
           </>
         )}
@@ -285,7 +291,7 @@ export function CTAForm({ onDone }: CTAFormProps) {
       <footer className={styles.actions}>
         {step > 0 ? (
           <button type="button" className={styles.back} onClick={() => setStep((s) => s - 1)}>
-            <span aria-hidden="true">←</span> Atrás
+            <span aria-hidden="true">←</span> {t('ctaForm.back')}
           </button>
         ) : (
           <span className={styles.backSpacer} />
@@ -293,11 +299,11 @@ export function CTAForm({ onDone }: CTAFormProps) {
 
         {step < TOTAL - 1 ? (
           <Button variant="solid" disabled={step === 0 && !canAdvance()} onClick={goNext} arrow>
-            Continuar
+            {t('ctaForm.continue')}
           </Button>
         ) : (
           <Button variant="gold" onClick={submit} arrow>
-            Enviar solicitud
+            {t('ctaForm.submit')}
           </Button>
         )}
       </footer>
@@ -364,12 +370,13 @@ function SummaryRow({
   value: string | null
   onEdit: () => void
 }) {
+  const { t } = useTranslation()
   return (
     <div className={styles.summaryRow}>
       <dt className={styles.summaryKey}>{label}</dt>
       <dd className={styles.summaryVal}>{value}</dd>
       <button type="button" className={styles.summaryEdit} onClick={onEdit}>
-        Editar
+        {t('ctaForm.summary.edit')}
       </button>
     </div>
   )

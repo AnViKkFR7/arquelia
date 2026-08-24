@@ -9,7 +9,7 @@
 /* ── Estados iniciales ───────────────────────────────── */
 .up {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(38px);
 }
 
 .fade {

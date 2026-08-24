@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Reveal } from '../ui/Reveal'
 import { ProjectCard } from './ProjectCard'
 import type { Project } from '../../types/project'
@@ -9,6 +10,7 @@ interface FeaturedProjectsShowcaseProps {
 }
 
 export function FeaturedProjectsShowcase({ projects }: FeaturedProjectsShowcaseProps) {
+  const { t } = useTranslation()
   if (projects.length === 0) return null
 
   return (
@@ -23,7 +25,7 @@ export function FeaturedProjectsShowcase({ projects }: FeaturedProjectsShowcaseP
 
       <div className={`container ${styles.footer}`}>
         <Reveal variant="fade">
-          <ButtonSlider to='/proyectos' text='Ver todos los proyectos'/>
+          <ButtonSlider to="/proyectos" text={t('home.showcase.seeAll')} />
         </Reveal>
       </div>
     </section>

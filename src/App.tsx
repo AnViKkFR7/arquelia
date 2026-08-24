@@ -21,9 +21,9 @@ function App() {
             <Route path="proyectos/:id" element={<ProjectDetailPage />} />
             <Route path="sobre-nosotros" element={<AboutPage />} />
             <Route path="contacto" element={<ContactPage />} />
-            <Route path="aviso-legal" element={<LegalPage title="Aviso Legal" />} />
-            <Route path="cookies" element={<LegalPage title="Política de Cookies" />} />
-            <Route path="privacidad" element={<LegalPage title="Política de Privacidad" />} />
+            <Route path="aviso-legal" element={<LegalPage slug="notice" />} />
+            <Route path="cookies" element={<LegalPage slug="cookies" />} />
+            <Route path="privacidad" element={<LegalPage slug="privacy" />} />
           </Route>
         </Routes>
       </CTAFormProvider>

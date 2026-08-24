@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import styles from './ProjectCard.module.css'
 
 import type { Project } from '../../types/project'
@@ -10,6 +11,7 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, index }: ProjectCardProps) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   return (
@@ -17,7 +19,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
       type="button"
       className={styles.card}
       onClick={() => navigate(`/proyectos/${project.id}`)}
-      aria-label={`Ver proyecto: ${project.title}`}
+      aria-label={t('common.seeProjectAria', { title: project.title })}
     >
       <span className={styles.frame}>
         <span
@@ -31,7 +33,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         )}
 
         {/* Botón "+" que rota 45° al hover — igual que la referencia */}
-        <span className={styles.plus} aria-hidden="true" aria-label='Haz clic para saber más'>
+        <span className={styles.plus} aria-hidden="true">
           <span className={styles.plusBar} />
           <span className={`${styles.plusBar} ${styles.plusBarV}`} />
         </span>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { PageHero } from '../components/ui/PageHero'
 import { SectionHeader } from '../components/ui/SectionHeader'
 import { Reveal } from '../components/ui/Reveal'
@@ -22,41 +23,45 @@ import cocinaImg from '../assets/cocina_abierta.avif'
 import banoImg from '../assets/baño_03.avif'
 import salonImg from '../assets/salon_01.avif'
 
-const featured = [
-  { label: 'Cocinas', prefix: 'Reformas de', suffix: 'a medida', image: cocinaImg, offset: 0 },
-  { label: 'Baños', prefix: 'Reformas de', suffix: 'de autor', image: banoImg, offset: 1 },
-  { label: 'Integral', prefix: 'Reforma', suffix: 'llave en mano', image: salonImg, offset: 2 },
-] as const
+const FEATURED_IMAGES: Record<string, string> = { cocina: cocinaImg, bano: banoImg, integral: salonImg }
+const CATALOG_ICONS: Record<string, () => React.JSX.Element> = {
+  integral: IconIntegral,
+  cocina: IconKitchen,
+  bano: IconBathroom,
+  interiorismo: IconInterior,
+  rehabilitacion: IconRehab,
+  local: IconCommercial,
+  oficina: IconOffice,
+  acabados: IconFinishes,
+}
 
-const services = [
-  { title: 'Reforma integral', desc: 'Transformación completa de la vivienda, de la estructura a los últimos acabados.', Icon: IconIntegral },
-  { title: 'Reforma de cocina', desc: 'Diseño funcional y materiales de alta gama para el corazón de la casa.', Icon: IconKitchen },
-  { title: 'Reforma de baño', desc: 'Espacios de bienestar con acabados exclusivos y grifería de diseño.', Icon: IconBathroom },
-  { title: 'Interiorismo', desc: 'Del concepto a la última pieza de mobiliario, con dirección de proyecto.', Icon: IconInterior },
-  { title: 'Rehabilitación', desc: 'Recuperación integral de edificios y viviendas respetando su carácter.', Icon: IconRehab },
-  { title: 'Local comercial', desc: 'Espacios que combinan identidad de marca, normativa y funcionalidad.', Icon: IconCommercial },
-  { title: 'Oficinas', desc: 'Entornos de trabajo eficientes, luminosos y con acabados de nivel premium.', Icon: IconOffice },
-  { title: 'Acabados y calidades', desc: 'Selección de materiales nobles y ejecución al milímetro en cada detalle.', Icon: IconFinishes },
-]
+interface FeaturedCard {
+  id: string
+  label: string
+  prefix: string
+  suffix: string
+}
 
-const processSteps: ProcessStep[] = [
-  { n: '01', title: 'Primera visita', desc: 'Visitamos el espacio, escuchamos qué necesitas y valoramos el alcance real del proyecto. Sin coste ni compromiso.' },
-  { n: '02', title: 'Proyecto y presupuesto', desc: 'Elaboramos la propuesta de diseño y un presupuesto cerrado y detallado por partidas: sabes exactamente qué incluye cada euro.' },
-  { n: '03', title: 'Materiales', desc: 'Te acompañamos en la elección de acabados con proveedores de confianza y relación directa de fabricante, para acceder a primera calidad al precio justo.' },
-  { n: '04', title: 'Planificación', desc: 'Definimos un calendario realista por fases y asignamos un único interlocutor que te acompaña durante toda la obra.' },
-  { n: '05', title: 'Ejecución', desc: 'Nuestro equipo ejecuta con control de calidad en cada fase y te mantiene informado del avance semana a semana.' },
-  { n: '06', title: 'Entrega de llaves', desc: 'Revisión final al milímetro, repaso conjunto contigo y entrega de un espacio listo para vivir, con garantía post-obra.' },
-]
+interface CatalogItem {
+  id: string
+  title: string
+  desc: string
+}
 
 export function ServicesPage() {
+  const { t } = useTranslation()
   const [activeStep, setActiveStep] = useState(0)
+
+  const featured = t('services.featured', { returnObjects: true }) as FeaturedCard[]
+  const catalog = t('services.catalog.items', { returnObjects: true }) as CatalogItem[]
+  const processSteps = t('services.process.steps', { returnObjects: true }) as ProcessStep[]
 
   return (
     <>
       <PageHero
-        eyebrow="Servicios"
-        title="Cada reforma, un oficio de precisión"
-        lead="Desde una intervención puntual hasta una rehabilitación completa: mismo nivel de exigencia en diseño, materiales y ejecución."
+        eyebrow={t('services.hero.eyebrow')}
+        title={t('services.hero.title')}
+        lead={t('services.hero.lead')}
         image={heroImg}
       />
 
@@ -64,8 +69,14 @@ export function ServicesPage() {
       <section className={`section ${styles.featured}`}>
         <div className={`container ${styles.featuredGrid}`}>
           {featured.map((f, i) => (
-            <Reveal key={f.label} variant="up" delay={i * 100}>
-              <ServiceCard {...f} />
+            <Reveal key={f.id} variant="up" delay={i * 100}>
+              <ServiceCard
+                label={f.label}
+                prefix={f.prefix}
+                suffix={f.suffix}
+                image={FEATURED_IMAGES[f.id]}
+                offset={i as 0 | 1 | 2}
+              />
             </Reveal>
           ))}
         </div>
@@ -76,23 +87,26 @@ export function ServicesPage() {
         <div className="container">
           <SectionHeader
             index="01"
-            eyebrow="Catálogo"
-            title="Todo lo que cubrimos"
-            lead="Un único equipo para todo el proyecto: sin subcontratas descoordinadas ni responsabilidades diluidas."
+            eyebrow={t('services.catalog.eyebrow')}
+            title={t('services.catalog.title')}
+            lead={t('services.catalog.lead')}
             inverse
           />
         </div>
 
         <div className={`container ${styles.iconGrid}`}>
-          {services.map(({ title, desc, Icon }, i) => (
-            <Reveal key={title} variant="fade" delay={i * 50} className={styles.iconCard}>
-              <span className={styles.iconWrap}>
-                <Icon />
-              </span>
-              <h3 className={styles.iconTitle}>{title}</h3>
-              <p className={styles.iconDesc}>{desc}</p>
-            </Reveal>
-          ))}
+          {catalog.map(({ id, title, desc }, i) => {
+            const Icon = CATALOG_ICONS[id]
+            return (
+              <Reveal key={id} variant="fade" delay={i * 50} className={styles.iconCard}>
+                <span className={styles.iconWrap}>
+                  <Icon />
+                </span>
+                <h3 className={styles.iconTitle}>{title}</h3>
+                <p className={styles.iconDesc}>{desc}</p>
+              </Reveal>
+            )
+          })}
         </div>
       </section>
 
@@ -101,9 +115,9 @@ export function ServicesPage() {
         <div className="container">
           <SectionHeader
             index="02"
-            eyebrow="Nuestro proceso"
-            title="Seis pasos, cero sorpresas"
-            lead="Un método probado que mantiene el proyecto dentro de plazo y presupuesto."
+            eyebrow={t('services.process.eyebrow')}
+            title={t('services.process.title')}
+            lead={t('services.process.lead')}
           />
 
           <div className={styles.timelineWrap}>
@@ -112,10 +126,7 @@ export function ServicesPage() {
         </div>
       </section>
 
-      <CtaBand
-        title="¿Listo para transformar tu espacio?"
-        text="Cuéntanos qué tienes en mente. La primera visita y el presupuesto son gratuitos."
-      />
+      <CtaBand title={t('services.cta.title')} text={t('services.cta.text')} />
     </>
   )
 }

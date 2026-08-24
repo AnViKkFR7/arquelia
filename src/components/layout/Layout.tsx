@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { Header } from './Header'
 import { Footer } from './Footer'
+import { DocumentMeta } from './DocumentMeta'
 import styles from './Layout.module.css'
 
 export function Layout() {
@@ -14,6 +15,7 @@ export function Layout() {
 
   return (
     <>
+      <DocumentMeta />
       <Header />
       {/* key fuerza el remontaje → transición de entrada en cada ruta */}
       <main key={pathname} className={styles.main}>

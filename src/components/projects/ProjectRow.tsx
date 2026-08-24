@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useInView } from '../../hooks/useInView'
 import { Button } from '../ui/Button'
 import type { Project } from '../../types/project'
@@ -14,6 +15,7 @@ interface ProjectRowProps {
  * Alterna el lado en cada índice — patrón "Private Courtyard" de la referencia.
  */
 export function ProjectRow({ project, index }: ProjectRowProps) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { ref, inView } = useInView<HTMLElement>({ threshold: 0.12 })
   const reversed = index % 2 === 1
@@ -46,16 +48,21 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
         {project.description && <p className={styles.desc}>{project.description}</p>}
 
         <Button variant="link" arrow onClick={go} className={styles.cta}>
-          Ver proyecto
+          {t('common.seeProject')}
         </Button>
       </div>
 
-      <button type="button" className={styles.media} onClick={go} aria-label={`Ver ${project.title}`}>
+      <button
+        type="button"
+        className={styles.media}
+        onClick={go}
+        aria-label={t('common.seeAria', { title: project.title })}
+      >
         <span
           className={styles.image}
           style={project.coverUrl ? { backgroundImage: `url(${project.coverUrl})` } : undefined}
         />
-        <span className={styles.plus} aria-hidden="true" aria-label='Haz clic para saber más'>
+        <span className={styles.plus} aria-hidden="true">
           <span className={styles.plusBar} />
           <span className={`${styles.plusBar} ${styles.plusBarV}`} />
         </span>

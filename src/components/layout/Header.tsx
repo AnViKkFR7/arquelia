@@ -35,12 +35,12 @@ export function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.bar}>
-        <NavLink to="/" className={styles.logo} aria-label="Arquelia — inicio">
+        <NavLink to="/" className={styles.logo} aria-label={t('nav.homeAria')}>
           <span className={styles.logoMark} aria-hidden="true" />
           ARQUELIA
         </NavLink>
 
-        <nav className={styles.nav} aria-label="Principal">
+        <nav className={styles.nav} aria-label={t('nav.mainAria')}>
           {links.map((link) => (
             <NavLink
               key={link.to}
@@ -63,7 +63,7 @@ export function Header() {
           <button
             type="button"
             className={`${styles.burger} ${menuOpen ? styles.burgerOpen : ''}`}
-            aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+            aria-label={menuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((v) => !v)}
           >
@@ -74,7 +74,7 @@ export function Header() {
       </div>
 
       <div className={`${styles.panel} ${menuOpen ? styles.panelOpen : ''}`}>
-        <nav className={styles.panelNav} aria-label="Móvil">
+        <nav className={styles.panelNav} aria-label={t('nav.mobileAria')}>
           {links.map((link, i) => (
             <NavLink
               key={link.to}

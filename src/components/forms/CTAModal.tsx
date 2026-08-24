@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import styles from './CTAModal.module.css'
 
 interface CTAModalProps {
@@ -8,6 +9,7 @@ interface CTAModalProps {
 }
 
 export function CTAModal({ isOpen, onClose, children }: CTAModalProps) {
+  const { t } = useTranslation()
   const dialogRef = useRef<HTMLDivElement | null>(null)
   const restoreFocus = useRef<HTMLElement | null>(null)
 
@@ -76,10 +78,10 @@ export function CTAModal({ isOpen, onClose, children }: CTAModalProps) {
         <header className={styles.bar}>
           <span className={styles.brand} id="cta-modal-title">
             <span className={styles.brandMark} aria-hidden="true" />
-            Solicitar presupuesto
+            {t('ctaModal.title')}
           </span>
 
-          <button type="button" className={styles.close} onClick={onClose} aria-label="Cerrar">
+          <button type="button" className={styles.close} onClick={onClose} aria-label={t('common.close')}>
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
             </svg>

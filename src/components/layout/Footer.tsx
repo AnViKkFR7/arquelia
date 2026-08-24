@@ -3,11 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { Reveal } from '../ui/Reveal'
 import styles from './Footer.module.css'
 
-const serviceLinks = ['Reformas integrales', 'Cocinas', 'Baños', 'Interiorismo', 'Rehabilitación']
-
 export function Footer() {
   const { t } = useTranslation()
   const year = new Date().getFullYear()
+  const serviceLinks = t('footer.serviceLinks', { returnObjects: true }) as string[]
 
   return (
     <footer className={styles.footer}>
@@ -18,11 +17,7 @@ export function Footer() {
               <span className={styles.logoMark} aria-hidden="true" />
               ARQUELIA
             </NavLink>
-            <p className={styles.claim}>
-              Construcción y reformas premium
-              <br />
-              en Cataluña.
-            </p>
+            <p className={styles.claim}>{t('footer.claim')}</p>
           </div>
         </Reveal>
 
@@ -37,7 +32,7 @@ export function Footer() {
           </div>
 
           <div className={styles.col}>
-            <h4 className={styles.heading}>Navegación</h4>
+            <h4 className={styles.heading}>{t('footer.navigation')}</h4>
             <NavLink to="/proyectos" className={styles.link}>
               {t('nav.projects')}
             </NavLink>
@@ -57,15 +52,11 @@ export function Footer() {
             <a href="tel:+34600000000" className={styles.link}>
               +34 600 000 000
             </a>
-            <span className={styles.muted}>
-              Cornellà de Llobregat
-              <br />
-              Barcelona
-            </span>
+            <span className={styles.muted}>{t('footer.location')}</span>
           </div>
 
           <div className={styles.col}>
-            <h4 className={styles.heading}>Legal</h4>
+            <h4 className={styles.heading}>{t('footer.legalHeading')}</h4>
             <NavLink to="/aviso-legal" className={styles.link}>
               {t('footer.legal')}
             </NavLink>
@@ -83,7 +74,9 @@ export function Footer() {
             &copy; {year} Arquelia. {t('footer.rights')}
           </span>
           <span>
-            <a href="https://moiraordo.es/" target='_blank' >Developed by Moira Ordo</a>
+            <a href="https://moiraordo.es/" target="_blank" rel="noreferrer">
+              {t('footer.developedBy')}
+            </a>
           </span>
           <span className={styles.legalName}>P &amp; B Cornellà Construcciones, S.L.</span>
         </div>

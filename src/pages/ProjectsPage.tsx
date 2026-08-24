@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { getPublishedProjects } from '../lib/projects'
 import { ProjectRow } from '../components/projects/ProjectRow'
 import { CtaBand } from '../components/home/CtaBand'
@@ -7,6 +8,7 @@ import type { Project } from '../types/project'
 import styles from './ProjectsPage.module.css'
 
 export function ProjectsPage() {
+  const { t } = useTranslation()
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -20,18 +22,16 @@ export function ProjectsPage() {
   return (
     <>
       <PageHero
-        eyebrow="Proyectos"
-        title="Reformas que hablan por sí solas"
-        lead="Una selección de obras entregadas en Barcelona y alrededores. Cada una con su propio carácter, todas con el mismo estándar de ejecución."
+        eyebrow={t('projects.hero.eyebrow')}
+        title={t('projects.hero.title')}
+        lead={t('projects.hero.lead')}
       />
 
       <div className={styles.rows}>
-        {loading && <p className={`container ${styles.loading}`}>Cargando proyectos…</p>}
+        {loading && <p className={`container ${styles.loading}`}>{t('projects.loading')}</p>}
 
         {!loading && projects.length === 0 && (
-          <p className={`container ${styles.loading}`}>
-            Aún no hay proyectos publicados. Vuelve pronto.
-          </p>
+          <p className={`container ${styles.loading}`}>{t('projects.empty')}</p>
         )}
 
         {projects.map((p, i) => (
@@ -39,10 +39,7 @@ export function ProjectsPage() {
         ))}
       </div>
 
-      <CtaBand
-        title="¿Quieres algo así en tu casa?"
-        text="Cada proyecto empieza con una visita. Cuéntanos qué tienes en mente y te preparamos una propuesta a medida."
-      />
+      <CtaBand title={t('projects.cta.title')} text={t('projects.cta.text')} />
     </>
   )
 }

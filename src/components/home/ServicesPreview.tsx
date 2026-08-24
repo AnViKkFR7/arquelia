@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Reveal } from '../ui/Reveal'
-import { Button } from '../ui/Button'
 import styles from './ServicesPreview.module.css'
 
 import cocina from '../../assets/cocina_abierta.avif'
@@ -11,13 +11,12 @@ import pasillo from '../../assets/pasillo_02.jpg'
 import aseo from '../../assets/aseo_02.jpg'
 import ButtonSlider from '../ui/ButtonSlider'
 
-const items = [
-  { title: 'Reformas integrales', note: 'De la estructura al último acabado', image: salon },
-  { title: 'Cocinas', note: 'Diseño, mobiliario y encimeras a medida', image: cocina },
-  { title: 'Baños', note: 'Materiales nobles y grifería de diseño', image: bano },
-  { title: 'Interiorismo', note: 'Proyecto completo, llave en mano', image: pasillo },
-  { title: 'Rehabilitación', note: 'Recuperar sin perder el carácter', image: aseo },
-]
+const images = [salon, cocina, bano, pasillo, aseo]
+
+interface ServiceItem {
+  title: string
+  note: string
+}
 
 /**
  * Listado de servicios con previsualización.
@@ -25,6 +24,8 @@ const items = [
  * no se muestra (no hay hover) y las filas quedan como lista limpia.
  */
 export function ServicesPreview() {
+  const { t } = useTranslation()
+  const items = t('home.services.items', { returnObjects: true }) as ServiceItem[]
   const [active, setActive] = useState<number | null>(null)
   const [pos, setPos] = useState({ x: 0, y: 0 })
 
@@ -36,11 +37,11 @@ export function ServicesPreview() {
       <div className={`container ${styles.head}`}>
         <Reveal variant="fade">
           <span className="eyebrow">
-            <span className={styles.index}>03</span> Servicios
+            <span className={styles.index}>03</span> {t('home.services.eyebrow')}
           </span>
         </Reveal>
         <Reveal variant="up" delay={60}>
-          <h2 className={styles.title}>Lo que hacemos</h2>
+          <h2 className={styles.title}>{t('home.services.title')}</h2>
         </Reveal>
       </div>
 
@@ -69,7 +70,7 @@ export function ServicesPreview() {
 
       <div className={`container ${styles.footer}`}>
         <Reveal variant="fade">
-          <ButtonSlider to='/servicios' text="Todos los servicios" />
+          <ButtonSlider to="/servicios" text={t('home.services.seeAll')} />
         </Reveal>
       </div>
 
@@ -83,7 +84,7 @@ export function ServicesPreview() {
           <span
             key={item.title}
             className={`${styles.previewImg} ${active === i ? styles.previewImgOn : ''}`}
-            style={{ backgroundImage: `url(${item.image})` }}
+            style={{ backgroundImage: `url(${images[i]})` }}
           />
         ))}
       </div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { getProjectById, getPublishedProjects } from '../lib/projects'
 import { Marquee } from '../components/ui/Marquee'
 import { Reveal } from '../components/ui/Reveal'
@@ -9,6 +10,7 @@ import type { Project } from '../types/project'
 import styles from './ProjectDetailPage.module.css'
 
 export function ProjectDetailPage() {
+  const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [project, setProject] = useState<Project | null>(null)
@@ -32,7 +34,7 @@ export function ProjectDetailPage() {
   if (loading) {
     return (
       <div className={`container ${styles.state}`}>
-        <p>Cargando proyecto…</p>
+        <p>{t('projectDetail.loading')}</p>
       </div>
     )
   }
@@ -40,9 +42,9 @@ export function ProjectDetailPage() {
   if (!project) {
     return (
       <div className={`container ${styles.state}`}>
-        <h1>Proyecto no encontrado</h1>
+        <h1>{t('projectDetail.notFound')}</h1>
         <Button to="/proyectos" variant="outline" arrow className={styles.stateCta}>
-          Ver todos los proyectos
+          {t('projectDetail.seeAll')}
         </Button>
       </div>
     )
@@ -51,23 +53,23 @@ export function ProjectDetailPage() {
   const stats = [
     project.categoria && {
       value: project.categoria,
-      label: 'Tipo de proyecto',
-      desc: 'Categoría de la intervención realizada.',
+      label: t('projectDetail.stats.typeLabel'),
+      desc: t('projectDetail.stats.typeDesc'),
     },
     project.superficieM2 != null && {
       value: `${project.superficieM2} m²`,
-      label: 'Superficie',
-      desc: 'Superficie total intervenida en el proyecto.',
+      label: t('projectDetail.stats.surfaceLabel'),
+      desc: t('projectDetail.stats.surfaceDesc'),
     },
     project.ubicacion && {
       value: project.ubicacion,
-      label: 'Ubicación',
-      desc: 'Localización de la vivienda o local reformado.',
+      label: t('projectDetail.stats.locationLabel'),
+      desc: t('projectDetail.stats.locationDesc'),
     },
     {
-      value: 'Llave en mano',
-      label: 'Entrega',
-      desc: 'Proyecto finalizado y entregado con garantía post-obra.',
+      value: t('projectDetail.stats.deliveryValue'),
+      label: t('projectDetail.stats.deliveryLabel'),
+      desc: t('projectDetail.stats.deliveryDesc'),
     },
   ].filter(Boolean) as { value: string; label: string; desc: string }[]
 
@@ -112,7 +114,7 @@ export function ProjectDetailPage() {
             {project.whatWasDone.length > 0 && (
               <div className={styles.work}>
                 <Reveal variant="fade">
-                  <h2 className={`eyebrow ${styles.workTitle}`}>Trabajos realizados</h2>
+                  <h2 className={`eyebrow ${styles.workTitle}`}>{t('projectDetail.workDone')}</h2>
                 </Reveal>
                 <ul className={styles.workList}>
                   {project.whatWasDone.map((item, i) => (
@@ -128,13 +130,10 @@ export function ProjectDetailPage() {
 
           <Reveal variant="up" delay={120}>
             <aside className={styles.aside}>
-              <span className={styles.asideLabel}>Un proyecto parecido</span>
-              <p className={styles.asideText}>
-                Si te encaja este estilo, podemos estudiar tu espacio y decirte qué es viable y con
-                qué presupuesto.
-              </p>
+              <span className={styles.asideLabel}>{t('projectDetail.aside.label')}</span>
+              <p className={styles.asideText}>{t('projectDetail.aside.text')}</p>
               <Button to="/contacto" variant="gold" arrow className={styles.asideCta}>
-                Hablemos
+                {t('projectDetail.aside.cta')}
               </Button>
             </aside>
           </Reveal>
@@ -161,14 +160,18 @@ export function ProjectDetailPage() {
 
       {/* Siguiente proyecto */}
       {next && (
-        <button type="button" className={styles.next} onClick={() => navigate(`/proyectos/${next.id}`)}>
+        <button
+          type="button"
+          className={styles.next}
+          onClick={() => navigate(`/proyectos/${next.id}`)}
+        >
           <span
             className={styles.nextImg}
             style={next.coverUrl ? { backgroundImage: `url(${next.coverUrl})` } : undefined}
           />
           <span className={styles.nextScrim} />
           <span className={styles.nextInner}>
-            <span className={`eyebrow ${styles.nextLabel}`}>Siguiente proyecto</span>
+            <span className={`eyebrow ${styles.nextLabel}`}>{t('projectDetail.next')}</span>
             <span className={styles.nextTitle}>{next.title}</span>
           </span>
         </button>
