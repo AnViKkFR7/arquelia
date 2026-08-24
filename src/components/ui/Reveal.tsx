@@ -1,5 +1,6 @@
 import type { ElementType, ReactNode } from 'react'
 import { useInView } from '../../hooks/useInView'
+import { useScrollReveal } from '../../hooks/useScrollReveal'
 import styles from './Reveal.module.css'
 
 type Variant = 'up' | 'fade' | 'left' | 'right' | 'clip'
@@ -8,19 +9,21 @@ interface RevealProps {
   children: ReactNode
   /** Dirección/tipo de entrada. */
   variant?: Variant
-  /** Retardo en ms al entrar, para escalonar elementos hermanos. */
+  /**
+   * Escalonado respecto a sus hermanos, en ms.
+   *
+   * En `up` no es un retardo de reloj: se traduce en recorrido de scroll, de
+   * modo que a mitad de la entrada los hermanos están visiblemente a alturas
+   * distintas (que es lo que hace que una rejilla "entre en escena" en vez de
+   * aparecer en bloque). En el resto de variantes sí es un `transition-delay`.
+   */
   delay?: number
   /**
-   * `true` (por defecto): se revela una vez y se queda así — es lo que
-   * quieres en la mayoría de secciones, para que la página no "parpadee"
-   * al subir y bajar.
+   * `true` (por defecto): se revela una vez y se queda así.
+   * `false`: vuelve a su estado inicial al salir del viewport y se anima de
+   * nuevo al reaparecer.
    *
-   * `false`: cada vez que el elemento sale del viewport (hacia arriba o
-   * hacia abajo) vuelve a su estado inicial, y se anima de nuevo al
-   * reaparecer — en cualquier dirección de scroll. Pensado para piezas
-   * puntuales donde ese "respira cada vez" aporta (una tarjeta destacada,
-   * un titular de sección), no para usarlo en todas partes: si se abusa,
-   * la página se vuelve inquieta en vez de premium.
+   * No aplica a `up`, que al ir ligado al scroll ya es reversible por sí solo.
    */
   once?: boolean
   /** Etiqueta HTML a renderizar. */
@@ -30,12 +33,43 @@ interface RevealProps {
 
 /**
  * Envoltorio de revelado al hacer scroll.
- * Una sola curva de easing en todo el sitio; respeta `prefers-reduced-motion`
- * (la media query global neutraliza la transición).
+ *
+ * `up` va ligado al scroll de forma continua y suavizada (ver
+ * `useScrollReveal`); el resto de variantes son una transición CSS de
+ * duración fija disparada al entrar en el viewport. Todas respetan
+ * `prefers-reduced-motion`.
  */
-export function Reveal({
+export function Reveal({ variant = 'up', ...props }: RevealProps) {
+  // Dos componentes distintos en vez de dos ramas dentro de uno: cada rama
+  // usa hooks diferentes, y mezclarlas rompería el orden de llamada.
+  return variant === 'up' ? (
+    <ScrollUpReveal {...props} />
+  ) : (
+    <TransitionReveal variant={variant} {...props} />
+  )
+}
+
+function ScrollUpReveal({
   children,
-  variant = 'up',
+  delay = 0,
+  as,
+  className,
+}: Omit<RevealProps, 'variant'>) {
+  const Tag = (as ?? 'div') as ElementType
+  // El transform y la opacidad los escribe el ticker directamente en el nodo,
+  // así que aquí no se pasa `style`: se pisarían el uno al otro.
+  const ref = useScrollReveal<HTMLDivElement>(delay)
+
+  return (
+    <Tag ref={ref} className={`${styles.reveal} ${styles.upScroll} ${className ?? ''}`}>
+      {children}
+    </Tag>
+  )
+}
+
+function TransitionReveal({
+  children,
+  variant = 'fade',
   delay = 0,
   once = true,
   as,

@@ -6,12 +6,16 @@
   will-change: opacity, transform;
 }
 
-/* ── Estados iniciales ───────────────────────────────── */
-.up {
-  opacity: 0;
-  transform: translateY(38px);
+/* ── "up": ligado al scroll, no a transición CSS ────────
+   El transform/opacity los fija el inline style de <ScrollUpReveal> en cada
+   frame, así que aquí sólo se anula la transición heredada de `.reveal`
+   (si no, iría siempre a remolque del valor anterior en vez de seguir el
+   dedo/rueda al instante). */
+.upScroll {
+  transition: none;
 }
 
+/* ── Estados iniciales ───────────────────────────────── */
 .fade {
   opacity: 0;
 }
@@ -31,7 +35,6 @@
 }
 
 /* ── Estado final ────────────────────────────────────── */
-.in.up,
 .in.left,
 .in.right {
   opacity: 1;

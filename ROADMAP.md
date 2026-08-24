@@ -111,6 +111,70 @@ y que las animaciones de entrada básicas ya bastan.
   consola, `getComputedStyle` confirma `translateY(38px)` en el estado inicial de `.up`,
   `tsc -p tsconfig.app.json --noEmit` limpio.
 
+**2026-08-24 — Reveal "up" ligado al scroll, calcado de la referencia**
+
+La variante `up` deja de ser una transición CSS de duración fija disparada por
+`IntersectionObserver` y pasa a ir ligada al scroll de forma continua y suavizada.
+El punto de partida fue que la landing "no daba sensación de estar viva" pese a tener
+`Reveal` en casi todo. Se analizó [siteassist.com](https://www.siteassist.com/) (la
+referencia) inspeccionando sus instancias de GSAP ScrollTrigger en vivo.
+
+**Lo que hace la referencia** (rejilla `industry-grid`, 8 tarjetas, valores literales):
+
+```
+startAt: { opacity: 0, y: "100%" }  ->  { opacity: 1, y: "0%" }
+ease: "power1.out"   stagger: { amount: 0.2 }   duration: 0.5
+ScrollTrigger: start "clamp(top bottom)", end "clamp(bottom bottom)", scrub: 0.8
+```
+
+Es decir: **mueve el 100% del alto de cada tarjeta** — mucho más que nosotros — y aun así
+no se percibe brusco. Lo que lo hace legible no es la distancia, son otras tres cosas:
+
+| | Referencia | Nuestro (antes) |
+|---|---|---|
+| Suavizado | `scrub: 0.8` (persigue con retardo) | 1:1 con la rueda |
+| Curva | `power1.out` (frena al llegar) | lineal |
+| Recorrido | toda la altura del grupo (~2 pantallas) | 0.45 pantallas |
+| Escalonado | 0.2s repartidos entre 8 hermanos | `delay`×0.55px ≈ nada |
+
+La conclusión es que el problema nunca fue el tamaño del desplazamiento (bajarlo al 22%
+sólo lo mató del todo), sino que **iba clavado a la rueda, en línea recta y se agotaba en
+la quinta parte inferior de la pantalla** — terminaba antes de que el ojo llegase a mirar.
+
+- **`useScrollReveal` reescrito** ([`src/hooks/useScrollReveal.ts`](src/hooks/useScrollReveal.ts))
+  como **ticker compartido**: un solo `requestAnimationFrame` y un solo
+  `IntersectionObserver` para los ~40 `Reveal` de la página, en vez de uno por componente.
+  Escribe el `transform`/`opacity` directamente en el nodo, sin pasar por estado de React
+  — si no, serían 40 re-renders por fotograma. Lee todos los rects primero y escribe
+  después, para no forzar un recálculo de layout por elemento. El bucle se detiene solo
+  cuando no queda nada por asentar y el usuario no está scrolleando.
+- **Suavizado (`LERP = 0.14`)**: cada fotograma el valor aplicado se acerca un 14% al que
+  pide el scroll. Equivale al `scrub: 0.8` de la referencia — llega al 90% del objetivo en
+  ~267ms y al 99% en ~517ms. Es el cambio que más aporta a la sensación de "vivo".
+- **Curva `power1.out`** y **recorrido de 0.75 pantallas** (`END_VH = 0.25`): el movimiento
+  sigue siendo perceptible hasta media pantalla en vez de terminar abajo del todo.
+- **Desplazamiento proporcional y acotado**: 45% del alto del elemento, entre 28 y 110px.
+  Un porcentaje puro (como el 100% de la referencia) es inconsistente con nuestro contenido
+  mixto — movería un titular de una línea 30px y un bloque de 600px medio viewport. Así un
+  texto corto se desplaza ~32px y una tarjeta grande 110px.
+- **`delay` pasa a ser escalonado real**: se traduce en recorrido de scroll (700ms = el
+  recorrido entero, tope 40%), no en `transition-delay`. Con los delays que ya usaba el
+  mosaico (0/80/120/140/180ms) los hermanos llegan a separarse **48px entre sí** a mitad de
+  entrada — que es justo lo que hace que una rejilla "entre en escena" en vez de aparecer
+  en bloque.
+- **Bug corregido de paso en `Reveal.tsx`**: la versión anterior hacía `return` de la rama
+  `up` *antes* de llamar a `useInView`, dejando un hook en una rama condicional (viola las
+  reglas de hooks). Ahora `Reveal` es un despachador sin hooks propios y cada rama es un
+  componente aparte (`ScrollUpReveal` / `TransitionReveal`).
+- **Limitación de verificación, no resuelta aquí**: el panel de previsualización de este
+  entorno reporta `document.visibilityState === "hidden"` y **0 callbacks de `rAF` en
+  600ms**, así que la animación no se puede ver ni capturar desde aquí (misma limitación ya
+  documentada para el zoom del hero). Verificado en su lugar: `tsc` limpio, sin errores de
+  consola, los 23 elementos `upScroll` de la landing registrados con su offset correcto y
+  escalado por altura (h=71→32px, h=392→110px tope), sin conflicto entre el estilo que
+  escribe el ticker y el que gestiona React, y la matemática de curva/escalonado/suavizado
+  comprobada aparte en Node. **Pendiente de confirmación visual en local.**
+
 **2026-08-20 — i18n ES/EN completo**
 
 Auditoría de los 33 archivos `.tsx` del proyecto y traducción de todo el texto estático
