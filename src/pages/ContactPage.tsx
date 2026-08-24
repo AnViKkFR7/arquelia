@@ -30,23 +30,19 @@ export function ContactPage() {
       <section className={`section ${styles.section}`}>
         <div className={`container ${styles.grid}`}>
           {/* Formulario */}
-          <Reveal variant="up" className={styles.formCard}>
+          <div className={styles.formCard}>
             <span className={`eyebrow ${styles.formEyebrow}`}>{t('contact.formEyebrow')}</span>
             <CTAForm onDone={() => undefined} />
-          </Reveal>
-
+          </div>
           {/* Datos */}
           <div className={styles.info}>
-            <Reveal variant="up" delay={100}>
               <h2 className={styles.infoTitle}>{t('contact.talk')}</h2>
               <p className={styles.infoText}>{t('contact.talkText')}</p>
-            </Reveal>
 
             <dl className={styles.details}>
               {details.map((d, i) => {
                 const href = HREFS[d.label]
-                return (
-                  <Reveal key={d.label} variant="up" delay={160 + i * 60} className={styles.detail}>
+                return (<>
                     <dt className={styles.detailLabel}>{d.label}</dt>
                     <dd className={styles.detailValue}>
                       {href ? (
@@ -56,18 +52,15 @@ export function ContactPage() {
                       ) : (
                         d.value
                       )}
-                    </dd>
-                  </Reveal>
+                    </dd></>
                 )
               })}
             </dl>
 
-            <Reveal variant="up" delay={420}>
               <div className={styles.note}>
                 <span className={styles.noteLabel}>{t('contact.zone.label')}</span>
                 <p>{t('contact.zone.text')}</p>
               </div>
-            </Reveal>
           </div>
         </div>
       </section>

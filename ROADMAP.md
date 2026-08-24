@@ -87,6 +87,33 @@
 
 ## Registro de trabajo
 
+**2026-08-24 — Contraste de las tarjetas de servicios en táctil**
+
+En móvil las palabras laterales de las tarjetas de `/servicios` ("REFORMAS DE … A MEDIDA")
+eran prácticamente ilegibles sobre las imágenes claras.
+
+- **Causa**: en `(hover: none)` la frase se muestra siempre, pero el velo se quedaba en su
+  valor de reposo (32%). En escritorio eso no molesta porque las palabras sólo aparecen
+  en hover, y el hover aclara la imagen a la vez que las muestra; en táctil no se llega
+  nunca a ese estado, así que el velo en reposo tiene que cargar él solo con todo el
+  contraste. La etiqueta central nunca sufrió porque lleva fondo blanco sólido.
+- **Medido** en [`ServiceCard.module.css`](src/components/services/ServiceCard.module.css)
+  componiendo la imagen real con el velo y comparando contra el texto blanco:
+
+  | tarjeta | antes | ahora |
+  |---|---|---|
+  | cocina_abierta | 3.84:1 | 6.53:1 |
+  | baño_03 | 4.40:1 | 7.27:1 |
+  | salon_01 | 5.39:1 | 8.48:1 |
+
+  La cocina estaba por debajo del mínimo AA (4.5:1) — y eso es la media de la banda: sobre
+  la encimera blanca el caso real era peor.
+- **Solución**: sólo dentro de `@media (hover: none)`, velo al 52% y `text-shadow` reforzada
+  (0.75 / 10px). El escritorio no se toca: velo 0.32 en reposo y 0.16 en hover, igual que antes.
+- **Nota de verificación**: el dev server acumulaba 29 hojas de estilo por HMR y los
+  `getComputedStyle` se contradecían entre lecturas. Se verificó contra el CSS compilado
+  (`npm run build`), donde aparecen las tres reglas en el orden correcto.
+
 **2026-08-24 — Mosaico sin zoom+scroll; Reveal "up" más intenso**
 
 Quitado el efecto de anclar-y-crecer (`usePinProgress`) de `MosaicGallery` (sección

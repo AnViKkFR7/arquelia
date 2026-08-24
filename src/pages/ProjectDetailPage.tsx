@@ -8,6 +8,7 @@ import { Button } from '../components/ui/Button'
 import { CtaBand } from '../components/home/CtaBand'
 import type { Project } from '../types/project'
 import styles from './ProjectDetailPage.module.css'
+import ButtonSlider from '../components/ui/ButtonSlider'
 
 export function ProjectDetailPage() {
   const { t } = useTranslation()
@@ -132,9 +133,9 @@ export function ProjectDetailPage() {
             <aside className={styles.aside}>
               <span className={styles.asideLabel}>{t('projectDetail.aside.label')}</span>
               <p className={styles.asideText}>{t('projectDetail.aside.text')}</p>
-              <Button to="/contacto" variant="gold" arrow className={styles.asideCta}>
-                {t('projectDetail.aside.cta')}
-              </Button>
+              <div className={styles.asideCta}>
+                <ButtonSlider to="/contacto" text={t('projectDetail.aside.cta')} ></ButtonSlider>
+              </div>
             </aside>
           </Reveal>
         </div>

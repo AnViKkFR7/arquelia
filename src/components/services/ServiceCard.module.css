@@ -109,10 +109,19 @@
   transform: none;
 }
 
-/* En táctil no hay hover: la frase se muestra siempre */
+/* En táctil no hay hover: la frase se muestra siempre. Y como nunca se llega
+   al estado hover, el velo en reposo tiene que hacer todo el trabajo de
+   contraste él solo: al 32% el texto blanco de los laterales es ilegible
+   sobre una imagen clara (una cocina blanca deja el fondo casi a blanco).
+   La etiqueta central no sufre porque lleva su propio fondo sólido. */
 @media (hover: none) {
   .side {
     opacity: 1;
     transform: none;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.75);
+  }
+
+  .veil {
+    background: rgba(6, 6, 6, 0.52);
   }
 }
