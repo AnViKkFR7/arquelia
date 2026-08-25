@@ -10,7 +10,7 @@ interface VariantInfo {
 
 const MANIFEST_URL = '/hero-frames/manifest.json'
 const framePath = (variant: Variant, i: number) =>
-  `/hero-frames/${variant}/hero-${String(i).padStart(4, '0')}.webp`
+  `/hero-frames/final-frames/ARQUELIA Home Effect${String(i).padStart(3, '0')}.webp`
 const posterPath = (variant: Variant) => `/hero-frames/poster-${variant}.webp`
 
 /** Cuántos fotogramas se cargan en paralelo antes de seguir con el resto. */

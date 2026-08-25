@@ -74,20 +74,7 @@ export function ServicesPreview() {
         </Reveal>
       </div>
 
-      {/* Previsualización flotante */}
-      <div
-        className={`${styles.preview} ${active !== null ? styles.previewOn : ''}`}
-        style={{ transform: `translate3d(${pos.x}px, ${pos.y}px, 0)` }}
-        aria-hidden="true"
-      >
-        {items.map((item, i) => (
-          <span
-            key={item.title}
-            className={`${styles.previewImg} ${active === i ? styles.previewImgOn : ''}`}
-            style={{ backgroundImage: `url(${images[i]})` }}
-          />
-        ))}
-      </div>
+      
     </section>
   )
 }

@@ -10,8 +10,8 @@ import styles from './Hero.module.css'
  * En móvil se acorta: el gesto de scroll con el dedo avanza mucho menos que
  * la rueda del ratón, y 3 pantallas se hacen eternas.
  */
-const SPAN_DESKTOP = 3
-const SPAN_MOBILE = 2.2
+const SPAN_DESKTOP = 3.5
+const SPAN_MOBILE = 3
 
 export function Hero() {
   const { t } = useTranslation()
