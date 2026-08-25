@@ -65,12 +65,7 @@ export function ServicesPage() {
       {/* Catálogo completo */}
       <section className={`section ${styles.catalog}`}>
         <div className="container">
-          <SectionHeader
-            index="01"
-            eyebrow={t('services.catalog.eyebrow')}
-            title={t('services.catalog.title')}
-            lead={t('services.catalog.lead')}
-          />
+          <SectionHeader title={t('services.catalog.title')} lead={t('services.catalog.lead')} />
         </div>
 
         <div className={`container ${styles.catalogGrid}`}>
@@ -87,12 +82,7 @@ export function ServicesPage() {
       {/* Proceso */}
       <section className={`section ${styles.process}`}>
         <div className="container">
-          <SectionHeader
-            index="02"
-            eyebrow={t('services.process.eyebrow')}
-            title={t('services.process.title')}
-            lead={t('services.process.lead')}
-          />
+          <SectionHeader title={t('services.process.title')} lead={t('services.process.lead')} />
 
           <div className={styles.timelineWrap}>
             <ProcessTimeline steps={processSteps} activeIndex={activeStep} onSelect={setActiveStep} />

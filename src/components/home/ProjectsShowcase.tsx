@@ -59,7 +59,6 @@ export function ProjectsShowcase() {
       <section className={`section ${styles.section}`}>
         <div className="container">
           <SectionHeader
-            eyebrow={t('home.projectsShowcase.eyebrow')}
             title={t('home.projectsShowcase.title')}
             lead={t('home.projectsShowcase.lead')}
           />
@@ -84,7 +83,6 @@ export function ProjectsShowcase() {
     <section className={`section ${styles.section}`}>
       <div className="container">
         <SectionHeader
-          eyebrow={t('home.projectsShowcase.eyebrow')}
           title={t('home.projectsShowcase.title')}
           lead={t('home.projectsShowcase.lead')}
         />

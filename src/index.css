@@ -62,13 +62,12 @@ h2 {
 h3 {
   font-size: var(--fs-h3);
   line-height: var(--lh-snug);
-  /* "Tosh A Medium": los títulos de apoyo (h3/h4) no llevan el mismo peso
-     que los titulares principales. */
-  font-weight: 600;
+  /* "Tosh A Medium" es 500, no 600 — Tosh A sólo trae 300/400/500/700. */
+  font-weight: 500;
 }
 
 h4 {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 p {

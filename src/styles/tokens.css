@@ -51,16 +51,18 @@
   --line-inverse: rgba(255, 255, 255, 0.12);
 
   /* ─── Tipografía ─────────────────────────────────────────
-     El mockup del cliente pide "Tosh A" en cuatro pesos (Light/Regular/
-     Medium/Bold) para todo el sitio. Tosh A es una tipografía de pago de
-     Black[Foundry] (Adobe Fonts), no está en Google Fonts y no hay licencia
-     para sus archivos, así que no se puede usar tal cual. Manrope es la
-     sustituta: geométrica como Tosh A, gratuita, y cubre los mismos cuatro
-     pesos (300/400/500/600) más 700 para los titulares en negrita. Si en
-     algún momento se consigue la licencia de Tosh A, este es el único sitio
-     que hay que tocar para sustituirla en todo el sitio. */
-  --font-display: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-sans: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+     "Tosh A" real, con licencia, cargada vía Adobe Fonts (Typekit, kit
+     "zol5arr" en index.html) — el cliente tiene una suscripción con acceso a
+     ella. El nombre de familia que registra el kit es literalmente "tosh-a"
+     (así, en minúsculas, es cosa de Typekit). Sólo trae 4 pesos —
+     300/400/500/700— ni más ni menos: no hay un 600 "Tosh A SemiBold", así
+     que donde el mockup pide "Medium" se usa 500, no 600.
+     `Manrope` queda de reserva por si el kit de Typekit no llegara a cargar
+     (red del cliente, cuota de Adobe Fonts agotada, etc.): geométrica en el
+     mismo espíritu, así que la reserva no desentona mientras carga o si
+     falla del todo. */
+  --font-display: 'tosh-a', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'tosh-a', system-ui, -apple-system, 'Segoe UI', sans-serif;
   /* Acento puntual, no la base: sólo para cifras grandes (p. ej. "15+ años
      de oficio") donde se pidió un aire más clásico que el resto del sitio. */
   --font-serif-accent: 'Fraunces', 'Times New Roman', serif;

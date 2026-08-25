@@ -27,11 +27,7 @@ export function ServicesGrid() {
   return (
     <section className={`section ${styles.section}`}>
       <div className="container">
-        <SectionHeader
-          eyebrow={t('home.servicesGrid.eyebrow')}
-          title={t('home.servicesGrid.title')}
-          lead={t('home.servicesGrid.lead')}
-        />
+        <SectionHeader title={t('home.servicesGrid.title')} lead={t('home.servicesGrid.lead')} />
       </div>
 
       <div className={`container ${styles.grid}`}>

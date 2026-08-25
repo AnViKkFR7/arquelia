@@ -66,12 +66,7 @@ export function AboutPage() {
       {/* Tres pilares */}
       <section className={`section ${styles.pillars}`}>
         <div className="container">
-          <SectionHeader
-            index="01"
-            eyebrow={t('about.pillars.eyebrow')}
-            title={t('about.pillars.title')}
-            lead={t('about.pillars.lead')}
-          />
+          <SectionHeader title={t('about.pillars.title')} lead={t('about.pillars.lead')} />
 
           <div className={styles.pillarsGrid}>
             {pillars.map((p, i) => (

@@ -3,9 +3,6 @@ import { Reveal } from './Reveal'
 import styles from './SectionHeader.module.css'
 
 interface SectionHeaderProps {
-  /** Número de sección, p. ej. "01". */
-  index?: string
-  eyebrow?: string
   title?: ReactNode
   lead?: ReactNode
   /** Contenido extra alineado a la derecha en desktop. */
@@ -14,15 +11,7 @@ interface SectionHeaderProps {
   className?: string
 }
 
-export function SectionHeader({
-  index,
-  eyebrow,
-  title,
-  lead,
-  aside,
-  inverse,
-  className,
-}: SectionHeaderProps) {
+export function SectionHeader({ title, lead, aside, inverse, className }: SectionHeaderProps) {
   return (
     <div className={`${styles.header} ${inverse ? styles.inverse : ''} ${className ?? ''}`}>
       <div className={styles.main}>

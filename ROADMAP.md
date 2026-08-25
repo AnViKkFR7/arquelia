@@ -87,6 +87,41 @@
 
 ## Registro de trabajo
 
+**2026-08-25 — Tosh A real vía Adobe Fonts; limpieza tras ediciones manuales**
+
+- **Tosh A ya no es una sustitución — es la fuente real, con licencia.** El cliente añadió
+  un kit de Adobe Fonts (Typekit) a `index.html`
+  (`https://use.typekit.net/zol5arr.css`) con acceso a la tipografía real. Verificado con
+  `curl` contra el propio kit: registra la familia `"tosh-a"` (así, en minúsculas — cosa de
+  Typekit) en 4 pesos exactos, 300/400/500/700 — ni más ni menos, no hay un 600. `tokens.css`
+  pasa a `--font-display`/`--font-sans: 'tosh-a', 'Manrope', ...`, con Manrope de reserva
+  por si el kit no cargara. Corregido `index.css`: `h3`/`h4` de 600 a 500, porque ese 600
+  "Tosh A Medium" que puse en la pasada iteración no existe en la fuente real — con Tosh A
+  cargado, el navegador habría buscado el peso más cercano disponible (probablemente 700)
+  en vez del 500 que tocaba.
+- **Quitado el enlace a "TRY Tosh A" de `db.onlinewebfonts.com`** que también había en
+  `index.html`. Ya no hace falta (el kit de Typekit da la fuente real) y además era
+  arriesgado: ese mirror redistribuye tipografías de pago afirmando una licencia
+  "CC BY 4.0" que no le corresponde — es una señal clara de fuente pirateada, y usarla en
+  la web de un cliente es un riesgo legal real que no vale la pena correr habiendo ya una
+  vía legítima.
+- **`SectionHeader` — limpieza tras una edición manual.** El cliente simplificó el
+  componente compartido quitando el bloque que pintaba el índice/eyebrow ("01 / Servicios"),
+  pero dejó las props `index`/`eyebrow` declaradas sin usar, lo que rompía `tsc -b` (y por
+  tanto el build de Vercel) en los 6 archivos que aún se las pasaban. Quitadas del tipo y
+  de las llamadas en `ServicesPage`, `AboutPage`, `ServicesGrid`, `ProjectsShowcase` y
+  `ProjectDetailPage`. En `ProjectDetailPage` había dos casos que pasaban *sólo* `eyebrow`
+  sin `title` — con el bloque de renderizado ya quitado, esas dos cabeceras se habían
+  quedado completamente vacías; sustituidas por un simple `<span className="eyebrow">`
+  para no perder el texto.
+- **Borrado `src/pages/HomePage.module.css`**: archivo huérfano que `HomePage.tsx` no
+  importa, con tokens que ni siquiera existen en este proyecto (`--color-black-900`,
+  `--space-8`...) — resto de un scaffold que nunca se conectó.
+- **Verificado**: `tsc -p tsconfig.app.json --noEmit` y `npm run build` limpios; en el
+  navegador, `document.fonts` confirma `tosh-a` cargado y en uso (`status: "loaded"`), el
+  CSS compilado tiene `h3{font-weight:500}`, y las páginas tocadas (`/`, `/servicios`,
+  `/sobre-nosotros`, `/proyectos`, `/proyectos/:id`) cargan sin errores de consola.
+
 **2026-08-25 — Rediseño de la landing según mockup del cliente**
 
 Cambio grande a partir de un mockup enviado por el cliente: tipografía, estructura de la

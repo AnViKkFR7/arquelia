@@ -136,7 +136,9 @@ export function ProjectDetailPage() {
       {/* Cuerpo */}
       <section className={`section ${styles.body}`}>
         <div className={`container ${styles.descriptionHead}`}>
-          <SectionHeader eyebrow={t('projectDetail.description')} />
+          <Reveal variant="fade">
+            <span className="eyebrow">{t('projectDetail.description')}</span>
+          </Reveal>
         </div>
         <div className={`container ${styles.bodyGrid}`}>
           <div>
@@ -180,7 +182,9 @@ export function ProjectDetailPage() {
       {project.media.length > 0 && (
         <section className={styles.gallery}>
           <div className={`container ${styles.galleryHead}`}>
-            <SectionHeader eyebrow={t('projectDetail.gallery.eyebrow')} />
+            <Reveal variant="fade">
+              <span className="eyebrow">{t('projectDetail.gallery.eyebrow')}</span>
+            </Reveal>
           </div>
           <ProjectGallery media={project.media} title={project.title} />
         </section>
@@ -190,10 +194,7 @@ export function ProjectDetailPage() {
       {others.length > 0 && (
         <section className={`section ${styles.more}`}>
           <div className="container">
-            <SectionHeader
-              eyebrow={t('projectDetail.more.eyebrow')}
-              title={t('projectDetail.more.title')}
-            />
+            <SectionHeader title={t('projectDetail.more.title')} />
             <div className={styles.moreGrid}>
               {others.map((p, i) => (
                 <ProjectCard key={p.id} project={p} index={i} />
