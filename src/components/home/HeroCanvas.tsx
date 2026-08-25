@@ -9,7 +9,9 @@ interface VariantInfo {
 }
 
 const MANIFEST_URL = '/hero-frames/manifest.json'
-const framePath = (variant: Variant, i: number) =>
+// Una única secuencia sirve a las dos variantes: el recorte a 16:9 o 3:4 lo
+// resuelve `paint()` vía cover, no hace falta un set de fotogramas por aparte.
+const framePath = (i: number) =>
   `/hero-frames/final-frames/ARQUELIA Home Effect${String(i).padStart(3, '0')}.webp`
 const posterPath = (variant: Variant) => `/hero-frames/poster-${variant}.webp`
 
@@ -141,7 +143,7 @@ export function HeroCanvas({ progress, className }: HeroCanvasProps) {
     const load = (i: number) =>
       new Promise<void>((resolve) => {
         const img = new Image()
-        img.src = framePath(variant, i + 1)
+        img.src = framePath(i + 1)
         img.decoding = 'async'
         img.onload = () => {
           if (!cancelled) framesRef.current[i] = img

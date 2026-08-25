@@ -47,44 +47,78 @@
     "seeAria": "View {{title}}"
   },
   "home": {
-    "heroTitle": "Architecture you live in",
-    "heroSubtitle": "Premium renovations and construction in Catalonia",
-    "heroBrand": "P & B Cornellà Construcciones",
+    "heroTitle": "Your home, taken to the next level",
+    "heroSubtitle": "High-quality renovations and construction in Barcelona and the surrounding area.",
     "heroStrip": "Full renovations · Kitchens · Bathrooms · Interior design · Restoration",
-    "aboutTeaser": "At Arquelia we transform spaces with millimetre precision and top-tier finishes, taking care of every detail from the first sketch to the last joint.",
-    "featuredProjects": "Featured projects",
-    "ctaTitle": "Have a project in mind?",
     "intro": {
-      "eyebrow": "About us",
-      "titlePre": "Where architecture",
-      "titleEm": "becomes",
-      "titlePost": "home",
-      "requestBudget": "Request a quote",
-      "knowUs": "Discover Arquelia",
-      "facts": [
-        { "value": "15+", "label": "Years in the trade" },
-        { "value": "120+", "label": "Projects delivered" },
-        { "value": "1", "label": "Point of contact per job" }
-      ]
+      "title": "Design and quality in every project.",
+      "text": "At Arquelia we transform homes into unique spaces, designed for those who want something more. We combine years of experience, top-quality materials and careful attention to detail to deliver exclusive renovations and an experience worthy of every project."
     },
-    "mosaic": {
-      "eyebrow": "Projects",
-      "clickToSee": "Click to see the renovation in detail"
-    },
-    "showcase": {
-      "seeAll": "View all projects"
-    },
-    "services": {
+    "servicesGrid": {
       "eyebrow": "Services",
-      "title": "What we do",
-      "seeAll": "All services",
+      "title": "Our services",
+      "lead": "We design renovations with a comprehensive approach, taking care of every detail to create functional, elegant and long-lasting spaces.",
       "items": [
-        { "title": "Full renovations", "note": "From the structure to the last finish" },
-        { "title": "Kitchens", "note": "Bespoke design, furniture and worktops" },
-        { "title": "Bathrooms", "note": "Noble materials and designer fittings" },
-        { "title": "Interior design", "note": "Complete project, move-in ready" },
-        { "title": "Restoration", "note": "Restored without losing character" }
+        {
+          "id": "cocina",
+          "title": "Kitchen"
+        },
+        {
+          "id": "bano",
+          "title": "Bathrooms"
+        },
+        {
+          "id": "integral",
+          "title": "Full Renovation"
+        },
+        {
+          "id": "rehabilitacion",
+          "title": "Restoration"
+        }
       ]
+    },
+    "projectsShowcase": {
+      "eyebrow": "Projects",
+      "title": "Projects",
+      "lead": "Every renovation is a chance to turn a space into something unique. At Arquelia we take care of every detail to create work that combines function, aesthetics and flawless execution.",
+      "seeAllAria": "See all projects",
+      "items": [
+        {
+          "title": "Full Renovation",
+          "desc": "Every finish was crafted down to the last millimetre: natural stone flooring, made-to-measure joinery and integrated home automation, striking a balance between classic architecture and contemporary comfort."
+        },
+        {
+          "title": "Kitchen and Bathroom Renovation",
+          "desc": "A complete kitchen and bathroom renovation with top-quality materials and a layout designed for everyday life."
+        },
+        {
+          "title": "Facade Restoration",
+          "desc": "A full restoration of the facade, respecting the building’s original character with current techniques and materials."
+        },
+        {
+          "title": "Parquet Flooring",
+          "desc": "Natural parquet flooring installed with a seamless finish, bringing warmth and light to the whole space."
+        }
+      ]
+    },
+    "finalCta": {
+      "question": "Have a project in mind?",
+      "text": "At Arquelia we transform spaces with millimetre precision and top-tier finishes, taking care of every detail from the first sketch to the last joint.",
+      "facts": [
+        {
+          "value": "15+",
+          "label": "Years in the trade"
+        },
+        {
+          "value": "120+",
+          "label": "Projects delivered"
+        },
+        {
+          "value": "1",
+          "label": "Point of contact per job"
+        }
+      ],
+      "requestBudget": "Request a quote"
     },
     "cta": {
       "title": "Have a project in mind?",
@@ -100,23 +134,70 @@
       "lead": "From a single-room job to a full restoration: the same level of care in design, materials and execution."
     },
     "featured": [
-      { "id": "cocina", "label": "Kitchens", "prefix": "Bespoke", "suffix": "renovations" },
-      { "id": "bano", "label": "Bathrooms", "prefix": "Designer", "suffix": "renovations" },
-      { "id": "integral", "label": "Full reno", "prefix": "Move-in ready", "suffix": "renovation" }
+      {
+        "id": "cocina",
+        "label": "Kitchens",
+        "prefix": "Bespoke",
+        "suffix": "renovations"
+      },
+      {
+        "id": "bano",
+        "label": "Bathrooms",
+        "prefix": "Designer",
+        "suffix": "renovations"
+      },
+      {
+        "id": "integral",
+        "label": "Full reno",
+        "prefix": "Move-in ready",
+        "suffix": "renovation"
+      }
     ],
     "catalog": {
       "eyebrow": "Catalogue",
       "title": "Everything we cover",
       "lead": "A single team for the whole project: no uncoordinated subcontractors, no diluted responsibility.",
       "items": [
-        { "id": "integral", "title": "Full renovation", "desc": "Complete transformation of the home, from structure to the last finish." },
-        { "id": "cocina", "title": "Kitchen renovation", "desc": "Functional design and top-tier materials for the heart of the house." },
-        { "id": "bano", "title": "Bathroom renovation", "desc": "Wellness spaces with exclusive finishes and designer fittings." },
-        { "id": "interiorismo", "title": "Interior design", "desc": "From concept to the last piece of furniture, with full project direction." },
-        { "id": "rehabilitacion", "title": "Restoration", "desc": "Full restoration of buildings and homes, respecting their character." },
-        { "id": "local", "title": "Commercial premises", "desc": "Spaces that combine brand identity, compliance and functionality." },
-        { "id": "oficina", "title": "Offices", "desc": "Efficient, bright workspaces with premium-level finishes." },
-        { "id": "acabados", "title": "Finishes and materials", "desc": "A selection of noble materials, executed down to the millimetre." }
+        {
+          "id": "integral",
+          "title": "Full renovation",
+          "desc": "Complete transformation of the home, from structure to the last finish."
+        },
+        {
+          "id": "cocina",
+          "title": "Kitchen renovation",
+          "desc": "Functional design and top-tier materials for the heart of the house."
+        },
+        {
+          "id": "bano",
+          "title": "Bathroom renovation",
+          "desc": "Wellness spaces with exclusive finishes and designer fittings."
+        },
+        {
+          "id": "interiorismo",
+          "title": "Interior design",
+          "desc": "From concept to the last piece of furniture, with full project direction."
+        },
+        {
+          "id": "rehabilitacion",
+          "title": "Restoration",
+          "desc": "Full restoration of buildings and homes, respecting their character."
+        },
+        {
+          "id": "local",
+          "title": "Commercial premises",
+          "desc": "Spaces that combine brand identity, compliance and functionality."
+        },
+        {
+          "id": "oficina",
+          "title": "Offices",
+          "desc": "Efficient, bright workspaces with premium-level finishes."
+        },
+        {
+          "id": "acabados",
+          "title": "Finishes and materials",
+          "desc": "A selection of noble materials, executed down to the millimetre."
+        }
       ]
     },
     "process": {
@@ -124,12 +205,36 @@
       "title": "Six steps, zero surprises",
       "lead": "A proven method that keeps the project on time and on budget.",
       "steps": [
-        { "n": "01", "title": "First visit", "desc": "We visit the space, listen to what you need and assess the real scope of the project. No cost, no obligation." },
-        { "n": "02", "title": "Design and quote", "desc": "We put together the design proposal and a fixed, itemised quote: you know exactly what every euro covers." },
-        { "n": "03", "title": "Materials", "desc": "We guide you through choosing finishes, with trusted suppliers and direct manufacturer relationships, for top quality at a fair price." },
-        { "n": "04", "title": "Planning", "desc": "We set a realistic phased schedule and assign a single point of contact who stays with you throughout the works." },
-        { "n": "05", "title": "Execution", "desc": "Our team executes with quality control at every stage, keeping you informed of progress week by week." },
-        { "n": "06", "title": "Handover", "desc": "A final review down to the millimetre, a walkthrough together, and a move-in-ready space with post-works warranty." }
+        {
+          "n": "01",
+          "title": "First visit",
+          "desc": "We visit the space, listen to what you need and assess the real scope of the project. No cost, no obligation."
+        },
+        {
+          "n": "02",
+          "title": "Design and quote",
+          "desc": "We put together the design proposal and a fixed, itemised quote: you know exactly what every euro covers."
+        },
+        {
+          "n": "03",
+          "title": "Materials",
+          "desc": "We guide you through choosing finishes, with trusted suppliers and direct manufacturer relationships, for top quality at a fair price."
+        },
+        {
+          "n": "04",
+          "title": "Planning",
+          "desc": "We set a realistic phased schedule and assign a single point of contact who stays with you throughout the works."
+        },
+        {
+          "n": "05",
+          "title": "Execution",
+          "desc": "Our team executes with quality control at every stage, keeping you informed of progress week by week."
+        },
+        {
+          "n": "06",
+          "title": "Handover",
+          "desc": "A final review down to the millimetre, a walkthrough together, and a move-in-ready space with post-works warranty."
+        }
       ]
     },
     "cta": {
@@ -172,7 +277,7 @@
       "text": "If this style fits what you're after, we can look at your space and tell you what's possible and at what budget.",
       "cta": "Let's talk"
     },
-    "description" : "Description",
+    "description": "Description",
     "gallery": {
       "eyebrow": "Gallery",
       "openAria": "Enlarge image {{n}} of {{total}}",
@@ -203,19 +308,43 @@
       "title": "A way of working",
       "lead": "It's not a slogan: it's what we check on every job before closing off a phase.",
       "items": [
-        { "n": "01", "title": "Mastery", "desc": "Years in the trade applied to every detail, with no room for improvisation. Every task, in the hands of someone who has mastered it: we don't split the work between uncoordinated subcontractors." },
-        { "n": "02", "title": "Materials", "desc": "We choose noble materials and trusted suppliers. Direct relationships with manufacturers let us access top quality at a price that makes sense." },
-        { "n": "03", "title": "Method", "desc": "A single point of contact and a clear process, from the first visit to handover. Fixed quote, realistic schedule and weekly communication." }
+        {
+          "n": "01",
+          "title": "Mastery",
+          "desc": "Years in the trade applied to every detail, with no room for improvisation. Every task, in the hands of someone who has mastered it: we don't split the work between uncoordinated subcontractors."
+        },
+        {
+          "n": "02",
+          "title": "Materials",
+          "desc": "We choose noble materials and trusted suppliers. Direct relationships with manufacturers let us access top quality at a price that makes sense."
+        },
+        {
+          "n": "03",
+          "title": "Method",
+          "desc": "A single point of contact and a clear process, from the first visit to handover. Fixed quote, realistic schedule and weekly communication."
+        }
       ]
     },
     "numbers": {
       "eyebrow": "By the numbers",
       "imageAlt": "Detail of an Arquelia renovation",
       "items": [
-        { "value": "15+", "label": "Years of experience" },
-        { "value": "120+", "label": "Projects delivered" },
-        { "value": "100%", "label": "Fixed quotes" },
-        { "value": "2 years", "label": "Post-works warranty" }
+        {
+          "value": "15+",
+          "label": "Years of experience"
+        },
+        {
+          "value": "120+",
+          "label": "Projects delivered"
+        },
+        {
+          "value": "100%",
+          "label": "Fixed quotes"
+        },
+        {
+          "value": "2 years",
+          "label": "Post-works warranty"
+        }
       ]
     }
   },
@@ -229,10 +358,22 @@
     "talk": "Let's talk",
     "talkText": "If you'd rather deal with us directly, write or call us. We reply within 24 business hours.",
     "details": [
-      { "label": "Email", "value": "info@arquelia.es" },
-      { "label": "Phone", "value": "+34 600 000 000" },
-      { "label": "Office", "value": "Cornellà de Llobregat, Barcelona" },
-      { "label": "Hours", "value": "Monday to Friday, 9:00 – 18:00" }
+      {
+        "label": "Email",
+        "value": "info@arquelia.es"
+      },
+      {
+        "label": "Phone",
+        "value": "+34 600 000 000"
+      },
+      {
+        "label": "Office",
+        "value": "Cornellà de Llobregat, Barcelona"
+      },
+      {
+        "label": "Hours",
+        "value": "Monday to Friday, 9:00 – 18:00"
+      }
     ],
     "zone": {
       "label": "Service area",
@@ -244,10 +385,26 @@
   },
   "ctaForm": {
     "steps": {
-      "project": { "label": "Project", "title": "What do you want to renovate?", "hint": "Pick whichever option is closest." },
-      "contact": { "label": "Contact", "title": "How can we reach you?", "hint": "Just the essentials so we can get back to you." },
-      "details": { "label": "Details", "title": "Tell us about your project", "hint": "Optional, but it helps us prepare for the visit." },
-      "summary": { "label": "Summary", "title": "Review and send", "hint": "Check that everything is correct." }
+      "project": {
+        "label": "Project",
+        "title": "What do you want to renovate?",
+        "hint": "Pick whichever option is closest."
+      },
+      "contact": {
+        "label": "Contact",
+        "title": "How can we reach you?",
+        "hint": "Just the essentials so we can get back to you."
+      },
+      "details": {
+        "label": "Details",
+        "title": "Tell us about your project",
+        "hint": "Optional, but it helps us prepare for the visit."
+      },
+      "summary": {
+        "label": "Summary",
+        "title": "Review and send",
+        "hint": "Check that everything is correct."
+      }
     },
     "services": {
       "integral": "Full renovation",
@@ -305,17 +462,117 @@
     }
   },
   "legal": {
+    "eyebrow": "Legal",
+    "updated": "Last updated: August 2026",
     "notice": {
       "title": "Legal Notice",
-      "text": "Legal text pending completion with the company's real details: [COMPANY NAME], Tax ID [TAX ID], registered at [ADDRESS], contact email [EMAIL]."
-    },
-    "cookies": {
-      "title": "Cookie Policy",
-      "text": "Legal text pending completion with the company's real details: [COMPANY NAME], Tax ID [TAX ID], registered at [ADDRESS], contact email [EMAIL]."
+      "sections": [
+        {
+          "heading": "1. Identifying information",
+          "body": "In compliance with the duty of information set out in article 10 of Spanish Law 34/2002, of 11 July, on Information Society Services and Electronic Commerce (LSSI-CE), this website is owned by P & B Cornellà Construcciones, S.L. (\"Arquelia\"), with Tax ID [TAX ID PENDING] and registered address at [ADDRESS PENDING], Cornellà de Llobregat (Barcelona), registered with the Commercial Registry of [PROVINCE PENDING], volume [VOLUME], page [PAGE], sheet [SHEET]. You can contact us at info@arquelia.es or by phone at +34 600 000 000."
+        },
+        {
+          "heading": "2. Purpose",
+          "body": "This legal notice governs access to and use of this website, which Arquelia makes available to users to present its construction and renovation services. Access to the website is free of charge and its use grants the status of user, which implies acceptance of the terms set out in this legal notice."
+        },
+        {
+          "heading": "3. Terms of use",
+          "body": "The user agrees to make appropriate and lawful use of the website, in accordance with applicable law, this legal notice, generally accepted morals and good practice, and public order. Any use of the website for unlawful or harmful purposes, or in a way that could cause damage or prevent its normal operation, is prohibited."
+        },
+        {
+          "heading": "4. Intellectual and industrial property",
+          "body": "All content on this website — including, by way of example, text, photographs, graphics, images, icons, as well as its graphic design and source code — is the property of Arquelia or of third parties who have authorised its use, and is protected under applicable intellectual and industrial property law. Its reproduction, distribution or public communication, in whole or in part, without express authorisation from Arquelia is expressly prohibited."
+        },
+        {
+          "heading": "5. Third-party links",
+          "body": "Where this website includes links to third-party websites, Arquelia assumes no responsibility for the content, information or services that may appear on them, which are provided for information purposes only and do not imply any relationship between Arquelia and the owners of such sites."
+        },
+        {
+          "heading": "6. Disclaimer",
+          "body": "Arquelia takes reasonable steps to ensure the website functions correctly and its content is up to date, without this constituting a guarantee against errors. Arquelia is not liable for damages arising from interference, interruptions, computer viruses, faults or disconnections in the operation of the electronic system that are beyond its control."
+        },
+        {
+          "heading": "7. Governing law and jurisdiction",
+          "body": "These terms are governed by Spanish law. For any dispute arising from access to or use of this website, where the user is a consumer, both parties submit to the courts of the user's domicile; otherwise, to the courts of Barcelona."
+        }
+      ]
     },
     "privacy": {
       "title": "Privacy Policy",
-      "text": "Legal text pending completion with the company's real details: [COMPANY NAME], Tax ID [TAX ID], registered at [ADDRESS], contact email [EMAIL]."
+      "sections": [
+        {
+          "heading": "1. Data controller",
+          "body": "The controller responsible for the personal data submitted through this website is P & B Cornellà Construcciones, S.L. (\"Arquelia\"), with Tax ID [TAX ID PENDING] and registered address at [ADDRESS PENDING], Cornellà de Llobregat (Barcelona), registered with the Commercial Registry of [PROVINCE PENDING], volume [VOLUME], page [PAGE], sheet [SHEET]. You can contact the data controller at info@arquelia.es."
+        },
+        {
+          "heading": "2. Purpose of processing",
+          "body": "The data you provide through this website's forms (name, email, phone number, town/city and project details) are processed to handle your quote and information requests, respond to your enquiries and, where applicable, manage any resulting contractual relationship. No automated decisions or profiling are carried out using your data."
+        },
+        {
+          "heading": "3. Legal basis",
+          "body": "The legal basis for processing is the consent you give when submitting the relevant form and, where applicable, the performance of the pre-contractual or contractual relationship established between you and Arquelia."
+        },
+        {
+          "heading": "4. Data retention",
+          "body": "Data is retained for as long as the relationship with the user is maintained and, once it ends, for the periods legally required to address any liabilities arising from the processing."
+        },
+        {
+          "heading": "5. Recipients",
+          "body": "Data is not shared with third parties except where legally required. Data may be processed by service providers (web hosting, email delivery) acting as data processors on behalf of Arquelia, subject to the guarantees required by the GDPR."
+        },
+        {
+          "heading": "6. Your rights",
+          "body": "You may exercise your rights of access, rectification, erasure, objection, restriction of processing and portability by writing to info@arquelia.es or to Arquelia’s registered address, enclosing a copy of an identity document. You also have the right to lodge a complaint with the Spanish Data Protection Agency (www.aepd.es) if you believe the processing does not comply with applicable law."
+        },
+        {
+          "heading": "7. Source of the data",
+          "body": "The only data we process is what you voluntarily provide yourself through this website's forms."
+        }
+      ]
+    },
+    "cookies": {
+      "title": "Cookie Policy",
+      "sections": [
+        {
+          "heading": "1. What are cookies?",
+          "body": "Cookies are small text files that a website may store in your browser or device when you visit it. The same legal regime also covers other data storage and retrieval technologies, such as the browser's local storage (localStorage), which this website uses instead of actual cookies for the single purpose described below."
+        },
+        {
+          "heading": "2. Types of cookies by purpose",
+          "body": "Technical or necessary: essential for the site to work and to provide the requested service (for example, remembering your language). Personalisation: allow preferences such as language or region to be remembered. Analytics: allow visitor numbers and site usage to be measured. Advertising or third-party: allow ad spaces to be managed or information to be shared with social networks and other external platforms."
+        },
+        {
+          "heading": "3. Types of cookies by ownership and duration",
+          "body": "Depending on who manages them, cookies can be first-party (managed by Arquelia) or third-party (managed by a party other than Arquelia). Depending on how long they remain active, they can be session cookies (deleted when you close your browser) or persistent cookies (stored for a set period)."
+        },
+        {
+          "heading": "4. What we use on this website",
+          "body": "This website only uses its own, persistent technical storage: the language you select (Spanish or English), saved in your browser's local storage so you don't have to choose it again on every visit. We do not install analytics, advertising or social-media cookies or similar technologies, and we do not share browsing data with third parties. Should analytical or third-party cookies be added in the future, your prior consent will be requested via the corresponding notice, and this policy will be updated accordingly."
+        },
+        {
+          "heading": "5. Legal basis",
+          "body": "This processing is based on article 22.2 of Spanish Law 34/2002, on Information Society Services and Electronic Commerce (LSSI-CE), which exempts cookies and equivalent technologies that are strictly necessary to provide a service expressly requested by the user from the duty to obtain consent. For this reason, this website’s cookie notice lets you accept or reject, but your choice does not affect the site’s operation while no non-essential cookies are in use."
+        },
+        {
+          "heading": "6. Managing or withdrawing your consent",
+          "body": "You can accept or reject the use of non-essential cookies from the notice shown on your first visit. You can change your choice at any time from the \"Cookie settings\" link available in this website’s footer, which will show the notice again."
+        },
+        {
+          "heading": "7. Configuring your browser",
+          "body": "In addition to the options above, you can allow, block or delete cookies installed on your device through your browser settings: in Chrome, via Settings > Privacy and security > Cookies; in Firefox, via Settings > Privacy & Security; in Safari, via Preferences > Privacy; and in Edge, via Settings > Privacy, search and services. If you block all cookies, some parts of the site may not work correctly."
+        },
+        {
+          "heading": "8. Changes to this policy",
+          "body": "Arquelia may amend this cookie policy in response to legislative requirements or to align it with guidance from the Spanish Data Protection Agency. We recommend reviewing it each time you visit the website."
+        }
+      ]
     }
+  },
+  "cookieBanner": {
+    "text": "We use technical storage necessary for the site to work (for example, remembering your chosen language). We don't use analytics or advertising cookies.",
+    "accept": "Accept",
+    "reject": "Reject",
+    "policyLink": "Cookie policy",
+    "manage": "Cookie settings"
   }
 }

@@ -3,8 +3,13 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useCTAForm } from '../../context/CTAFormContext'
 import { LanguageSwitcher } from './LanguageSwitcher'
+import wordmark from '../../assets/brand/wordmark-white_lite.png'
 import styles from './Header.module.css'
 
+// El panel móvil sí lleva las 5: en la barra de escritorio "Inicio" y
+// "Contacto" se acceden por otra vía (el logo centrado enlaza a inicio; el
+// CTA de la derecha ya cubre el propósito de contacto), pero en el menú a
+// pantalla completa del móvil conviene dejarlas explícitas.
 const links = [
   { to: '/', key: 'home' },
   { to: '/servicios', key: 'services' },
@@ -12,6 +17,8 @@ const links = [
   { to: '/sobre-nosotros', key: 'about' },
   { to: '/contacto', key: 'contact' },
 ] as const
+
+const desktopLinks = links.filter((l) => ['services', 'projects', 'about'].includes(l.key))
 
 export function Header() {
   const { t } = useTranslation()
@@ -35,13 +42,11 @@ export function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.bar}>
-        <NavLink to="/" className={styles.logo} aria-label={t('nav.homeAria')}>
-          <span className={styles.logoMark} aria-hidden="true" />
-          ARQUELIA
-        </NavLink>
-
+        {/* En el DOM va antes que el logo a propósito: en desktop `.bar` es
+            una rejilla de 3 columnas (nav / logo / acciones) y el orden
+            visual depende del orden del marcado, no hay `order` en CSS. */}
         <nav className={styles.nav} aria-label={t('nav.mainAria')}>
-          {links.map((link) => (
+          {desktopLinks.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
@@ -52,6 +57,10 @@ export function Header() {
             </NavLink>
           ))}
         </nav>
+
+        <NavLink to="/" className={styles.logo} aria-label={t('nav.homeAria')}>
+          <img src={wordmark} alt="Arquelia" className={styles.wordmark} />
+        </NavLink>
 
         <div className={styles.actions}>
           <span className={styles.langDesktop}>

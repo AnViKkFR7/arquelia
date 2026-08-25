@@ -1,0 +1,205 @@
+.section {
+  background: var(--bg-alt);
+}
+
+/* ── Escenario (imagen grande, formato story) ───────────── */
+.stage {
+  position: relative;
+  margin-top: var(--sp-12);
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+@media (min-width: 700px) {
+  .stage {
+    aspect-ratio: 21 / 9;
+  }
+}
+
+.stageLink {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  flex-direction: grid;
+  align-items: flex-end;
+  justify-content: flex-end;
+  text-align: center;
+  padding-bottom: 70px;
+  background: var(--grey-300) center / cover no-repeat;
+}
+
+.stageScrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0.45) 0%, rgba(6, 6, 6, 0.08) 30%, rgba(6, 6, 6, 0.7) 100%);
+}
+
+.stageIndex {
+  position: absolute;
+  top: var(--sp-6);
+  right: var(--sp-6);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  /* Mucho más fino que el resto de la tipografía del sitio, a propósito:
+     es un dato de apoyo (el número de orden), no un titular. */
+  font-weight: 200;
+  color: var(--text-inverse);
+  opacity: 0.85;
+}
+
+.stageMeta {
+  position: relative;
+  z-index: var(--z-base);
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  text-align: start;
+  padding-inline: var(--sp-8);
+  padding-bottom: var(--sp-2);
+  color: var(--text-inverse);
+}
+
+.stageTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.stageDesc {
+  max-width: 52ch;
+  font-size: var(--fs-sm);
+  color: var(--text-inverse-muted);
+}
+
+/* ── Índices / chips ───────────────────────────────────────
+   Van dentro de la propia imagen (pedido explícito): tira anclada al borde
+   inferior de `.stage`, por encima de `.stageLink` en el eje z pero
+   hermana suya, no descendiente — así cada índice es su propio <Link> sin
+   anidar un <a> dentro de otro. Cada uno lleva su propia barra de progreso:
+   se rellena en 5s, igual que el timing de la rotación, y se reinicia
+   cuando le toca ser el activo (`key={active}` fuerza el remonte). */
+.chips {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-base);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-2) var(--sp-6);
+  padding: var(--sp-10) var(--sp-6) var(--sp-5);
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0) 0%, rgba(6, 6, 6, 0.55) 55%, rgba(6, 6, 6, 0.72) 100%);
+}
+
+@media (min-width: 700px) {
+  .chips {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.chip {
+  display: block;
+}
+
+.chipTrack {
+  display: block;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.chipFill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent-bright);
+  animation: fill 5s linear forwards;
+}
+
+@keyframes fill {
+  to {
+    width: 100%;
+  }
+}
+
+.chipLabel {
+  display: block;
+  margin-top: var(--sp-3);
+  font-size: var(--fs-xs);
+  color: rgba(255, 255, 255, 0.7);
+  transition: color var(--t-fast) var(--ease);
+}
+
+.chip:hover .chipLabel,
+.chip:focus-visible .chipLabel {
+  color: var(--white);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chipFill {
+    animation: none;
+    width: 100%;
+  }
+}
+
+/* ── Móvil: carrusel deslizable ───────────────────────────
+   Mismo patrón que la cabecera de proyecto en móvil: scroll-snap nativo en
+   vez de una librería de gestos, sangrado hasta el borde de pantalla. */
+.carousel {
+  margin-top: var(--sp-8);
+  display: flex;
+  gap: var(--sp-3);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.slide {
+  position: relative;
+  flex: 0 0 84%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+
+.slideImg {
+  position: absolute;
+  inset: 0;
+  background: var(--grey-300) center / cover no-repeat;
+}
+
+.slideVeil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0.1) 40%, rgba(6, 6, 6, 0.72) 100%);
+}
+
+.slideMeta {
+  position: absolute;
+  left: var(--sp-5);
+  right: var(--sp-5);
+  bottom: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  color: var(--text-inverse);
+}
+
+.slideIndex {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wider);
+  color: var(--accent-bright);
+}
+
+.slideTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+}

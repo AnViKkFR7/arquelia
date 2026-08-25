@@ -87,6 +87,117 @@
 
 ## Registro de trabajo
 
+**2026-08-25 — Rediseño de la landing según mockup del cliente**
+
+Cambio grande a partir de un mockup enviado por el cliente: tipografía, estructura de la
+landing, navbar, footer y contenido legal.
+
+- **Tipografía sitewide**: el mockup pide "Tosh A" en 4 pesos (Light/Regular/Medium/Bold)
+  para todo el texto. **Tosh A es de pago** (Black[Foundry], vía Adobe Fonts), no está en
+  Google Fonts y no hay licencia para sus archivos. Sustituida por **Manrope**: geométrica
+  como Tosh A, gratuita, cubre los mismos 4 pesos. Cambio centralizado en
+  [`tokens.css`](src/styles/tokens.css) (`--font-display`/`--font-sans` → Manrope) e
+  [`index.html`](index.html) — si algún día se consigue la licencia de Tosh A, ese es el
+  único sitio que hay que tocar. En [`index.css`](src/index.css): `h1`/`h2` a peso 700
+  (antes 400 — con Fraunces un peso medio ya tenía presencia propia; en Manrope se veía
+  plano), `h3`/`h4` a 600, `body` a 300. Quitado `font-variation-settings` (ejes de
+  variable font específicos de Fraunces, sin efecto en Manrope). El hero (`Hero.module.css`)
+  tenía su titular a 300 a propósito (look editorial fino); ahora a 700 para seguir el mockup.
+- **Landing reestructurada** — orden nuevo: Hero → Diseño y calidad → Servicios (grid) →
+  Proyectos (story) → CTA final. Sustituye al orden anterior (Hero, Sobre nosotros,
+  Mosaico, Destacados, Servicios en lista, CTA con imagen).
+  - **`IntroSection`** simplificada a título + párrafo centrados, sin cifras ni CTA
+    (antes las llevaba). Copy nuevo: "Diseño y calidad en cada proyecto."
+  - **`ServicesGrid`** (nuevo): 4 tarjetas de imagen (Cocina/Baños/Reforma
+    Integral/Rehabilitación, imágenes de `public/mockup-images/`), `Reveal variant="up"
+    once={false}` como pidió el cliente, todas enlazan a `/servicios`.
+  - **`ProjectsShowcase`** (nuevo) — la pieza más compleja: formato "story", imagen grande
+    que rota entre 4 proyectos cada 5s, con 4 índices clicables debajo (llevan a
+    `/proyectos`) que al pasar el ratón adelantan la vista sin tocar la rotación de fondo
+    (`hovered` es un estado de visualización aparte de `active`; al quitar el ratón se ve
+    lo que le tocara en ese momento — confirmado en vivo: el índice había avanzado solo
+    durante la verificación). Cada índice lleva su propia barra de progreso de 5s
+    (`key={active}` para reiniciar la animación CSS al remontar).
+    **Móvil**: sin hover y sin sitio para 4 índices con etiqueta, así que pasa a ser un
+    **carrusel deslizable** (`scroll-snap`, mismo patrón que la cabecera de proyecto en
+    móvil) — decisión propia ante la petición explícita de ideas del cliente; alternativas
+    no implementadas que se le plantean: una barra de progreso apilada arriba de la imagen
+    (más fiel al patrón real de Instagram) o autoplay con vídeos cortos en vez de fotos.
+  - **`FinalCta`** (nuevo): recoge el contenido que antes vivía en `IntroSection`
+    (pregunta + párrafo + cifras 15+/120+/1 + `ButtonSlider`), ahora sobre fondo claro al
+    cierre de la landing — es justo lo que pedía el cliente ("ya está muy similar al
+    actual punto 01"). Reutiliza `SectionHeader` para el título+párrafo a dos columnas.
+  - **Eliminados** `MosaicGallery`, `FeaturedProjectsShowcase` y `ServicesPreview`
+    (`.tsx`+`.module.css` de los tres): quedaban huérfanos tras el nuevo orden, sin otro
+    sitio en el código que los usara.
+- **Navbar**: el logo pasa a estar realmente centrado en desktop, no sólo "en el hueco que
+  sobra" — `.bar` cambia de `flex` a una rejilla `1fr auto auto 1fr` sólo a partir de
+  1024px (por debajo, sigue el `flex` de siempre: nav oculto, logo izq., hamburguesa der.).
+  El orden en el DOM cambia a nav→logo→acciones porque CSS Grid coloca por orden de
+  marcado, no hay `order` en juego. Verificado con `getBoundingClientRect()`: el centro
+  del logo cae a 1px del centro de la barra. El selector de idioma se mantiene (no salía
+  en el mockup, pero el cliente pidió explícitamente conservarlo).
+- **Footer**: ya tenía la barra inferior con © año / desarrollado por / razón social que
+  pedía el cliente — no hizo falta ningún cambio, sólo se verificó que el texto coincide
+  exactamente.
+- **Páginas legales reescritas** ([`LegalPage.tsx`](src/pages/LegalPage.tsx)): antes eran
+  un único párrafo placeholder ("Texto legal pendiente de completar..."). Ahora Aviso
+  Legal (LSSI-CE), Política de Privacidad (RGPD/LOPDGDD) y Política de Cookies con
+  estructura real por secciones (7/7/4 secciones respectivamente), en ES y EN. Usa los
+  datos ya conocidos (razón social "P & B Cornellà Construcciones, S.L.", "Arquelia",
+  Cornellà de Llobregat, info@arquelia.es) y dejan como placeholder explícito lo que no se
+  conoce (CIF, domicilio exacto, datos de Registro Mercantil) — pendiente de que el
+  cliente los facilite para sustituir esos corchetes.
+- **Verificado**: `tsc` y `npm run build` limpios. En el navegador (pestaña nueva, para
+  evitar histórico de errores de HMR acumulado): las 8 rutas cargan, el grid de servicios
+  muestra las 4 imágenes correctas, el story de proyectos rota de verdad (el índice había
+  avanzado al comprobarlo), el carrusel móvil tiene `overflow-x:auto` con 4 slides, el
+  logo del header está centrado a 1px, y el pie de página coincide con el texto pedido.
+
+**2026-08-25 — Build roto en Vercel, y logo/favicon reales**
+
+- **Errores de TypeScript que bloqueaban `npm run build` en Vercel** (`tsc -b` es
+  estricto con variables sin usar; en local con el dev server no se nota).
+  - [`HeroCanvas.tsx`](src/components/home/HeroCanvas.tsx): `framePath(variant, i)` ya no
+    usaba `variant` — quedó así tras consolidar las secuencias `desktop`/`mobile` en una
+    sola carpeta `final-frames` (commits "final frames"). El recorte a cada aspect ratio
+    ya lo resuelve `paint()` vía cover, así que un único set de fotogramas sirve a las dos
+    variantes; se quita el parámetro muerto.
+  - [`ServicesPreview.tsx`](src/components/home/ServicesPreview.tsx): `images` y `pos`
+    sin usar. No era código muerto para borrar — `git log -p` muestra que el bloque que
+    los usaba (la previsualización flotante que sigue al cursor) se borró por accidente en
+    un commit posterior, y el CSS correspondiente (`.preview`/`.previewImg`, con su gating
+    `@media (hover: hover) and (pointer: fine)` y su `prefers-reduced-motion`) seguía
+    intacto y sin usar. Restaurado el bloque, adaptado a `images[i]` en vez de
+    `item.image` porque ahora los textos de las filas vienen de i18n (sin URL de imagen
+    propia) y ya existía un array `images` en paralelo para esto.
+- **Logo y favicon reales**, sustituyendo el placeholder violeta de Vite
+  (`public/favicon.svg`, sin relación con la marca) y el rombo dorado dibujado en CSS que
+  hacía de marca en el header y el footer.
+  - **Movidos los archivos de logo** de `public/hero-frames/logos/` a `public/brand/logos/`
+    antes de tocar nada más: `design-refs/build_hero_frames.py:98` hace
+    `shutil.rmtree()` sobre toda `public/hero-frames/` al regenerar la secuencia del hero.
+    Si el logo se hubiera quedado ahí dentro, la próxima regeneración lo habría borrado
+    sin avisar.
+  - **Favicon**: `Favicon_transparente.png` (el "A" dorado, con más margen que el resto de
+    variantes — se ve mejor a tamaño de pestaña). Sustituye a `favicon.svg`, que se borra.
+  - **Header y footer**: el rombo CSS de 9-11px que usaba `var(--accent-bright)` pasa a
+    ser el icono real (`Transparente_solo_logo.png`, el "A" con el degradado dorado de
+    marca — se copia a `src/assets/brand/mark-gold.png` para que Vite lo optimice y
+    hashee, igual que el resto de imágenes del proyecto). Se eligió la versión dorada y no
+    una de las planas (blanco/negro/antracita) porque es la que continúa el lenguaje que
+    ya tenía el rombo que sustituye: un acento de marca en el dorado de acento, no un
+    icono neutro. El giro brusco de 45°→135° al hover no tenía sentido sobre una forma
+    triangular asimétrica (se veía roto), así que el hover pasa a un `scale(1.15)` sutil.
+  - Quedan sin usar en `public/brand/logos/`: las variantes `Iso_*` (planas, para fondos
+    donde el degradado no lea bien) y `Transparente_*_logo_abajo_nombre.png` /
+    `..._solo_nombre.png` (un lockup completo con el nombre tipografiado). No se ha
+    encontrado un sitio en la web actual donde encajen mejor que el texto "ARQUELIA" ya
+    maquetado con la tipografía de display del sitio — quedan disponibles si se necesitan.
+- **Verificado**: `tsc -p tsconfig.app.json --noEmit` y `npm run build` limpios; en el
+  navegador, el `<img>` del header y el del footer cargan (`naturalWidth > 0`) y el
+  `<link rel="icon">` apunta al archivo correcto; sin errores de consola.
+
 **2026-08-24 — El visor de galería no mostraba la imagen: `position: fixed` roto por `<main>`**
 
 Síntoma: al abrir una imagen aparecía el fondo negro a pantalla completa pero **sin

@@ -59,18 +59,17 @@
   will-change: opacity, transform;
 }
 
-.eyebrow {
-  color: var(--accent-bright);
-  opacity: 0;
-  animation: fadeUp var(--t-slow) var(--ease) 80ms both;
-}
-
 .title {
-  margin-top: var(--sp-6);
-  font-size: var(--fs-display);
-  font-weight: 300;
-  line-height: 0.98;
-  max-width: 16ch;
+  /* Más grande que --fs-display (el que usan h1 normales): éste es el único
+     titular a pantalla completa del sitio. */
+  font-size: clamp(3.25rem, 11vw, 5.5rem);
+  /* "Tosh A Bold": antes era 300 (peso ligero de Fraunces, look editorial
+     fino); el mockup pide el titular en negrita y en mayúsculas. */
+  font-weight: 700;
+  line-height: 0.96;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  max-width: 20ch;
 }
 
 .word {

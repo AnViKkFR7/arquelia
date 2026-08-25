@@ -1,0 +1,87 @@
+.section {
+  background: var(--bg);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+  max-width: 640px;
+  /* A la derecha, no a la izquierda: pedido explícito del cliente. */
+  margin-left: auto;
+  padding-top: var(--sp-8);
+  border-top: 1px solid var(--line);
+}
+
+.questionContainer {
+  margin-inline: auto;
+  text-align: space-around;
+  display: flex;
+  flex-direction: row;
+  gap: var(--sp-4);
+}
+.content {
+  width: 50%;
+}
+@media (max-width: 900px) {
+  .section {
+    padding-block: var(--sp-16);
+  }
+
+  .questionContainer {
+    margin-inline: auto;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+  }
+  .content {
+    width: 100%;
+  }
+  .factLabel {
+    text-align: start;
+  }
+}
+
+.title {
+  margin-inline: auto;
+  text-transform: uppercase;
+  font-size: 2.5rem;
+  font-weight: 500;
+  line-height: 0.96;
+  letter-spacing: -0.01em;
+}
+.fact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-1);
+  text-align: right;
+}
+
+.factValue {
+  /* Serif clásica sólo aquí, como acento — el resto del sitio va en Manrope. */
+  font-family: var(--font-serif-accent);
+  font-weight: 600;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  line-height: 1;
+  color: var(--text);
+}
+
+.factLabel {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+
+.text {
+  color: var(--text-muted);
+  max-width: 56ch;
+  margin-inline: auto;
+}
+
+.action {
+  margin-top: var(--sp-10);
+}

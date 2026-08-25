@@ -6,6 +6,9 @@
   --black-900: #0e0e0e;
   --black-850: #141414;
   --black-800: #1c1c1c;
+  /* Coincide con el logo "Iso_antracita" de marca — se usa como el gris más
+     claro del footer de dos tonos. */
+  --anthracite: #242424;
 
   --grey-050: #fafaf9;
   --grey-100: #f4f4f3;
@@ -21,6 +24,11 @@
   --gold-600: #b8952e;
   --gold-500: #d4af37;
   --gold-400: #e3c65f;
+
+  /* Colores puntuales pedidos en el mockup del cliente, con su hex exacto en
+     vez de aproximarlos a la escala de dorados de arriba. */
+  --cream: #fffbf2;
+  --gold-notch: #c6a15b;
 
   /* ─── Roles semánticos ───────────────────────────────── */
   --bg: var(--white);
@@ -42,9 +50,20 @@
   --line-strong: var(--grey-300);
   --line-inverse: rgba(255, 255, 255, 0.12);
 
-  /* ─── Tipografía ─────────────────────────────────────── */
-  --font-display: 'Fraunces', 'Times New Roman', serif;
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* ─── Tipografía ─────────────────────────────────────────
+     El mockup del cliente pide "Tosh A" en cuatro pesos (Light/Regular/
+     Medium/Bold) para todo el sitio. Tosh A es una tipografía de pago de
+     Black[Foundry] (Adobe Fonts), no está en Google Fonts y no hay licencia
+     para sus archivos, así que no se puede usar tal cual. Manrope es la
+     sustituta: geométrica como Tosh A, gratuita, y cubre los mismos cuatro
+     pesos (300/400/500/600) más 700 para los titulares en negrita. Si en
+     algún momento se consigue la licencia de Tosh A, este es el único sitio
+     que hay que tocar para sustituirla en todo el sitio. */
+  --font-display: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Acento puntual, no la base: sólo para cifras grandes (p. ej. "15+ años
+     de oficio") donde se pidió un aire más clásico que el resto del sitio. */
+  --font-serif-accent: 'Fraunces', 'Times New Roman', serif;
 
   /* Escala fluida (mobile → desktop) */
   --fs-display: clamp(2.75rem, 9vw, 7rem);

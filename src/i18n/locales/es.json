@@ -24,7 +24,7 @@
     "legal": "Aviso legal",
     "cookies": "Política de cookies",
     "privacy": "Política de privacidad",
-    "claim": "Construcción y reformas premium en Cataluña.",
+    "claim": "TU HOGAR LLEVADO A OTRO NIVEL",
     "navigation": "Navegación",
     "legalHeading": "Legal",
     "location": "Cornellà de Llobregat, Barcelona",
@@ -47,44 +47,78 @@
     "seeAria": "Ver {{title}}"
   },
   "home": {
-    "heroTitle": "Arquitectura que se vive",
-    "heroSubtitle": "Reformas y construcciones premium en Cataluña",
-    "heroBrand": "P & B Cornellà Construcciones",
+    "heroTitle": "Tu hogar llevado a otro nivel",
+    "heroSubtitle": "Reformas y construcciones de alta calidad en Barcelona y alrededores.",
     "heroStrip": "Reformas integrales · Cocinas · Baños · Interiorismo · Rehabilitación",
-    "aboutTeaser": "En Arquelia transformamos espacios con precisión milimétrica y un acabado de altísima calidad, cuidando cada detalle desde el primer boceto hasta la última junta.",
-    "featuredProjects": "Proyectos destacados",
-    "ctaTitle": "¿Tienes un proyecto en mente?",
     "intro": {
-      "eyebrow": "Sobre nosotros",
-      "titlePre": "Donde la arquitectura",
-      "titleEm": "se convierte",
-      "titlePost": "en hogar",
-      "requestBudget": "Solicita presupuesto",
-      "knowUs": "Conoce Arquelia",
-      "facts": [
-        { "value": "15+", "label": "Años de oficio" },
-        { "value": "120+", "label": "Proyectos entregados" },
-        { "value": "1", "label": "Interlocutor por obra" }
-      ]
+      "title": "Diseño y calidad en cada proyecto.",
+      "text": "En Arquelia transformamos hogares para crear espacios únicos, pensados para quienes buscan algo más. Combinamos años de experiencia, materiales de primera calidad y una cuidada atención al detalle para ofrecer reformas exclusivas y una experiencia a la altura de cada proyecto."
     },
-    "mosaic": {
-      "eyebrow": "Proyectos",
-      "clickToSee": "Haz clic para ver la reforma en detalle"
-    },
-    "showcase": {
-      "seeAll": "Ver todos los proyectos"
-    },
-    "services": {
+    "servicesGrid": {
       "eyebrow": "Servicios",
-      "title": "Lo que hacemos",
-      "seeAll": "Todos los servicios",
+      "title": "Nuestros servicios",
+      "lead": "Diseñamos reformas con un enfoque integral, cuidando cada detalle para crear espacios funcionales, elegantes y duraderos.",
       "items": [
-        { "title": "Reformas integrales", "note": "De la estructura al último acabado" },
-        { "title": "Cocinas", "note": "Diseño, mobiliario y encimeras a medida" },
-        { "title": "Baños", "note": "Materiales nobles y grifería de diseño" },
-        { "title": "Interiorismo", "note": "Proyecto completo, llave en mano" },
-        { "title": "Rehabilitación", "note": "Recuperar sin perder el carácter" }
+        {
+          "id": "cocina",
+          "title": "Cocina"
+        },
+        {
+          "id": "bano",
+          "title": "Baños"
+        },
+        {
+          "id": "integral",
+          "title": "Reforma Integral"
+        },
+        {
+          "id": "rehabilitacion",
+          "title": "Rehabilitación"
+        }
       ]
+    },
+    "projectsShowcase": {
+      "eyebrow": "Proyectos",
+      "title": "Proyectos",
+      "lead": "Cada reforma es una oportunidad para transformar un espacio en algo único. En Arquelia cuidamos cada detalle para crear obras que combinan funcionalidad, estética y una ejecución impecable.",
+      "seeAllAria": "Ver todos los proyectos",
+      "items": [
+        {
+          "title": "Reforma Integral",
+          "desc": "Se han cuidado hasta el último milímetro los acabados: suelo de piedra natural, carpintería a medida y sistemas domóticos integrados, logrando un equilibrio entre arquitectura clásica y confort contemporáneo."
+        },
+        {
+          "title": "Reforma de Cocina y Baño",
+          "desc": "Renovación completa de cocina y baño con materiales de primera calidad y una distribución pensada para el día a día."
+        },
+        {
+          "title": "Rehabilitación de fachada",
+          "desc": "Recuperación integral de la fachada, respetando el carácter original del edificio con técnicas y materiales actuales."
+        },
+        {
+          "title": "Instalación de parquet",
+          "desc": "Suelo de parquet natural instalado con acabado continuo, aportando calidez y luminosidad a todo el espacio."
+        }
+      ]
+    },
+    "finalCta": {
+      "question": "¿Tienes un proyecto en mente?",
+      "text": "En Arquelia transformamos espacios con precisión milimétrica y un acabado de altísima calidad, cuidando cada detalle desde el primer boceto hasta la última junta.",
+      "facts": [
+        {
+          "value": "15+",
+          "label": "Años de oficio"
+        },
+        {
+          "value": "120+",
+          "label": "Proyectos entregados"
+        },
+        {
+          "value": "1",
+          "label": "Interlocutor por obra"
+        }
+      ],
+      "requestBudget": "Solicita presupuesto"
     },
     "cta": {
       "title": "¿Tienes un proyecto en mente?",
@@ -100,23 +134,70 @@
       "lead": "Desde una intervención puntual hasta una rehabilitación completa: mismo nivel de exigencia en diseño, materiales y ejecución."
     },
     "featured": [
-      { "id": "cocina", "label": "Cocinas", "prefix": "Reformas de", "suffix": "a medida" },
-      { "id": "bano", "label": "Baños", "prefix": "Reformas de", "suffix": "de autor" },
-      { "id": "integral", "label": "Integral", "prefix": "Reforma", "suffix": "llave en mano" }
+      {
+        "id": "cocina",
+        "label": "Cocinas",
+        "prefix": "Reformas de",
+        "suffix": "a medida"
+      },
+      {
+        "id": "bano",
+        "label": "Baños",
+        "prefix": "Reformas de",
+        "suffix": "de autor"
+      },
+      {
+        "id": "integral",
+        "label": "Integral",
+        "prefix": "Reforma",
+        "suffix": "llave en mano"
+      }
     ],
     "catalog": {
       "eyebrow": "Catálogo",
       "title": "Todo lo que cubrimos",
       "lead": "Un único equipo para todo el proyecto: sin subcontratas descoordinadas ni responsabilidades diluidas.",
       "items": [
-        { "id": "integral", "title": "Reforma integral", "desc": "Transformación completa de la vivienda, de la estructura a los últimos acabados." },
-        { "id": "cocina", "title": "Reforma de cocina", "desc": "Diseño funcional y materiales de alta gama para el corazón de la casa." },
-        { "id": "bano", "title": "Reforma de baño", "desc": "Espacios de bienestar con acabados exclusivos y grifería de diseño." },
-        { "id": "interiorismo", "title": "Interiorismo", "desc": "Del concepto a la última pieza de mobiliario, con dirección de proyecto." },
-        { "id": "rehabilitacion", "title": "Rehabilitación", "desc": "Recuperación integral de edificios y viviendas respetando su carácter." },
-        { "id": "local", "title": "Local comercial", "desc": "Espacios que combinan identidad de marca, normativa y funcionalidad." },
-        { "id": "oficina", "title": "Oficinas", "desc": "Entornos de trabajo eficientes, luminosos y con acabados de nivel premium." },
-        { "id": "acabados", "title": "Acabados y calidades", "desc": "Selección de materiales nobles y ejecución al milímetro en cada detalle." }
+        {
+          "id": "integral",
+          "title": "Reforma integral",
+          "desc": "Transformación completa de la vivienda, de la estructura a los últimos acabados."
+        },
+        {
+          "id": "cocina",
+          "title": "Reforma de cocina",
+          "desc": "Diseño funcional y materiales de alta gama para el corazón de la casa."
+        },
+        {
+          "id": "bano",
+          "title": "Reforma de baño",
+          "desc": "Espacios de bienestar con acabados exclusivos y grifería de diseño."
+        },
+        {
+          "id": "interiorismo",
+          "title": "Interiorismo",
+          "desc": "Del concepto a la última pieza de mobiliario, con dirección de proyecto."
+        },
+        {
+          "id": "rehabilitacion",
+          "title": "Rehabilitación",
+          "desc": "Recuperación integral de edificios y viviendas respetando su carácter."
+        },
+        {
+          "id": "local",
+          "title": "Local comercial",
+          "desc": "Espacios que combinan identidad de marca, normativa y funcionalidad."
+        },
+        {
+          "id": "oficina",
+          "title": "Oficinas",
+          "desc": "Entornos de trabajo eficientes, luminosos y con acabados de nivel premium."
+        },
+        {
+          "id": "acabados",
+          "title": "Acabados y calidades",
+          "desc": "Selección de materiales nobles y ejecución al milímetro en cada detalle."
+        }
       ]
     },
     "process": {
@@ -124,12 +205,36 @@
       "title": "Seis pasos, cero sorpresas",
       "lead": "Un método probado que mantiene el proyecto dentro de plazo y presupuesto.",
       "steps": [
-        { "n": "01", "title": "Primera visita", "desc": "Visitamos el espacio, escuchamos qué necesitas y valoramos el alcance real del proyecto. Sin coste ni compromiso." },
-        { "n": "02", "title": "Proyecto y presupuesto", "desc": "Elaboramos la propuesta de diseño y un presupuesto cerrado y detallado por partidas: sabes exactamente qué incluye cada euro." },
-        { "n": "03", "title": "Materiales", "desc": "Te acompañamos en la elección de acabados con proveedores de confianza y relación directa de fabricante, para acceder a primera calidad al precio justo." },
-        { "n": "04", "title": "Planificación", "desc": "Definimos un calendario realista por fases y asignamos un único interlocutor que te acompaña durante toda la obra." },
-        { "n": "05", "title": "Ejecución", "desc": "Nuestro equipo ejecuta con control de calidad en cada fase y te mantiene informado del avance semana a semana." },
-        { "n": "06", "title": "Entrega de llaves", "desc": "Revisión final al milímetro, repaso conjunto contigo y entrega de un espacio listo para vivir, con garantía post-obra." }
+        {
+          "n": "01",
+          "title": "Primera visita",
+          "desc": "Visitamos el espacio, escuchamos qué necesitas y valoramos el alcance real del proyecto. Sin coste ni compromiso."
+        },
+        {
+          "n": "02",
+          "title": "Proyecto y presupuesto",
+          "desc": "Elaboramos la propuesta de diseño y un presupuesto cerrado y detallado por partidas: sabes exactamente qué incluye cada euro."
+        },
+        {
+          "n": "03",
+          "title": "Materiales",
+          "desc": "Te acompañamos en la elección de acabados con proveedores de confianza y relación directa de fabricante, para acceder a primera calidad al precio justo."
+        },
+        {
+          "n": "04",
+          "title": "Planificación",
+          "desc": "Definimos un calendario realista por fases y asignamos un único interlocutor que te acompaña durante toda la obra."
+        },
+        {
+          "n": "05",
+          "title": "Ejecución",
+          "desc": "Nuestro equipo ejecuta con control de calidad en cada fase y te mantiene informado del avance semana a semana."
+        },
+        {
+          "n": "06",
+          "title": "Entrega de llaves",
+          "desc": "Revisión final al milímetro, repaso conjunto contigo y entrega de un espacio listo para vivir, con garantía post-obra."
+        }
       ]
     },
     "cta": {
@@ -172,7 +277,7 @@
       "text": "Si te encaja este estilo, podemos estudiar tu espacio y decirte qué es viable y con qué presupuesto.",
       "cta": "Hablemos"
     },
-    "description" : "Descripción",
+    "description": "Descripción",
     "gallery": {
       "eyebrow": "Galería",
       "openAria": "Ampliar imagen {{n}} de {{total}}",
@@ -203,19 +308,43 @@
       "title": "Una forma de trabajar",
       "lead": "No es un eslogan: es lo que revisamos en cada obra antes de dar una fase por cerrada.",
       "items": [
-        { "n": "01", "title": "Maestría", "desc": "Años de oficio aplicados a cada detalle, sin margen para la improvisación. Cada trabajo, en manos de quien lo domina: no repartimos la obra entre subcontratas descoordinadas." },
-        { "n": "02", "title": "Materiales", "desc": "Seleccionamos materiales nobles y proveedores de confianza. La relación directa con fabricante nos permite acceder a primera calidad a un precio que tiene sentido." },
-        { "n": "03", "title": "Método", "desc": "Un único interlocutor y un proceso claro, de la primera visita a la entrega de llaves. Presupuesto cerrado, calendario realista y comunicación semanal." }
+        {
+          "n": "01",
+          "title": "Maestría",
+          "desc": "Años de oficio aplicados a cada detalle, sin margen para la improvisación. Cada trabajo, en manos de quien lo domina: no repartimos la obra entre subcontratas descoordinadas."
+        },
+        {
+          "n": "02",
+          "title": "Materiales",
+          "desc": "Seleccionamos materiales nobles y proveedores de confianza. La relación directa con fabricante nos permite acceder a primera calidad a un precio que tiene sentido."
+        },
+        {
+          "n": "03",
+          "title": "Método",
+          "desc": "Un único interlocutor y un proceso claro, de la primera visita a la entrega de llaves. Presupuesto cerrado, calendario realista y comunicación semanal."
+        }
       ]
     },
     "numbers": {
       "eyebrow": "En cifras",
       "imageAlt": "Detalle de una reforma de Arquelia",
       "items": [
-        { "value": "15+", "label": "Años de experiencia" },
-        { "value": "120+", "label": "Proyectos entregados" },
-        { "value": "100%", "label": "Presupuestos cerrados" },
-        { "value": "2 años", "label": "Garantía post-obra" }
+        {
+          "value": "15+",
+          "label": "Años de experiencia"
+        },
+        {
+          "value": "120+",
+          "label": "Proyectos entregados"
+        },
+        {
+          "value": "100%",
+          "label": "Presupuestos cerrados"
+        },
+        {
+          "value": "2 años",
+          "label": "Garantía post-obra"
+        }
       ]
     }
   },
@@ -229,10 +358,22 @@
     "talk": "Hablemos",
     "talkText": "Si prefieres el trato directo, escríbenos o llámanos. Respondemos en menos de 24 h laborables.",
     "details": [
-      { "label": "Email", "value": "info@arquelia.es" },
-      { "label": "Teléfono", "value": "+34 600 000 000" },
-      { "label": "Oficina", "value": "Cornellà de Llobregat, Barcelona" },
-      { "label": "Horario", "value": "Lunes a viernes, 9:00 – 18:00" }
+      {
+        "label": "Email",
+        "value": "info@arquelia.es"
+      },
+      {
+        "label": "Teléfono",
+        "value": "+34 600 000 000"
+      },
+      {
+        "label": "Oficina",
+        "value": "Cornellà de Llobregat, Barcelona"
+      },
+      {
+        "label": "Horario",
+        "value": "Lunes a viernes, 9:00 – 18:00"
+      }
     ],
     "zone": {
       "label": "Zona de trabajo",
@@ -244,10 +385,26 @@
   },
   "ctaForm": {
     "steps": {
-      "project": { "label": "Proyecto", "title": "¿Qué quieres reformar?", "hint": "Elige la opción que más se acerque." },
-      "contact": { "label": "Contacto", "title": "¿Cómo te contactamos?", "hint": "Solo lo imprescindible para poder responderte." },
-      "details": { "label": "Detalles", "title": "Cuéntanos tu proyecto", "hint": "Opcional, pero nos ayuda a preparar mejor la visita." },
-      "summary": { "label": "Resumen", "title": "Revisa y envía", "hint": "Comprueba que todo esté correcto." }
+      "project": {
+        "label": "Proyecto",
+        "title": "¿Qué quieres reformar?",
+        "hint": "Elige la opción que más se acerque."
+      },
+      "contact": {
+        "label": "Contacto",
+        "title": "¿Cómo te contactamos?",
+        "hint": "Solo lo imprescindible para poder responderte."
+      },
+      "details": {
+        "label": "Detalles",
+        "title": "Cuéntanos tu proyecto",
+        "hint": "Opcional, pero nos ayuda a preparar mejor la visita."
+      },
+      "summary": {
+        "label": "Resumen",
+        "title": "Revisa y envía",
+        "hint": "Comprueba que todo esté correcto."
+      }
     },
     "services": {
       "integral": "Reforma integral",
@@ -305,17 +462,117 @@
     }
   },
   "legal": {
+    "eyebrow": "Legal",
+    "updated": "Última actualización: agosto de 2026",
     "notice": {
       "title": "Aviso Legal",
-      "text": "Texto legal pendiente de completar con los datos reales de la empresa: [NOMBRE DE LA EMPRESA], CIF [CIF], con domicilio en [DIRECCIÓN], y email de contacto [EMAIL]."
-    },
-    "cookies": {
-      "title": "Política de Cookies",
-      "text": "Texto legal pendiente de completar con los datos reales de la empresa: [NOMBRE DE LA EMPRESA], CIF [CIF], con domicilio en [DIRECCIÓN], y email de contacto [EMAIL]."
+      "sections": [
+        {
+          "heading": "1. Datos identificativos",
+          "body": "En cumplimiento del deber de información recogido en el artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se informa que este sitio web es titularidad de P & B Cornellà Construcciones, S.L. («Arquelia»), con CIF [CIF PENDIENTE] y domicilio social en [DIRECCIÓN PENDIENTE], Cornellà de Llobregat (Barcelona), inscrita en el Registro Mercantil de [PROVINCIA PENDIENTE], tomo [TOMO], folio [FOLIO], hoja [HOJA]. Puede contactar con nosotros en el correo electrónico info@arquelia.es o en el teléfono +34 600 000 000."
+        },
+        {
+          "heading": "2. Objeto",
+          "body": "El presente aviso legal regula el acceso y el uso de este sitio web, que Arquelia pone a disposición de los usuarios para dar a conocer sus servicios de construcción y reforma. El acceso al sitio web es gratuito y su uso atribuye la condición de usuario, lo que implica la aceptación de las condiciones recogidas en este aviso legal."
+        },
+        {
+          "heading": "3. Condiciones de uso",
+          "body": "El usuario se compromete a hacer un uso adecuado y lícito del sitio web, de conformidad con la legislación aplicable, el presente aviso legal, la moral y las buenas costumbres generalmente aceptadas y el orden público. Queda prohibido el uso del sitio web con fines ilícitos o lesivos, o que de cualquier forma puedan causar perjuicio o impedir su normal funcionamiento."
+        },
+        {
+          "heading": "4. Propiedad intelectual e industrial",
+          "body": "Todos los contenidos del sitio web —incluyendo, a título enunciativo, textos, fotografías, gráficos, imágenes, iconos, así como su diseño gráfico y código fuente— son propiedad de Arquelia o de terceros que han autorizado su uso, y están protegidos por la normativa vigente en materia de propiedad intelectual e industrial. Queda expresamente prohibida su reproducción, distribución o comunicación pública, total o parcial, sin autorización expresa de Arquelia."
+        },
+        {
+          "heading": "5. Enlaces a terceros",
+          "body": "En caso de que el sitio web incluya enlaces a sitios de terceros, Arquelia no asume responsabilidad alguna sobre los contenidos, informaciones o servicios que pudieran aparecer en ellos, que tienen carácter exclusivamente informativo y que en ningún caso implican relación alguna entre Arquelia y los titulares de dichos sitios."
+        },
+        {
+          "heading": "6. Exclusión de responsabilidad",
+          "body": "Arquelia pone los medios razonables a su alcance para que el sitio web funcione correctamente y su contenido esté actualizado, sin que ello suponga una garantía de ausencia de errores. Arquelia no se hace responsable de los daños y perjuicios derivados de interferencias, interrupciones, virus informáticos, averías o desconexiones en el funcionamiento del sistema electrónico ajenas a su control."
+        },
+        {
+          "heading": "7. Legislación aplicable y jurisdicción",
+          "body": "Las presentes condiciones se rigen por la legislación española. Para cualquier controversia derivada del acceso o uso de este sitio web, y cuando el usuario tenga la condición de consumidor, ambas partes se someten a los juzgados y tribunales de su domicilio; en caso contrario, a los juzgados y tribunales de Barcelona."
+        }
+      ]
     },
     "privacy": {
       "title": "Política de Privacidad",
-      "text": "Texto legal pendiente de completar con los datos reales de la empresa: [NOMBRE DE LA EMPRESA], CIF [CIF], con domicilio en [DIRECCIÓN], y email de contacto [EMAIL]."
+      "sections": [
+        {
+          "heading": "1. Responsable del tratamiento",
+          "body": "El responsable del tratamiento de los datos personales facilitados a través de este sitio web es P & B Cornellà Construcciones, S.L. («Arquelia»), con CIF [CIF PENDIENTE] y domicilio social en [DIRECCIÓN PENDIENTE], Cornellà de Llobregat (Barcelona), inscrita en el Registro Mercantil de [PROVINCIA PENDIENTE], tomo [TOMO], folio [FOLIO], hoja [HOJA]. Puede contactar con el responsable del tratamiento en info@arquelia.es."
+        },
+        {
+          "heading": "2. Finalidad del tratamiento",
+          "body": "Los datos que nos facilite a través de los formularios de este sitio web (nombre, correo electrónico, teléfono, población y detalles del proyecto) se tratan para gestionar sus solicitudes de presupuesto e información, atender sus consultas y, en su caso, gestionar la relación contractual que pudiera derivarse. No se toman decisiones automatizadas ni se elaboran perfiles a partir de sus datos."
+        },
+        {
+          "heading": "3. Legitimación",
+          "body": "La base legal del tratamiento es el consentimiento que presta al enviar el formulario correspondiente y, en su caso, la ejecución de la relación precontractual o contractual que se establezca entre usted y Arquelia."
+        },
+        {
+          "heading": "4. Conservación de los datos",
+          "body": "Los datos se conservarán mientras se mantenga la relación con el usuario y, una vez finalizada, durante los plazos legalmente exigibles para atender las eventuales responsabilidades derivadas del tratamiento."
+        },
+        {
+          "heading": "5. Destinatarios",
+          "body": "No se ceden datos a terceros, salvo obligación legal. Los datos podrán ser tratados por proveedores de servicios (alojamiento web, envío de correo electrónico) que actúan como encargados del tratamiento en nombre de Arquelia y con las garantías exigidas por el RGPD."
+        },
+        {
+          "heading": "6. Sus derechos",
+          "body": "Puede ejercer sus derechos de acceso, rectificación, supresión, oposición, limitación del tratamiento y portabilidad dirigiéndose por escrito a info@arquelia.es o al domicilio social de Arquelia, adjuntando copia de un documento que acredite su identidad. Asimismo, tiene derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (www.aepd.es) si considera que el tratamiento no se ajusta a la normativa vigente."
+        },
+        {
+          "heading": "7. Procedencia de los datos",
+          "body": "Los únicos datos que tratamos son los que usted mismo nos facilita voluntariamente a través de los formularios de este sitio web."
+        }
+      ]
+    },
+    "cookies": {
+      "title": "Política de Cookies",
+      "sections": [
+        {
+          "heading": "1. ¿Qué son las cookies?",
+          "body": "Las cookies son pequeños archivos de texto que un sitio web puede instalar en su navegador o dispositivo al visitarlo. Bajo el mismo régimen legal se incluyen también otras tecnologías de almacenamiento y recuperación de datos, como el almacenamiento local del navegador (localStorage), que este sitio utiliza en lugar de cookies propiamente dichas para el único fin descrito más abajo."
+        },
+        {
+          "heading": "2. Tipos de cookies según su finalidad",
+          "body": "Técnicas o necesarias: imprescindibles para que el sitio funcione y para prestar el servicio solicitado (por ejemplo, recordar su idioma). De personalización: permiten recordar preferencias como el idioma o la región. Analíticas: permiten cuantificar el número de visitantes y analizar su uso del sitio. Publicitarias o de terceros: permiten gestionar espacios publicitarios o compartir información con redes sociales y otras plataformas externas."
+        },
+        {
+          "heading": "3. Tipos de cookies según su titularidad y duración",
+          "body": "Según quién las gestione, pueden ser propias (gestionadas por Arquelia) o de terceros (gestionadas por un tercero ajeno a Arquelia). Según el tiempo que permanecen activas, pueden ser de sesión (se eliminan al cerrar el navegador) o persistentes (permanecen almacenadas durante un periodo determinado)."
+        },
+        {
+          "heading": "4. Qué usamos en este sitio web",
+          "body": "Este sitio web únicamente utiliza almacenamiento técnico propio y de sesión persistente: el idioma que usted selecciona (español o inglés), guardado en el almacenamiento local de su navegador para no tener que volver a elegirlo en cada visita. No instalamos cookies ni tecnologías similares de analítica, publicidad o redes sociales, y no compartimos datos de navegación con terceros. Si en el futuro se incorporan cookies analíticas o de terceros, se solicitará su consentimiento previo mediante el correspondiente aviso, actualizando esta política."
+        },
+        {
+          "heading": "5. Base legal",
+          "body": "El tratamiento descrito se ampara en el artículo 22.2 de la Ley 34/2002, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), que exime del deber de obtener consentimiento a las cookies y tecnologías equivalentes estrictamente necesarias para prestar el servicio expresamente solicitado por el usuario. Por esta razón, el aviso de cookies de este sitio le permite aceptar o rechazar, pero su elección no afecta al funcionamiento del sitio mientras no se incorporen cookies no esenciales."
+        },
+        {
+          "heading": "6. Cómo gestionar o revocar su consentimiento",
+          "body": "Puede aceptar o rechazar el uso de cookies no esenciales desde el aviso que aparece en su primera visita. Puede cambiar su elección en cualquier momento desde el enlace «Configurar cookies» disponible en el pie de página de este sitio web, lo que volverá a mostrarle el aviso."
+        },
+        {
+          "heading": "7. Cómo configurar su navegador",
+          "body": "Además de las opciones anteriores, puede permitir, bloquear o eliminar las cookies instaladas en su equipo configurando las opciones de su navegador: en Chrome, desde Configuración > Privacidad y seguridad > Cookies; en Firefox, desde Ajustes > Privacidad y seguridad; en Safari, desde Preferencias > Privacidad; y en Edge, desde Configuración > Privacidad, búsqueda y servicios. Si bloquea todas las cookies, es posible que algunas funciones del sitio no funcionen correctamente."
+        },
+        {
+          "heading": "8. Cambios en esta política",
+          "body": "Arquelia puede modificar esta política de cookies en función de exigencias legislativas o con la finalidad de adaptarla a las instrucciones de la Agencia Española de Protección de Datos. Se recomienda revisarla cada vez que acceda al sitio web."
+        }
+      ]
     }
+  },
+  "cookieBanner": {
+    "text": "Usamos almacenamiento técnico necesario para el funcionamiento del sitio (por ejemplo, recordar el idioma elegido). No usamos cookies de análisis ni de publicidad.",
+    "accept": "Aceptar",
+    "reject": "Rechazar",
+    "policyLink": "Política de cookies",
+    "manage": "Configurar cookies"
   }
 }

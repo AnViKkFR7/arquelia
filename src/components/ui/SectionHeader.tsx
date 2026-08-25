@@ -26,14 +26,6 @@ export function SectionHeader({
   return (
     <div className={`${styles.header} ${inverse ? styles.inverse : ''} ${className ?? ''}`}>
       <div className={styles.main}>
-        {(index || eyebrow) && (
-          <Reveal variant="fade">
-            <span className={`eyebrow ${styles.eyebrow}`}>
-              {index && <span className={styles.index}>{index}</span>}
-              {eyebrow}
-            </span>
-          </Reveal>
-        )}
         {title && (
           <Reveal variant="up" delay={60}>
             <h2 className={styles.title}>{title}</h2>

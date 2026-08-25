@@ -28,7 +28,10 @@ body {
   font-family: var(--font-sans);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
-  font-weight: 400;
+  /* "Tosh A Light": el cuerpo de texto por defecto es el peso más ligero.
+     Cualquier elemento con su propio font-weight (botones, nav, eyebrows...)
+     no se ve afectado por este valor heredado. */
+  font-weight: 300;
   color: var(--text);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
@@ -41,10 +44,12 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  font-weight: 400;
+  /* "Tosh A Bold": los titulares grandes van en negrita en el mockup — antes
+     heredaban el peso 400 de Fraunces, que como serif variable ya se leía
+     con presencia propia a ese peso; Manrope a 400 se queda plano. */
+  font-weight: 700;
   line-height: var(--lh-tight);
   letter-spacing: -0.015em;
-  font-variation-settings: 'SOFT' 0, 'WONK' 0;
   text-wrap: balance;
 }
 
@@ -57,6 +62,13 @@ h2 {
 h3 {
   font-size: var(--fs-h3);
   line-height: var(--lh-snug);
+  /* "Tosh A Medium": los títulos de apoyo (h3/h4) no llevan el mismo peso
+     que los titulares principales. */
+  font-weight: 600;
+}
+
+h4 {
+  font-weight: 600;
 }
 
 p {

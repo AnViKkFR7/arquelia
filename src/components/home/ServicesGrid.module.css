@@ -1,0 +1,66 @@
+.section {
+  position: relative;
+  background: var(--cream);
+}
+
+/* Muesca centrada arriba, pedida en el mockup: una pequeña pestaña dorada
+   que sobresale del borde superior de la sección. */
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 120px;
+  height: 2px;
+  background: var(--gold-notch);
+  transform: translateX(-50%);
+}
+
+.grid {
+  margin-top: var(--sp-12);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-4);
+}
+
+@media (min-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--sp-5);
+  }
+}
+
+.card {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--grey-300) center / cover no-repeat;
+  transition: transform var(--t-slow) var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0) 45%, rgba(6, 6, 6, 0.72) 100%);
+  transition: background var(--t-base) var(--ease);
+}
+
+.card:hover .veil {
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0.1) 25%, rgba(6, 6, 6, 0.8) 100%);
+}
+
+.title {
+  position: relative;
+  z-index: var(--z-base);
+  width: 100%;
+  padding: var(--sp-5);
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  font-weight: 600;
+  color: var(--text-inverse);
+}

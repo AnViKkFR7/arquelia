@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Reveal } from '../ui/Reveal'
+import logoMark from '../../assets/brand/Transparente_blanco_logo_abajo_nombre.png'
 import styles from './Footer.module.css'
 
 export function Footer() {
@@ -10,17 +11,20 @@ export function Footer() {
 
   return (
     <footer className={styles.footer}>
-      <div className="container">
-        <Reveal variant="up">
-          <div className={styles.top}>
-            <NavLink to="/" className={styles.logo}>
-              <span className={styles.logoMark} aria-hidden="true" />
-              ARQUELIA
-            </NavLink>
-            <p className={styles.claim}>{t('footer.claim')}</p>
-          </div>
-        </Reveal>
+      <div className={styles.containerWrapper}>
+        <div className={styles.container}>
+          <Reveal variant="up">
+            <div className={styles.top}>
+              <NavLink to="/" className={styles.logo}>
+                <img src={logoMark} alt="" className={styles.logoMark} />
+              </NavLink>
+              <p className={styles.claim}>{t('footer.claim')}</p>
+            </div>
+          </Reveal>
+        </div>
+      </div>
 
+      <div className={styles.containerBottom}>
         <div className={styles.grid}>
           <div className={styles.col}>
             <h4 className={styles.heading}>{t('nav.services')}</h4>
@@ -68,8 +72,14 @@ export function Footer() {
             </NavLink>
           </div>
         </div>
+      </div>
 
-        <div className={styles.bottom}>
+      {/* Banda a sangre completa con su propio fondo, más oscuro que el
+          resto del footer — de ahí que viva fuera del `container` de
+          arriba: necesita ocupar el ancho entero de la pantalla, no sólo
+          el ancho de línea del contenido. */}
+      <div className={styles.bottom}>
+        <div className={`container ${styles.bottomInner}`}>
           <span>
             &copy; {year} Arquelia. {t('footer.rights')}
           </span>
@@ -81,6 +91,6 @@ export function Footer() {
           <span className={styles.legalName}>P &amp; B Cornellà Construcciones, S.L.</span>
         </div>
       </div>
-    </footer>
+    </footer >
   )
 }

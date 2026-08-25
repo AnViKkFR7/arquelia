@@ -44,8 +44,6 @@ export function Hero() {
             pointerEvents: titleOut > 0.8 ? 'none' : undefined,
           }}
         >
-          <span className={`eyebrow ${styles.eyebrow}`}>{t('home.heroBrand')}</span>
-
           {/* Título accesible completo; la versión animada por palabras se
               oculta a la API de accesibilidad para no leer fragmentos sueltos. */}
           <h1 className={styles.title}>
