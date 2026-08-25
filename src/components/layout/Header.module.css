@@ -45,6 +45,8 @@
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     padding-inline: 1.4rem;
+    background: rgb(67 67 67 / 36%);
+    backdrop-filter: blur(18px) saturate(150%);
   }
 }
 
