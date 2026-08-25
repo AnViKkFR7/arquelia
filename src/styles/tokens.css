@@ -28,7 +28,7 @@
   /* Colores puntuales pedidos en el mockup del cliente, con su hex exacto en
      vez de aproximarlos a la escala de dorados de arriba. */
   --cream: #fffbf2;
-  --gold-notch: #c6a15b;
+  --gold-notch: #c6a158;
 
   /* ─── Roles semánticos ───────────────────────────────── */
   --bg: var(--white);

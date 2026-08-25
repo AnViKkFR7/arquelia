@@ -63,9 +63,11 @@
   /* Más grande que --fs-display (el que usan h1 normales): éste es el único
      titular a pantalla completa del sitio. */
   font-size: clamp(3.25rem, 11vw, 5.5rem);
-  /* "Tosh A Bold": antes era 300 (peso ligero de Fraunces, look editorial
-     fino); el mockup pide el titular en negrita y en mayúsculas. */
-  font-weight: 700;
+  /* "Tosh A Medium": revisando el mockup elemento a elemento, el titular del
+     hero no va en negrita — Bold sólo aparece en el wordmark de marca (una
+     imagen). Antes era 300 (peso ligero de Fraunces); antes de esto pasó por
+     700 al confundirlo con Bold. El mayúsculas sí se mantiene. */
+  font-weight: 500;
   line-height: 0.96;
   letter-spacing: -0.01em;
   text-transform: uppercase;

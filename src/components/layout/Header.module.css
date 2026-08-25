@@ -151,7 +151,9 @@
   background: var(--accent-bright);
   color: var(--black-950);
   font-size: var(--fs-sm);
-  font-weight: 600;
+  /* "Tosh A Regular": el botón de CTA no lleva el mismo peso que los
+     titulares, va en el peso base de la fuente. */
+  font-weight: 400;
   white-space: nowrap;
   transition:
     background var(--t-fast) var(--ease),
@@ -283,7 +285,7 @@
   border-radius: 10px;
   background: var(--accent-bright);
   color: var(--black-950);
-  font-weight: 600;
+  font-weight: 400;
   font-size: var(--fs-sm);
   width: 12rem;
 }

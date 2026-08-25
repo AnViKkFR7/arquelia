@@ -8,10 +8,10 @@ import { ProcessTimeline, type ProcessStep } from '../components/services/Proces
 import { CtaBand } from '../components/home/CtaBand'
 import styles from './ServicesPage.module.css'
 
-import heroImg from '../assets/pasillo_01.jpg'
-import cocinaImg from '../assets/cocina_abierta.avif'
-import banoImg from '../assets/baño_03.avif'
-import salonImg from '../assets/salon_01.avif'
+import heroImg from '../assets/servicios_header_2.webp'
+import cocinaImg from '../assets/cocina_abierta.webp'
+import banoImg from '../assets/baño_03.webp'
+import salonImg from '../assets/salon_01.webp'
 
 const FEATURED_IMAGES: Record<string, string> = { cocina: cocinaImg, bano: banoImg, integral: salonImg }
 

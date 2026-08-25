@@ -44,10 +44,11 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  /* "Tosh A Bold": los titulares grandes van en negrita en el mockup — antes
-     heredaban el peso 400 de Fraunces, que como serif variable ya se leía
-     con presencia propia a ese peso; Manrope a 400 se queda plano. */
-  font-weight: 700;
+  /* "Tosh A Medium": revisando el mockup elemento a elemento, el único sitio
+     con "Tosh A Bold" es el wordmark de marca (una imagen, no texto) — el
+     titular del hero y todos los H2 de sección van en Medium (500), no en
+     negrita. */
+  font-weight: 500;
   line-height: var(--lh-tight);
   letter-spacing: -0.015em;
   text-wrap: balance;
@@ -62,12 +63,6 @@ h2 {
 h3 {
   font-size: var(--fs-h3);
   line-height: var(--lh-snug);
-  /* "Tosh A Medium" es 500, no 600 — Tosh A sólo trae 300/400/500/700. */
-  font-weight: 500;
-}
-
-h4 {
-  font-weight: 500;
 }
 
 p {

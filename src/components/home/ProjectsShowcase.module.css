@@ -41,9 +41,11 @@
   right: var(--sp-6);
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 3vw, 2.25rem);
-  /* Mucho más fino que el resto de la tipografía del sitio, a propósito:
-     es un dato de apoyo (el número de orden), no un titular. */
-  font-weight: 200;
+  /* Mucho más fino que el resto de la tipografía del sitio, a propósito: es
+     un dato de apoyo (el número de orden), no un titular. 300 y no menos:
+     Tosh A sólo trae 300/400/500/700, un 200 no existe y el navegador
+     habría aproximado al peso disponible más cercano igualmente. */
+  font-weight: 300;
   color: var(--text-inverse);
   opacity: 0.85;
 }
@@ -62,7 +64,8 @@
 
 .stageTitle {
   font-family: var(--font-display);
-  font-weight: 700;
+  /* "Tosh A Medium" en el mockup, no negrita. */
+  font-weight: 500;
   font-size: var(--fs-sm);
   text-transform: uppercase;
   letter-spacing: 0.02em;
@@ -128,6 +131,9 @@
   display: block;
   margin-top: var(--sp-3);
   font-size: var(--fs-xs);
+  /* "Tosh A Medium": las etiquetas de los índices, igual que el título del
+     escenario que representan. */
+  font-weight: 500;
   color: rgba(255, 255, 255, 0.7);
   transition: color var(--t-fast) var(--ease);
 }
@@ -200,6 +206,6 @@
 
 .slideTitle {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 500;
   font-size: 1.15rem;
 }

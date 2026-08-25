@@ -8,6 +8,13 @@ import { ProjectDetailPage } from './pages/ProjectDetailPage'
 import { AboutPage } from './pages/AboutPage'
 import { ContactPage } from './pages/ContactPage'
 import { LegalPage } from './pages/LegalPage'
+// `/next` es el punto de entrada específico de Next.js: internamente
+// importa de `next/navigation`, un paquete que no existe aquí (este
+// proyecto es un SPA con Vite, no Next.js) — por eso el build fallaba con
+// "Missing export" al intentar resolverlo. `/react` es el genérico para
+// cualquier app de React que no sea Next.
+import { Analytics } from '@vercel/analytics/react'
+
 
 function App() {
   return (
@@ -26,8 +33,10 @@ function App() {
             <Route path="privacidad" element={<LegalPage slug="privacy" />} />
           </Route>
         </Routes>
+        <Analytics />
       </CTAFormProvider>
     </BrowserRouter>
+
   )
 }
 

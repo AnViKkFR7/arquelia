@@ -27,6 +27,8 @@
 .btn_arrow__text {
   position: relative;
   z-index: 2;
+  /* "Tosh A Regular": mismo peso que el resto de botones del sitio. */
+  font-weight: 400;
   transition: color 0.4s ease;
 }
 

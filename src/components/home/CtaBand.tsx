@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useCTAForm } from '../../context/CTAFormContext'
 import { Reveal } from '../ui/Reveal'
 import { Button } from '../ui/Button'
-import bg from '../../assets/salon_01.avif'
+import bg from '../../assets/salon_01.webp'
 import styles from './CtaBand.module.css'
 
 interface CtaBandProps {

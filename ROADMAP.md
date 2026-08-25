@@ -87,6 +87,44 @@
 
 ## Registro de trabajo
 
+**2026-08-25 — Peso tipográfico exacto por elemento; `@vercel/analytics` con el import equivocado**
+
+- **Corrección importante sobre la pasada anterior**: revisando el mockup elemento a
+  elemento, el titular del hero y todos los `h2` de sección van en **Medium (500)**, no en
+  Bold — el único "TOSH A BOLD" de toda la imagen es el wordmark de marca (una imagen, no
+  texto). La base (`h1`/`h2` en `index.css`, `.title` del hero en `Hero.module.css`) pasa
+  de 700 a 500.
+  - Nav del header → Light (300, ya lo era por herencia del `body`, sin cambios).
+  - Botones (CTA del header, panel móvil, `ButtonSlider`) → Regular (400, antes 600).
+  - Título de las tarjetas de `ServicesGrid` ("Cocina", "Baños"...) → Regular (400, antes 600).
+  - Título del escenario de `ProjectsShowcase` y las etiquetas de los índices → Medium
+    (500, antes 700 y sin peso explícito respectivamente).
+  - Número de orden del escenario (`stageIndex`) → 300, no 200: Tosh A no tiene un peso
+    200, así que el navegador habría aproximado al más cercano disponible de todos modos.
+  - Firma del footer ("Tu hogar llevado a otro nivel") → Medium (500, antes 700); el texto
+    en inglés se sincroniza con el título del hero para que diga lo mismo en los dos idiomas.
+  - Corregido además un error de transcripción del hex de la muesca dorada:
+    `--gold-notch` era `#c6a15b`, la imagen dice `#c6a158`.
+- **`@vercel/analytics` con el subpath equivocado, dos veces**. `src/App.tsx` importaba
+  `Analytics` de `@vercel/analytics/next` — el punto de entrada específico de Next.js, que
+  internamente importa de `next/navigation`, un paquete que no existe en este proyecto
+  (SPA con Vite, no Next.js). En `tsc` sólo daba un aviso de import sin usar (nunca se
+  llegó a montar `<Analytics />`); en el build de Vite ya no compila en absoluto, con un
+  "Missing export" al no poder resolver `next/navigation`. Cambiado a `@vercel/analytics/react`,
+  el genérico para cualquier app de React que no sea Next, y montado dentro de
+  `<CTAFormProvider>`. Esto se corrigió dos veces en la misma sesión porque una edición
+  manual intermedia volvió a dejar `/next` — si se toca este import otra vez, que quede
+  claro por qué: con Next.js no instalado, `/next` no puede funcionar aquí bajo ninguna
+  circunstancia, no es una cuestión de preferencia.
+- **Verificado**: `tsc -p tsconfig.app.json --noEmit` y `npm run build` limpios; en el
+  navegador, pesos computados confirmados uno a uno (`h1`/`h2`: 500, nav: 300, botones:
+  400, tarjetas de servicios: 400, escenario de proyectos: 500/300, firma del footer:
+  500) sin errores de consola.
+- **Nota sobre el error de Vercel pegado en el chat**: correspondía al commit `f804424`
+  (anterior al arreglo de `SectionHeader` de la entrada de abajo). El commit con el
+  arreglo (`9ba04ec`) ya estaba en `origin/main` en el momento de revisarlo — el log
+  pegado era de un despliegue viejo, no reflejaba el estado real del repo.
+
 **2026-08-25 — Tosh A real vía Adobe Fonts; limpieza tras ediciones manuales**
 
 - **Tosh A ya no es una sustitución — es la fuente real, con licencia.** El cliente añadió

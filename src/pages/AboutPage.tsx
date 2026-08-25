@@ -7,7 +7,7 @@ import { CtaBand } from '../components/home/CtaBand'
 import styles from './AboutPage.module.css'
 
 import heroImg from '../assets/livingroom_kitchen.webp'
-import portraitImg from '../assets/cocina_01.jpg'
+import portraitImg from '../assets/cocina_01.webp'
 
 interface Pillar {
   n: string
@@ -83,7 +83,7 @@ export function AboutPage() {
       {/* Cifras + imagen */}
       <section className={styles.numbers}>
         <div className={`container ${styles.numbersGrid}`}>
-          <Reveal variant="clip" className={styles.numbersImage}>
+          <Reveal variant="up" className={styles.numbersImage}>
             <img src={portraitImg} alt={t('about.numbers.imageAlt')} loading="lazy" />
           </Reveal>
 
