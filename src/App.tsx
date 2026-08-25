@@ -12,8 +12,9 @@ import { LegalPage } from './pages/LegalPage'
 // importa de `next/navigation`, un paquete que no existe aquí (este
 // proyecto es un SPA con Vite, no Next.js) — por eso el build fallaba con
 // "Missing export" al intentar resolverlo. `/react` es el genérico para
-// cualquier app de React que no sea Next.
+// cualquier app de React que no sea Next. Mismo criterio para Speed Insights.
 import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
           </Route>
         </Routes>
         <Analytics />
+        <SpeedInsights />
       </CTAFormProvider>
     </BrowserRouter>
 
