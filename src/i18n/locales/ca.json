@@ -1,0 +1,578 @@
+{
+  "meta": {
+    "title": "Arquelia — Construcció i reformes prèmium a Catalunya",
+    "description": "Arquelia. Reformes integrals, cuines, banys i interiorisme d'alta gamma a Catalunya. Acabats al mil·límetre i un únic interlocutor de principi a fi.",
+    "ogTitle": "Arquelia — Construcció i reformes prèmium",
+    "ogDescription": "Reformes integrals i interiorisme d'alta gamma a Catalunya.",
+    "locale": "ca_ES"
+  },
+  "nav": {
+    "home": "Inici",
+    "services": "Serveis",
+    "projects": "Projectes",
+    "about": "Sobre Nosaltres",
+    "contact": "Contacte",
+    "cta": "Sol·licitar pressupost",
+    "homeAria": "Arquelia — inici",
+    "mainAria": "Principal",
+    "mobileAria": "Mòbil",
+    "openMenu": "Obrir menú",
+    "closeMenu": "Tancar menú"
+  },
+  "footer": {
+    "rights": "Tots els drets reservats.",
+    "legal": "Avís legal",
+    "cookies": "Política de cookies",
+    "privacy": "Política de privacitat",
+    "claim": "LA TEVA LLAR, A UN ALTRE NIVELL",
+    "navigation": "Navegació",
+    "legalHeading": "Legal",
+    "location": "Cornellà de Llobregat, Barcelona",
+    "developedBy": "Desenvolupat per Moira Ordo",
+    "serviceLinks": [
+      "Reformes integrals",
+      "Cuines",
+      "Banys",
+      "Interiorisme",
+      "Rehabilitació"
+    ]
+  },
+  "common": {
+    "close": "Tancar",
+    "back": "Enrere",
+    "loading": "Carregant…",
+    "seeMore": "Fes clic per saber-ne més",
+    "seeProject": "Veure projecte",
+    "seeProjectAria": "Veure projecte: {{title}}",
+    "seeAria": "Veure {{title}}"
+  },
+  "home": {
+    "heroTitle": "La teva llar, a un altre nivell",
+    "heroSubtitle": "Reformes i construccions d'alta qualitat a Barcelona i rodalies.",
+    "heroStrip": "Reformes integrals · Cuines · Banys · Interiorisme · Rehabilitació",
+    "intro": {
+      "title": "Disseny i qualitat en cada projecte.",
+      "text": "A Arquelia transformem llars per crear espais únics, pensats per a qui busca alguna cosa més. Combinem anys d'experiència, materials de primera qualitat i una cura atenció al detall per oferir reformes exclusives i una experiència a l'altura de cada projecte."
+    },
+    "servicesGrid": {
+      "eyebrow": "Serveis",
+      "title": "Els nostres serveis",
+      "lead": "Dissenyem reformes amb un enfocament integral, tenint cura de cada detall per crear espais funcionals, elegants i duradors.",
+      "items": [
+        {
+          "id": "cocina",
+          "title": "Cuina"
+        },
+        {
+          "id": "bano",
+          "title": "Banys"
+        },
+        {
+          "id": "integral",
+          "title": "Reforma Integral"
+        },
+        {
+          "id": "rehabilitacion",
+          "title": "Rehabilitació"
+        }
+      ]
+    },
+    "projectsShowcase": {
+      "eyebrow": "Projectes",
+      "title": "Projectes",
+      "lead": "Cada reforma és una oportunitat per transformar un espai en alguna cosa única. A Arquelia tenim cura de cada detall per crear obres que combinen funcionalitat, estètica i una execució impecable.",
+      "seeAllAria": "Veure tots els projectes",
+      "items": [
+        {
+          "title": "Reforma Integral",
+          "desc": "S'ha tingut cura fins a l'últim mil·límetre dels acabats: terra de pedra natural, fusteria a mida i sistemes domòtics integrats, aconseguint un equilibri entre arquitectura clàssica i confort contemporani."
+        },
+        {
+          "title": "Reforma de Cuina i Bany",
+          "desc": "Renovació completa de cuina i bany amb materials de primera qualitat i una distribució pensada per al dia a dia."
+        },
+        {
+          "title": "Rehabilitació de façana",
+          "desc": "Recuperació integral de la façana, respectant el caràcter original de l'edifici amb tècniques i materials actuals."
+        },
+        {
+          "title": "Instal·lació de parquet",
+          "desc": "Terra de parquet natural instal·lat amb acabat continu, aportant calidesa i lluminositat a tot l'espai."
+        }
+      ]
+    },
+    "finalCta": {
+      "question": "Tens un projecte en ment?",
+      "text": "A Arquelia transformem espais amb precisió mil·limètrica i un acabat d'altíssima qualitat, tenint cura de cada detall des del primer esbós fins a l'última junta.",
+      "facts": [
+        {
+          "value": "15+",
+          "label": "Anys d'ofici"
+        },
+        {
+          "value": "120+",
+          "label": "Projectes entregats"
+        },
+        {
+          "value": "1",
+          "label": "Interlocutor per obra"
+        }
+      ],
+      "requestBudget": "Sol·licita pressupost"
+    },
+    "cta": {
+      "title": "Tens un projecte en ment?",
+      "text": "Explica'ns què vols transformar. Et visitem, ho estudiem i et donem un pressupost tancat, sense compromís.",
+      "request": "Sol·licitar pressupost",
+      "callUs": "o truca'ns: +34 673 45 66 93"
+    }
+  },
+  "services": {
+    "hero": {
+      "eyebrow": "Serveis",
+      "title": "Cada reforma, un ofici de precisió",
+      "lead": "Des d'una intervenció puntual fins a una rehabilitació completa: mateix nivell d'exigència en disseny, materials i execució."
+    },
+    "featured": [
+      {
+        "id": "cocina",
+        "label": "Cuines",
+        "prefix": "Reformes de",
+        "suffix": "a mida"
+      },
+      {
+        "id": "bano",
+        "label": "Banys",
+        "prefix": "Reformes de",
+        "suffix": "d'autor"
+      },
+      {
+        "id": "integral",
+        "label": "Integral",
+        "prefix": "Reforma",
+        "suffix": "clau en mà"
+      }
+    ],
+    "catalog": {
+      "eyebrow": "Catàleg",
+      "title": "Tot el que cobrim",
+      "lead": "Un únic equip per a tot el projecte: sense subcontractes descoordinades ni responsabilitats diluïdes.",
+      "items": [
+        {
+          "id": "integral",
+          "title": "Reforma integral",
+          "desc": "Transformació completa de l'habitatge, de l'estructura als últims acabats."
+        },
+        {
+          "id": "cocina",
+          "title": "Reforma de cuina",
+          "desc": "Disseny funcional i materials d'alta gamma per al cor de la casa."
+        },
+        {
+          "id": "bano",
+          "title": "Reforma de bany",
+          "desc": "Espais de benestar amb acabats exclusius i aixetes de disseny."
+        },
+        {
+          "id": "interiorismo",
+          "title": "Interiorisme",
+          "desc": "Del concepte a l'última peça de mobiliari, amb direcció de projecte."
+        },
+        {
+          "id": "rehabilitacion",
+          "title": "Rehabilitació",
+          "desc": "Recuperació integral d'edificis i habitatges respectant el seu caràcter."
+        },
+        {
+          "id": "local",
+          "title": "Local comercial",
+          "desc": "Espais que combinen identitat de marca, normativa i funcionalitat."
+        },
+        {
+          "id": "oficina",
+          "title": "Oficines",
+          "desc": "Entorns de treball eficients, lluminosos i amb acabats de nivell prèmium."
+        },
+        {
+          "id": "acabados",
+          "title": "Acabats i qualitats",
+          "desc": "Selecció de materials nobles i execució al mil·límetre en cada detall."
+        }
+      ]
+    },
+    "process": {
+      "eyebrow": "El nostre procés",
+      "title": "Sis passos, zero sorpreses",
+      "lead": "Un mètode provat que manté el projecte dins de termini i pressupost.",
+      "steps": [
+        {
+          "n": "01",
+          "title": "Primera visita",
+          "desc": "Visitem l'espai, escoltem què necessites i valorem l'abast real del projecte. Sense cost ni compromís."
+        },
+        {
+          "n": "02",
+          "title": "Projecte i pressupost",
+          "desc": "Elaborem la proposta de disseny i un pressupost tancat i detallat per partides: saps exactament què inclou cada euro."
+        },
+        {
+          "n": "03",
+          "title": "Materials",
+          "desc": "T'acompanyem en la tria d'acabats amb proveïdors de confiança i relació directa de fabricant, per accedir a primera qualitat al preu just."
+        },
+        {
+          "n": "04",
+          "title": "Planificació",
+          "desc": "Definim un calendari realista per fases i assignem un únic interlocutor que t'acompanya durant tota l'obra."
+        },
+        {
+          "n": "05",
+          "title": "Execució",
+          "desc": "El nostre equip executa amb control de qualitat en cada fase i et manté informat de l'avenç setmana a setmana."
+        },
+        {
+          "n": "06",
+          "title": "Entrega de claus",
+          "desc": "Revisió final al mil·límetre, repàs conjunt amb tu i entrega d'un espai llest per viure-hi, amb garantia postobra."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Llest per transformar el teu espai?",
+      "text": "Explica'ns què tens en ment. La primera visita i el pressupost són gratuïts."
+    }
+  },
+  "projects": {
+    "hero": {
+      "eyebrow": "Projectes",
+      "title": "Reformes que parlen per si soles",
+      "lead": "Una selecció d'obres entregades a Barcelona i rodalies. Cadascuna amb el seu propi caràcter, totes amb el mateix estàndard d'execució."
+    },
+    "loading": "Carregant projectes…",
+    "empty": "Encara no hi ha projectes publicats. Torna aviat.",
+    "cta": {
+      "title": "Vols alguna cosa així a casa teva?",
+      "text": "Cada projecte comença amb una visita. Explica'ns què tens en ment i et preparem una proposta a mida."
+    }
+  },
+  "projectDetail": {
+    "loading": "Carregant projecte…",
+    "notFound": "Projecte no trobat",
+    "seeAll": "Veure tots els projectes",
+    "stats": {
+      "typeLabel": "Tipus de projecte",
+      "typeDesc": "Categoria de la intervenció realitzada.",
+      "surfaceLabel": "Superfície",
+      "surfaceDesc": "Superfície total intervinguda en el projecte.",
+      "locationLabel": "Ubicació",
+      "locationDesc": "Localització de l'habitatge o local reformat.",
+      "deliveryValue": "Clau en mà",
+      "deliveryLabel": "Entrega",
+      "deliveryDesc": "Projecte finalitzat i entregat amb garantia postobra.",
+      "swipe": "Llisca per veure'n més"
+    },
+    "workDone": "Treballs realitzats",
+    "aside": {
+      "label": "Un projecte semblant",
+      "text": "Si t'encaixa aquest estil, podem estudiar el teu espai i dir-te què és viable i amb quin pressupost.",
+      "cta": "Parlem-ne"
+    },
+    "description": "Descripció",
+    "gallery": {
+      "eyebrow": "Galeria",
+      "openAria": "Ampliar imatge {{n}} de {{total}}",
+      "prev": "Imatge anterior",
+      "next": "Imatge següent",
+      "close": "Tancar la galeria"
+    },
+    "more": {
+      "eyebrow": "Més feina",
+      "title": "Altres projectes"
+    }
+  },
+  "about": {
+    "hero": {
+      "eyebrow": "Sobre nosaltres",
+      "titleLine1": "Construïm amb la dedicació",
+      "titleLine2": "que hi posaríem a casa nostra"
+    },
+    "intro": {
+      "lead": "Arquelia neix de la voluntat de fer les coses bé, sense dreceres.",
+      "p1": "Darrere de cada projecte hi ha un equip que entén la construcció com un ofici de precisió, on el tracte amb el client pesa tant com l'últim acabat d'obra. Reformem llars, locals i oficines a tot Catalunya sota la raó social",
+      "p1Strong": "P & B Cornellà Construcciones, S.L.",
+      "p2": "No treballem per volum. Acceptem els projectes que podem atendre de veritat, amb l'equip propi i el temps que cada obra mereix. Això significa menys obres alhora i més atenció a cadascuna."
+    },
+    "band": "Precisió · Materials nobles · Paraula donada",
+    "pillars": {
+      "eyebrow": "Tres pilars",
+      "title": "Una manera de treballar",
+      "lead": "No és un eslògan: és el que revisem a cada obra abans de donar una fase per tancada.",
+      "items": [
+        {
+          "n": "01",
+          "title": "Mestratge",
+          "desc": "Anys d'ofici aplicats a cada detall, sense marge per a la improvisació. Cada feina, en mans de qui la domina: no repartim l'obra entre subcontractes descoordinades."
+        },
+        {
+          "n": "02",
+          "title": "Materials",
+          "desc": "Seleccionem materials nobles i proveïdors de confiança. La relació directa amb el fabricant ens permet accedir a primera qualitat a un preu que té sentit."
+        },
+        {
+          "n": "03",
+          "title": "Mètode",
+          "desc": "Un únic interlocutor i un procés clar, de la primera visita a l'entrega de claus. Pressupost tancat, calendari realista i comunicació setmanal."
+        }
+      ]
+    },
+    "numbers": {
+      "eyebrow": "En xifres",
+      "imageAlt": "Detall d'una reforma d'Arquelia",
+      "items": [
+        {
+          "value": "15+",
+          "label": "Anys d'experiència"
+        },
+        {
+          "value": "120+",
+          "label": "Projectes entregats"
+        },
+        {
+          "value": "100%",
+          "label": "Pressupostos tancats"
+        },
+        {
+          "value": "2 anys",
+          "label": "Garantia postobra"
+        }
+      ]
+    }
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "Contacte",
+      "title": "Comencem amb una conversa",
+      "lead": "Explica'ns què tens en ment. La primera visita i el pressupost són gratuïts i sense compromís."
+    },
+    "formEyebrow": "Sol·licitud de pressupost",
+    "talk": "Parlem-ne",
+    "talkText": "Si prefereixes el tracte directe, escriu-nos o truca'ns. Responem en menys de 24 h laborables.",
+    "details": [
+      {
+        "label": "Email",
+        "value": "info@arquelia.es"
+      },
+      {
+        "label": "Telèfon",
+        "value": "+34 673 45 66 93"
+      },
+      {
+        "label": "Oficina",
+        "value": "Cornellà de Llobregat, Barcelona"
+      },
+      {
+        "label": "Horari",
+        "value": "Dilluns a divendres, 9:00 – 18:00"
+      }
+    ],
+    "zone": {
+      "label": "Zona de treball",
+      "text": "Barcelona ciutat i àrea metropolitana: Cornellà, Sant Just, Esplugues, Sant Cugat, Sitges i rodalies."
+    }
+  },
+  "ctaModal": {
+    "title": "Sol·licitar pressupost"
+  },
+  "ctaForm": {
+    "steps": {
+      "project": {
+        "label": "Projecte",
+        "title": "Què vols reformar?",
+        "hint": "Tria l'opció que més s'hi assembli."
+      },
+      "contact": {
+        "label": "Contacte",
+        "title": "Com et contactem?",
+        "hint": "Només l'imprescindible per poder respondre't."
+      },
+      "details": {
+        "label": "Detalls",
+        "title": "Explica'ns el teu projecte",
+        "hint": "Opcional, però ens ajuda a preparar millor la visita."
+      },
+      "summary": {
+        "label": "Resum",
+        "title": "Revisa i envia",
+        "hint": "Comprova que tot sigui correcte."
+      }
+    },
+    "services": {
+      "integral": "Reforma integral",
+      "cocina": "Reforma Cuina",
+      "bano": "Reforma Bany",
+      "interiorismo": "Interiorisme",
+      "rehabilitacion": "Rehabilitació",
+      "local": "Local Comercial",
+      "oficina": "Oficina",
+      "otros": "Altres"
+    },
+    "servicesAria": "Tipus de projecte",
+    "fields": {
+      "name": "Nom complet",
+      "namePlaceholder": "Nom i cognoms",
+      "email": "Email",
+      "emailPlaceholder": "tu@email.com",
+      "phone": "Telèfon",
+      "phonePlaceholder": "+34 673 45 66 93",
+      "city": "Població",
+      "cityPlaceholder": "Barcelona",
+      "description": "Descripció",
+      "descriptionPlaceholder": "Superfície aproximada, quins espais, terminis, referències que t'agradin…"
+    },
+    "errors": {
+      "name": "Digues-nos com et dius.",
+      "emailRequired": "Necessitem un email per respondre't.",
+      "emailInvalid": "Aquest email no sembla vàlid.",
+      "phoneRequired": "Necessitem un telèfon de contacte.",
+      "phoneInvalid": "Aquest telèfon no sembla vàlid."
+    },
+    "summary": {
+      "project": "Projecte",
+      "name": "Nom",
+      "email": "Email",
+      "phone": "Telèfon",
+      "city": "Població",
+      "details": "Detalls",
+      "edit": "Editar",
+      "empty": "—"
+    },
+    "privacyPre": "En enviar acceptes la",
+    "privacyLink": "política de privacitat",
+    "privacyPost": ". Farem servir les teves dades únicament per respondre a aquesta sol·licitud.",
+    "back": "Enrere",
+    "continue": "Continuar",
+    "submit": "Enviar sol·licitud",
+    "done": {
+      "eyebrow": "Sol·licitud enviada",
+      "thanks": "Gràcies{{name}}.",
+      "textPre": "Hem rebut la teva sol·licitud de",
+      "textPost": ". Revisarem el projecte i et contactarem en menys de 24 h laborables.",
+      "close": "Tancar",
+      "seeProjects": "Veure projectes"
+    }
+  },
+  "legal": {
+    "eyebrow": "Legal",
+    "updated": "Última actualització: agost de 2026",
+    "notice": {
+      "title": "Avís Legal",
+      "sections": [
+        {
+          "heading": "1. Dades identificatives",
+          "body": "En compliment del deure d'informació recollit a l'article 10 de la Llei 34/2002, d'11 de juliol, de Serveis de la Societat de la Informació i de Comerç Electrònic (LSSI-CE), s'informa que aquest lloc web és titularitat de P & B Cornellà Construcciones, S.L. («Arquelia»), amb CIF [CIF PENDENT] i domicili social a [ADREÇA PENDENT], Cornellà de Llobregat (Barcelona), inscrita al Registre Mercantil de [PROVÍNCIA PENDENT], tom [TOM], foli [FOLI], full [FULL]. Pot contactar amb nosaltres al correu electrònic info@arquelia.es o al telèfon +34 673 45 66 93."
+        },
+        {
+          "heading": "2. Objecte",
+          "body": "Aquest avís legal regula l'accés i l'ús d'aquest lloc web, que Arquelia posa a disposició dels usuaris per donar a conèixer els seus serveis de construcció i reforma. L'accés al lloc web és gratuït i el seu ús atribueix la condició d'usuari, la qual cosa implica l'acceptació de les condicions recollides en aquest avís legal."
+        },
+        {
+          "heading": "3. Condicions d'ús",
+          "body": "L'usuari es compromet a fer un ús adequat i lícit del lloc web, de conformitat amb la legislació aplicable, aquest avís legal, la moral i els bons costums generalment acceptats i l'ordre públic. Queda prohibit l'ús del lloc web amb finalitats il·lícites o lesives, o que de qualsevol manera puguin causar perjudici o impedir-ne el normal funcionament."
+        },
+        {
+          "heading": "4. Propietat intel·lectual i industrial",
+          "body": "Tots els continguts del lloc web —incloent-hi, a títol enunciatiu, textos, fotografies, gràfics, imatges, icones, així com el seu disseny gràfic i codi font— són propietat d'Arquelia o de tercers que n'han autoritzat l'ús, i estan protegits per la normativa vigent en matèria de propietat intel·lectual i industrial. Queda expressament prohibida la seva reproducció, distribució o comunicació pública, total o parcial, sense autorització expressa d'Arquelia."
+        },
+        {
+          "heading": "5. Enllaços a tercers",
+          "body": "En cas que el lloc web inclogui enllaços a llocs de tercers, Arquelia no assumeix cap responsabilitat sobre els continguts, informacions o serveis que hi puguin aparèixer, que tenen caràcter exclusivament informatiu i que en cap cas impliquen cap relació entre Arquelia i els titulars d'aquests llocs."
+        },
+        {
+          "heading": "6. Exclusió de responsabilitat",
+          "body": "Arquelia posa els mitjans raonables al seu abast perquè el lloc web funcioni correctament i el seu contingut estigui actualitzat, sense que això suposi una garantia d'absència d'errors. Arquelia no es fa responsable dels danys i perjudicis derivats d'interferències, interrupcions, virus informàtics, avaries o desconnexions en el funcionament del sistema electrònic alienes al seu control."
+        },
+        {
+          "heading": "7. Legislació aplicable i jurisdicció",
+          "body": "Aquestes condicions es regeixen per la legislació espanyola. Per a qualsevol controvèrsia derivada de l'accés o ús d'aquest lloc web, i quan l'usuari tingui la condició de consumidor, ambdues parts se sotmeten als jutjats i tribunals del seu domicili; en cas contrari, als jutjats i tribunals de Barcelona."
+        }
+      ]
+    },
+    "privacy": {
+      "title": "Política de Privacitat",
+      "sections": [
+        {
+          "heading": "1. Responsable del tractament",
+          "body": "El responsable del tractament de les dades personals facilitades a través d'aquest lloc web és P & B Cornellà Construcciones, S.L. («Arquelia»), amb CIF [CIF PENDENT] i domicili social a [ADREÇA PENDENT], Cornellà de Llobregat (Barcelona), inscrita al Registre Mercantil de [PROVÍNCIA PENDENT], tom [TOM], foli [FOLI], full [FULL]. Pot contactar amb el responsable del tractament a info@arquelia.es."
+        },
+        {
+          "heading": "2. Finalitat del tractament",
+          "body": "Les dades que ens faciliti a través dels formularis d'aquest lloc web (nom, correu electrònic, telèfon, població i detalls del projecte) es tracten per gestionar les seves sol·licituds de pressupost i informació, atendre les seves consultes i, si escau, gestionar la relació contractual que se'n pugui derivar. No es prenen decisions automatitzades ni s'elaboren perfils a partir de les seves dades."
+        },
+        {
+          "heading": "3. Legitimació",
+          "body": "La base legal del tractament és el consentiment que atorga en enviar el formulari corresponent i, si escau, l'execució de la relació precontractual o contractual que s'estableixi entre vostè i Arquelia."
+        },
+        {
+          "heading": "4. Conservació de les dades",
+          "body": "Les dades es conservaran mentre es mantingui la relació amb l'usuari i, un cop finalitzada, durant els terminis legalment exigibles per atendre les eventuals responsabilitats derivades del tractament."
+        },
+        {
+          "heading": "5. Destinataris",
+          "body": "No se cedeixen dades a tercers, tret d'obligació legal. Les dades podran ser tractades per proveïdors de serveis (allotjament web, enviament de correu electrònic) que actuen com a encarregats del tractament en nom d'Arquelia i amb les garanties exigides pel RGPD."
+        },
+        {
+          "heading": "6. Els seus drets",
+          "body": "Pot exercir els seus drets d'accés, rectificació, supressió, oposició, limitació del tractament i portabilitat adreçant-se per escrit a info@arquelia.es o al domicili social d'Arquelia, adjuntant còpia d'un document que acrediti la seva identitat. Així mateix, té dret a presentar una reclamació davant l'Agència Espanyola de Protecció de Dades (www.aepd.es) si considera que el tractament no s'ajusta a la normativa vigent."
+        },
+        {
+          "heading": "7. Procedència de les dades",
+          "body": "Les úniques dades que tractem són les que vostè mateix ens facilita voluntàriament a través dels formularis d'aquest lloc web."
+        }
+      ]
+    },
+    "cookies": {
+      "title": "Política de Cookies",
+      "sections": [
+        {
+          "heading": "1. Què són les cookies?",
+          "body": "Les cookies són petits arxius de text que un lloc web pot instal·lar al seu navegador o dispositiu quan el visita. Sota el mateix règim legal s'inclouen també altres tecnologies d'emmagatzematge i recuperació de dades, com l'emmagatzematge local del navegador (localStorage), que aquest lloc utilitza en lloc de cookies pròpiament dites per a l'única finalitat descrita a continuació."
+        },
+        {
+          "heading": "2. Tipus de cookies segons la seva finalitat",
+          "body": "Tècniques o necessàries: imprescindibles perquè el lloc funcioni i per prestar el servei sol·licitat (per exemple, recordar el seu idioma). De personalització: permeten recordar preferències com l'idioma o la regió. Analítiques: permeten quantificar el nombre de visitants i analitzar-ne l'ús del lloc. Publicitàries o de tercers: permeten gestionar espais publicitaris o compartir informació amb xarxes socials i altres plataformes externes."
+        },
+        {
+          "heading": "3. Tipus de cookies segons la seva titularitat i durada",
+          "body": "Segons qui les gestioni, poden ser pròpies (gestionades per Arquelia) o de tercers (gestionades per un tercer aliè a Arquelia). Segons el temps que romanen actives, poden ser de sessió (s'eliminen en tancar el navegador) o persistents (romanen emmagatzemades durant un període determinat)."
+        },
+        {
+          "heading": "4. Què fem servir en aquest lloc web",
+          "body": "Aquest lloc web només fa servir emmagatzematge tècnic propi i de sessió persistent: l'idioma que vostè selecciona (espanyol, anglès o català), desat a l'emmagatzematge local del seu navegador per no haver-lo de triar de nou a cada visita. No instal·lem cookies ni tecnologies similars d'analítica, publicitat o xarxes socials, i no compartim dades de navegació amb tercers. Si en el futur s'incorporen cookies analítiques o de tercers, se sol·licitarà el seu consentiment previ mitjançant l'avís corresponent, actualitzant aquesta política."
+        },
+        {
+          "heading": "5. Base legal",
+          "body": "El tractament descrit s'empara en l'article 22.2 de la Llei 34/2002, de Serveis de la Societat de la Informació i de Comerç Electrònic (LSSI-CE), que eximeix del deure d'obtenir consentiment les cookies i tecnologies equivalents estrictament necessàries per prestar el servei expressament sol·licitat per l'usuari. Per aquesta raó, l'avís de cookies d'aquest lloc li permet acceptar o rebutjar, però la seva elecció no afecta el funcionament del lloc mentre no s'incorporin cookies no essencials."
+        },
+        {
+          "heading": "6. Com gestionar o revocar el seu consentiment",
+          "body": "Pot acceptar o rebutjar l'ús de cookies no essencials des de l'avís que apareix a la primera visita. Pot canviar la seva elecció en qualsevol moment des de l'enllaç «Configurar cookies» disponible al peu de pàgina d'aquest lloc web, la qual cosa tornarà a mostrar-li l'avís."
+        },
+        {
+          "heading": "7. Com configurar el seu navegador",
+          "body": "A més de les opcions anteriors, pot permetre, bloquejar o eliminar les cookies instal·lades al seu equip configurant les opcions del seu navegador: a Chrome, des de Configuració > Privadesa i seguretat > Cookies; a Firefox, des d'Ajustos > Privadesa i seguretat; a Safari, des de Preferències > Privadesa; i a Edge, des de Configuració > Privadesa, cerca i serveis. Si bloqueja totes les cookies, és possible que algunes funcions del lloc no funcionin correctament."
+        },
+        {
+          "heading": "8. Canvis en aquesta política",
+          "body": "Arquelia pot modificar aquesta política de cookies en funció d'exigències legislatives o amb la finalitat d'adaptar-la a les instruccions de l'Agència Espanyola de Protecció de Dades. Es recomana revisar-la cada vegada que accedeixi al lloc web."
+        }
+      ]
+    }
+  },
+  "cookieBanner": {
+    "text": "Fem servir emmagatzematge tècnic necessari per al funcionament del lloc (per exemple, recordar l'idioma triat). No fem servir cookies d'anàlisi ni de publicitat.",
+    "accept": "Acceptar",
+    "reject": "Rebutjar",
+    "policyLink": "Política de cookies",
+    "manage": "Configurar cookies"
+  }
+}

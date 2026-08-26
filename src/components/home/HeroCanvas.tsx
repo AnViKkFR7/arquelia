@@ -107,20 +107,40 @@ export function HeroCanvas({ progress, className }: HeroCanvasProps) {
     const canvas = canvasRef.current
     if (!canvas) return
 
+    let raf = 0
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2)
-      const { width, height } = canvas.getBoundingClientRect()
-      if (!width || !height) return
-      canvas.width = Math.round(width * dpr)
-      canvas.height = Math.round(height * dpr)
-      lastDrawn.current = -1
-      const current = framesRef.current[0] ?? posterRef.current
-      if (current) paint(current)
+      // Se programa al frame siguiente, no se calcula en el propio evento:
+      // en móvil, ocultar/mostrar la barra de direcciones del navegador
+      // dispara `resize` en pleno scroll, en el mismo instante en que el
+      // alto de `.sticky` (100svh) también se está recalculando. Leer
+      // `getBoundingClientRect()` de forma síncrona ahí a veces devolvía un
+      // alto a medio actualizar, y el canvas se quedaba dibujado más
+      // pequeño que su caja real — el hueco se veía como una franja negra
+      // (el `background-color` de reserva del propio `<canvas>`) debajo de
+      // la imagen. Esperar un frame deja que el layout se asiente primero.
+      if (raf) cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => {
+        raf = 0
+        const dpr = Math.min(window.devicePixelRatio || 1, 2)
+        const { width, height } = canvas.getBoundingClientRect()
+        if (!width || !height) return
+        canvas.width = Math.round(width * dpr)
+        canvas.height = Math.round(height * dpr)
+        // Repinta el mismo fotograma que tocaba, no vuelve siempre al
+        // primero: forzarlo se veía como un salto brusco hacia atrás cada
+        // vez que el redimensionado llegaba a media secuencia.
+        const target = lastDrawn.current
+        const current = (target >= 0 ? framesRef.current[target] : undefined) ?? posterRef.current
+        if (current) paint(current)
+      })
     }
 
     resize()
     window.addEventListener('resize', resize)
-    return () => window.removeEventListener('resize', resize)
+    return () => {
+      if (raf) cancelAnimationFrame(raf)
+      window.removeEventListener('resize', resize)
+    }
   }, [variant])
 
   // Póster: primer pintado.

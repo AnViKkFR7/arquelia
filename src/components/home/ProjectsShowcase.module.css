@@ -1,5 +1,6 @@
+/* Blanco, no gris clarito: pedido explícito del cliente. */
 .section {
-  background: var(--bg-alt);
+  background: var(--bg);
 }
 
 /* ── Escenario (imagen grande, formato story) ───────────── */
@@ -8,6 +9,7 @@
   margin-top: var(--sp-12);
   aspect-ratio: 16 / 10;
   overflow: hidden;
+  border-radius: 10px;
 }
 
 @media (min-width: 700px) {
@@ -17,15 +19,9 @@
 }
 
 .stageLink {
-  grid-template-columns: 1fr 1fr 1fr 1fr;
   position: absolute;
   inset: 0;
-  display: grid;
-  flex-direction: grid;
-  align-items: flex-end;
-  justify-content: flex-end;
-  text-align: center;
-  padding-bottom: 70px;
+  display: block;
   background: var(--grey-300) center / cover no-repeat;
 }
 
@@ -50,16 +46,16 @@
   opacity: 0.85;
 }
 
-.stageMeta {
-  position: relative;
-  z-index: var(--z-base);
+/* Celda del título dentro de la rejilla de `.chips` (fila 1): se mueve de
+   columna según cuál sea el proyecto activo, vía `gridColumn` en línea. */
+.metaCell {
+  grid-row: 1;
   display: flex;
   flex-direction: column;
-  align-items: start;
-  text-align: start;
-  padding-inline: var(--sp-8);
-  padding-bottom: var(--sp-2);
+  gap: var(--sp-1);
+  padding-bottom: var(--sp-4);
   color: var(--text-inverse);
+  text-align: left;
 }
 
 .stageTitle {
@@ -81,9 +77,15 @@
    Van dentro de la propia imagen (pedido explícito): tira anclada al borde
    inferior de `.stage`, por encima de `.stageLink` en el eje z pero
    hermana suya, no descendiente — así cada índice es su propio <Link> sin
-   anidar un <a> dentro de otro. Cada uno lleva su propia barra de progreso:
-   se rellena en 5s, igual que el timing de la rotación, y se reinicia
-   cuando le toca ser el activo (`key={active}` fuerza el remonte). */
+   anidar un <a> dentro de otro. Este componente sólo se renderiza a partir
+   de 768px (por debajo entra el carrusel móvil), así que va directo a 4
+   columnas sin variante intermedia. Dos filas: la de arriba es el título
+   del proyecto activo (`.metaCell`, cambia de columna según `active`), la
+   de abajo son las 4 líneas de tiempo — comparten rejilla para que sus
+   columnas coincidan exactamente sin tener que sincronizar dos grids
+   distintos a mano. Cada línea lleva su propia barra de progreso: se
+   rellena en 5s, igual que el timing de la rotación, y se reinicia cuando
+   le toca ser la activa (`key={active}` fuerza el remonte). */
 .chips {
   position: absolute;
   left: 0;
@@ -91,16 +93,15 @@
   bottom: 0;
   z-index: var(--z-base);
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--sp-2) var(--sp-6);
-  padding: var(--sp-10) var(--sp-6) var(--sp-5);
-  background: linear-gradient(180deg, rgba(6, 6, 6, 0) 0%, rgba(6, 6, 6, 0.55) 55%, rgba(6, 6, 6, 0.72) 100%);
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: var(--sp-6);
+  padding: var(--sp-8) var(--sp-6) var(--sp-5);
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0) 0%, rgba(6, 6, 6, 0.55) 45%, rgba(6, 6, 6, 0.72) 100%);
 }
 
-@media (min-width: 700px) {
-  .chips {
-    grid-template-columns: repeat(4, 1fr);
-  }
+.chipCell {
+  grid-row: 2;
 }
 
 .chip {

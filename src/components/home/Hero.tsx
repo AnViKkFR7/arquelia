@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Marquee } from '../ui/Marquee'
 import { HeroCanvas } from './HeroCanvas'
 import { usePinProgress } from '../../hooks/usePinProgress'
 import styles from './Hero.module.css'
@@ -33,42 +32,40 @@ export function Hero() {
   return (
     <section ref={wrapRef} className={styles.wrap} style={{ height: `${span * 100}svh` }}>
       <div className={styles.sticky}>
-        <HeroCanvas progress={progress} className={styles.canvas} />
-        <div className={styles.scrim} />
+        <div className={styles.stage}>
+          <HeroCanvas progress={progress} className={styles.canvas} />
+          <div className={styles.scrim} />
 
-        <div
-          className={`container ${styles.inner}`}
-          style={{
-            opacity: 1 - titleOut,
-            transform: `translateY(${titleOut * -24}px)`,
-            pointerEvents: titleOut > 0.8 ? 'none' : undefined,
-          }}
-        >
-          {/* Título accesible completo; la versión animada por palabras se
-              oculta a la API de accesibilidad para no leer fragmentos sueltos. */}
-          <h1 className={styles.title}>
-            <span className="visually-hidden">{t('home.heroTitle')}</span>
-            <span aria-hidden="true">
-              {t('home.heroTitle')
-                .split(' ')
-                .map((word, i) => (
-                  <span key={`${word}-${i}`} className={styles.word}>
-                    <span style={{ animationDelay: `${140 + i * 90}ms` }}>{word}</span>
-                  </span>
-                ))}
-            </span>
-          </h1>
+          <div
+            className={styles.inner}
+            style={{
+              opacity: 1 - titleOut,
+              transform: `translateY(${titleOut * -24}px)`,
+              pointerEvents: titleOut > 0.8 ? 'none' : undefined,
+            }}
+          >
+            {/* Título accesible completo; la versión animada por palabras se
+                oculta a la API de accesibilidad para no leer fragmentos sueltos. */}
+            <h1 className={styles.title}>
+              <span className="visually-hidden">{t('home.heroTitle')}</span>
+              <span aria-hidden="true">
+                {t('home.heroTitle')
+                  .split(' ')
+                  .map((word, i) => (
+                    <span key={`${word}-${i}`} className={styles.word}>
+                      <span style={{ animationDelay: `${140 + i * 90}ms` }}>{word}</span>
+                    </span>
+                  ))}
+              </span>
+            </h1>
 
-          <p className={styles.subtitle}>{t('home.heroSubtitle')}</p>
+            <p className={styles.subtitle}>{t('home.heroSubtitle')}</p>
+          </div>
+
+          <span className={styles.cue} style={{ opacity: 1 - titleOut }} aria-hidden="true">
+            <span className={styles.cueLine} />
+          </span>
         </div>
-
-        <div className={styles.strip} style={{ opacity: 1 - titleOut * 0.85 }}>
-          <Marquee small text={t('home.heroStrip')} separator="◆" speed={70} />
-        </div>
-
-        <span className={styles.cue} style={{ opacity: 1 - titleOut }} aria-hidden="true">
-          <span className={styles.cueLine} />
-        </span>
       </div>
     </section>
   )

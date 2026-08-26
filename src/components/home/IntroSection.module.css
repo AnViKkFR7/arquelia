@@ -1,8 +1,15 @@
+/* Ocupa una pantalla completa (mismo criterio en móvil y desktop): antes
+   sólo llevaba el padding-block estándar de `.section` y el bloque se
+   sentía apretado entre el hero y el resto de la landing. */
 .section {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
   background: var(--bg);
 }
 
 .inner {
+  width: 100%;
   max-width: 760px;
   margin-inline: auto;
   text-align: center;

@@ -20,9 +20,24 @@
   flex-direction: row;
   gap: var(--sp-4);
 }
-.content {
-  width: 50%;
+/* 65/35 en vez de 50/50: con la columna del título más ancha, "¿Tienes un
+   proyecto en mente?" entra en una sola línea sin tener que encoger la
+   letra. Sólo desde 901px a propósito: `.content:first-child` tiene más
+   especificidad (una pseudo-clase) que el `.content { width: 100% }` de
+   abajo, así que si esta regla no estuviera acotada al desktop, ganaría
+   igualmente en móvil pese a ir después en el archivo — la especificidad
+   manda sobre el orden. Eso es justo lo que pasaba: en pantallas estrechas
+   las columnas se quedaban al 65%/35% de un contenedor ya estrecho de por
+   sí, y el texto se apelotonaba en una columna de apenas 130px. */
+@media (min-width: 901px) {
+  .content:first-child {
+    width: 65%;
+  }
+  .content:last-child {
+    width: 35%;
+  }
 }
+
 @media (max-width: 900px) {
   .section {
     padding-block: var(--sp-16);
@@ -47,23 +62,31 @@
 .title {
   margin-inline: auto;
   text-transform: uppercase;
-  font-size: 2.5rem;
+  /* Fluido en vez de fijo: con la columna al 65% ya cabe en una línea en
+     desktop, pero el tamaño fijo de 2.5rem se salía en pantallas medianas
+     (tablet) antes de llegar al punto de quiebre de las columnas. */
+  font-size: clamp(1.6rem, 3.2vw, 2.5rem);
   font-weight: 500;
-  line-height: 0.96;
+  line-height: 1.05;
   letter-spacing: -0.01em;
+}
+
+@media (min-width: 901px) {
+  .title {
+    white-space: nowrap;
+  }
 }
 .fact {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--sp-1);
-  text-align: right;
+  text-align: left;
 }
 
 .factValue {
-  /* Serif clásica sólo aquí, como acento — el resto del sitio va en Manrope. */
-  font-family: var(--font-serif-accent);
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
   font-size: clamp(1.75rem, 4vw, 2.75rem);
   line-height: 1;
   color: var(--text);

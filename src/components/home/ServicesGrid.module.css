@@ -4,13 +4,27 @@
 }
 
 /* Muesca centrada arriba, pedida en el mockup: una pequeña pestaña dorada
-   que sobresale del borde superior de la sección. */
+   que sobresale del borde superior de la sección. El doble de ancha que al
+   principio (120px → 240px), a petición del cliente. */
 .section::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 50%;
-  width: 120px;
+  width: 440px;
+  height: 2px;
+  background: var(--gold-notch);
+  transform: translateX(-50%);
+}
+
+/* Misma barra al cerrar el bloque, para que el beige quede enmarcado por
+   los dos lados y no sólo señalado por arriba. */
+.section::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 440px;
   height: 2px;
   background: var(--gold-notch);
   transform: translateX(-50%);
@@ -33,9 +47,11 @@
 .card {
   position: relative;
   display: flex;
-  align-items: flex-end;
+  /* Arriba a la izquierda, no abajo: pedido explícito del cliente. */
+  align-items: flex-start;
   aspect-ratio: 3 / 4;
   overflow: hidden;
+  border-radius: 10px;
   background: var(--grey-300) center / cover no-repeat;
   transition: transform var(--t-slow) var(--ease);
 }
@@ -44,15 +60,17 @@
   transform: translateY(-4px);
 }
 
+/* El degradado se oscurece arriba, no abajo: el título vive ahora en la
+   esquina superior. */
 .veil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(6, 6, 6, 0) 45%, rgba(6, 6, 6, 0.72) 100%);
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0.72) 0%, rgba(6, 6, 6, 0) 45%);
   transition: background var(--t-base) var(--ease);
 }
 
 .card:hover .veil {
-  background: linear-gradient(180deg, rgba(6, 6, 6, 0.1) 25%, rgba(6, 6, 6, 0.8) 100%);
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0.8) 0%, rgba(6, 6, 6, 0.1) 25%);
 }
 
 .title {
@@ -60,8 +78,18 @@
   z-index: var(--z-base);
   width: 100%;
   padding: var(--sp-5);
+  text-align: left;
   font-size: clamp(1rem, 1.6vw, 1.2rem);
-  /* "Tosh A Regular": el nombre de la categoría en la tarjeta, no un titular. */
-  font-weight: 400;
+  /* Un peso por debajo de Regular: Light. */
+  font-weight: 300;
   color: var(--text-inverse);
+}
+
+@media (max-width: 700px) {
+  .section::before {
+    width: 240px;
+  }
+  .section::after {
+    width: 240px;
+  }
 }

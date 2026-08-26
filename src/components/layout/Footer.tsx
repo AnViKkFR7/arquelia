@@ -54,7 +54,7 @@ export function Footer() {
               info@arquelia.es
             </a>
             <a href="tel:+34600000000" className={styles.link}>
-              +34 600 000 000
+              +34 673 45 66 93
             </a>
             <span className={styles.muted}>{t('footer.location')}</span>
           </div>

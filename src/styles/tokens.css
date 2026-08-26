@@ -61,11 +61,11 @@
      (red del cliente, cuota de Adobe Fonts agotada, etc.): geométrica en el
      mismo espíritu, así que la reserva no desentona mientras carga o si
      falla del todo. */
-  --font-display: 'tosh-a', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-sans: 'tosh-a', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  /* Acento puntual, no la base: sólo para cifras grandes (p. ej. "15+ años
-     de oficio") donde se pidió un aire más clásico que el resto del sitio. */
-  --font-serif-accent: 'Fraunces', 'Times New Roman', serif;
+  --font-display: 'tosh-a', 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Tosh A se reserva para lo que va en mayúsculas (los títulos, en general):
+     --font-sans es la base de todo lo demás — cuerpo de texto, nav, botones,
+     etiquetas — y es Inter, no Tosh A. */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   /* Escala fluida (mobile → desktop) */
   --fs-display: clamp(2.75rem, 9vw, 7rem);

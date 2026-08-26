@@ -3,7 +3,6 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useCTAForm } from '../../context/CTAFormContext'
 import { LanguageSwitcher } from './LanguageSwitcher'
-import wordmark from '../../assets/brand/wordmark-white_lite.png'
 import styles from './Header.module.css'
 
 // El panel móvil sí lleva las 5: en la barra de escritorio "Inicio" y
@@ -59,7 +58,7 @@ export function Header() {
         </nav>
 
         <NavLink to="/" className={styles.logo} aria-label={t('nav.homeAria')}>
-          <img src={wordmark} alt="Arquelia" className={styles.wordmark} />
+          ARQUELIA
         </NavLink>
 
         <div className={styles.actions}>
@@ -109,7 +108,7 @@ export function Header() {
           >
             {t('nav.cta')}
           </button>
-          <LanguageSwitcher />
+          <LanguageSwitcher menuPosition="up" />
         </div>
       </div>
     </header>

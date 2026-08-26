@@ -10,6 +10,14 @@
   flex-direction: column;
   align-items: center;
   pointer-events: none;
+  /* Sube el header a su propia capa de composición: en móvil, con el hero
+     recalculando su canvas en cada frame de scroll, el hilo principal puede
+     ir justo de tiempo y el navegador tarda en repintar un `position: fixed`
+     que comparte capa con el resto de la página — se ve como si el header
+     "perdiera" su sitio un instante durante el scroll. Aislado en su propia
+     capa, el compositor lo posiciona sin depender de ese trabajo. */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 @media (min-width: 768px) {
@@ -51,22 +59,23 @@
 }
 
 /* ── Logo ────────────────────────────────────────────────
-   Ahora es sólo el wordmark en imagen (sin icono): en el bloque central del
-   navbar no queda sitio de sobra para icono + texto sin desequilibrar las
-   tres columnas, y el cliente pidió específicamente "el nombre sin logo". */
+   Texto real, no imagen: "el nombre sin logo" (sin icono) se mantiene, pero
+   necesitaba volver a ser texto para poder ponerlo en negrita — no existe
+   una variante bold del wordmark en PNG, y con Tosh A ya cargado (real, con
+   licencia) no hace falta: el peso lo pone el CSS. */
 .logo {
   display: inline-flex;
   align-items: center;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--text-inverse);
+  transition: opacity var(--t-base) var(--ease);
 }
 
-.wordmark {
-  height: 16px;
-  width: auto;
-  transition: transform var(--t-base) var(--ease);
-}
-
-.logo:hover .wordmark {
-  transform: scale(1.05);
+.logo:hover {
+  opacity: 0.8;
 }
 
 @media (min-width: 1024px) {

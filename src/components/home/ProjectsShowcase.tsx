@@ -21,19 +21,20 @@ const ROTATE_MS = 5000
 
 /**
  * Formato "story": una imagen grande que rota entre 4 proyectos cada 5s,
- * con índices clicables debajo (llevan a `/proyectos`) que al pasar el
- * ratón adelantan la previsualización sin alterar la rotación de fondo.
+ * con índices clicables debajo (llevan a `/proyectos`). El cambio de
+ * proyecto activo va sólo por tiempo — no hay preview por hover — y el
+ * título/descripción se sitúan encima de su propio índice, no siempre en
+ * el mismo sitio fijo.
  *
- * En móvil no hay hover ni sitio para cuatro índices con etiqueta, así que
- * pasa a ser un carrusel deslizable de toda la vida (scroll-snap + puntos),
- * mismo patrón que ya usa la cabecera de proyecto en móvil.
+ * En móvil no hay sitio para cuatro índices con etiqueta, así que pasa a
+ * ser un carrusel deslizable de toda la vida (scroll-snap), mismo patrón
+ * que ya usa la cabecera de proyecto en móvil.
  */
 export function ProjectsShowcase() {
   const { t } = useTranslation()
   const items = t('home.projectsShowcase.items', { returnObjects: true }) as ShowcaseItem[]
 
   const [active, setActive] = useState(0)
-  const [hovered, setHovered] = useState<number | null>(null)
   const [isNarrow, setIsNarrow] = useState(false)
 
   useEffect(() => {
@@ -44,15 +45,11 @@ export function ProjectsShowcase() {
     return () => mq.removeEventListener('change', apply)
   }, [])
 
-  // La rotación sigue de fondo aunque el ratón esté "espiando" otro índice:
-  // al retirar el cursor, vuelve a mostrarse el que le tocase en ese momento.
   useEffect(() => {
     if (isNarrow || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const id = setInterval(() => setActive((a) => (a + 1) % items.length), ROTATE_MS)
     return () => clearInterval(id)
   }, [isNarrow, items.length])
-
-  const shown = hovered ?? active
 
   if (isNarrow) {
     return (
@@ -99,36 +96,35 @@ export function ProjectsShowcase() {
             <Link
               to="/proyectos"
               className={styles.stageLink}
-              style={{ backgroundImage: `url(${IMAGES[shown]})` }}
+              style={{ backgroundImage: `url(${IMAGES[active]})` }}
               aria-label={t('home.projectsShowcase.seeAllAria')}
             >
               <span className={styles.stageScrim} />
-              <span className={styles.stageIndex}>{String(shown + 1).padStart(2, '0')}</span>
-              <span className={styles.stageMeta}>
-                <span className={styles.stageTitle}>{items[shown].title}</span>
-                <span className={styles.stageDesc}>{items[shown].desc}</span>
-              </span>
+              <span className={styles.stageIndex}>{String(active + 1).padStart(2, '0')}</span>
             </Link>
 
-            <ul className={styles.chips} onMouseLeave={() => setHovered(null)}>
+            {/* Una única rejilla de 4 columnas para el título y las líneas de
+                tiempo: así comparten exactamente los mismos bordes de
+                columna y el título del proyecto activo cae siempre encima
+                de su propio índice, no siempre en el mismo sitio fijo. `div`
+                y no `ul`/`li` porque el título ocupa una celda de la rejilla
+                sin ser un elemento de la lista. */}
+            <div className={styles.chips} role="list">
+              <div className={styles.metaCell} style={{ gridColumn: active + 1 }}>
+                <span className={styles.stageTitle}>{items[active].title}</span>
+                <span className={styles.stageDesc}>{items[active].desc}</span>
+              </div>
               {items.map((item, i) => (
-                <li key={item.title}>
-                  <Link
-                    to="/proyectos"
-                    className={styles.chip}
-                    aria-current={active === i ? 'true' : undefined}
-                    onMouseEnter={() => setHovered(i)}
-                    onFocus={() => setHovered(i)}
-                    onBlur={() => setHovered(null)}
-                  >
+                <div key={item.title} role="listitem" className={styles.chipCell}>
+                  <Link to="/proyectos" className={styles.chip} aria-current={active === i ? 'true' : undefined}>
                     <span className={styles.chipTrack}>
                       {active === i && <span key={active} className={styles.chipFill} />}
                     </span>
                     <span className={styles.chipLabel}>{item.title}</span>
                   </Link>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </Reveal>
       </div>

@@ -43,7 +43,7 @@ BEGIN
     'Arquelia',
     'P & B CORNELLA CONSTRUCCIONES, SOCIEDAD LIMITADA — Construcciones y reformas premium en Cataluña.',
     'info@arquelia.es',
-    '+34 600 000 000', -- TODO: sustituir por teléfono real
+    '+34 673 45 66 93', -- TODO: sustituir por teléfono real
     'https://arquelia.es',
     v_admin_user
   )

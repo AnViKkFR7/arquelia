@@ -87,6 +87,146 @@
 
 ## Registro de trabajo
 
+**2026-08-26 — Tres bugs de móvil: `FinalCta` apelotonado, header que "salta", franja negra en el hero**
+
+- **`FinalCta` apelotonado en móvil (bug real de especificidad CSS)**. Las reglas
+  `.content:first-child { width: 65% }` / `.content:last-child { width: 35% }` de la
+  entrada anterior tienen más especificidad (una pseudo-clase) que el
+  `.content { width: 100% }` del `@media (max-width: 900px)` — pese a ir *después* en el
+  archivo, la especificidad manda sobre el orden, así que en móvil el 65/35 nunca se
+  anulaba: el texto se apelotonaba en una columna de ~130px de ancho. Solución: la regla
+  65/35 se mete dentro de su propio `@media (min-width: 901px)`, así ni siquiera existe
+  como competidora en pantallas estrechas. Verificado: los dos bloques pasan a medir
+  335px (el ancho completo) en 375px de viewport.
+- **Franja negra al hacer scroll por el hero en móvil**. Causa encontrada en
+  `HeroCanvas.tsx`: el listener de `resize` del `<canvas>` leía
+  `getBoundingClientRect()` de forma **síncrona** dentro del propio evento y con eso
+  fijaba `canvas.width`/`canvas.height`. En móvil, ocultar o mostrar la barra de
+  direcciones del navegador dispara `resize` en pleno scroll — justo cuando el alto de
+  `.sticky` (`100svh`) también se está recalculando — así que a veces se leía un alto a
+  medio actualizar y el canvas se quedaba dibujado más pequeño que su caja real: el hueco
+  se veía como el `background-color` de reserva del propio `<canvas>` (`--black-900`,
+  casi negro) asomando por debajo de la imagen. Arreglado envolviendo el cálculo en un
+  `requestAnimationFrame` (deja que el layout se asiente antes de medir) — mismo patrón
+  que ya usa `usePinProgress` para su propio throttling. De paso, el resize ya no fuerza
+  siempre el fotograma 0: repinta el que tocase según el progreso actual, así que un
+  redimensionado a media secuencia no se ve como un salto brusco hacia atrás.
+- **Header que "pierde su sitio" al hacer scroll down**. Comprobado con scroll real
+  simulado en viewport móvil que el CSS en sí es correcto (`position: fixed` se queda
+  exactamente en `top: 16px` tras hacer `scrollTo` y disparar el evento) — no es un bug
+  de posicionamiento, es jank de scroll real de dispositivo que este entorno no puede
+  reproducir (sin navegador móvil de verdad no hay barra de direcciones que ocultar).
+  Aplicado el remedio estándar para esta clase de síntoma: `.header` sube a su propia
+  capa de composición (`transform: translateZ(0)` + `will-change: transform`), para que
+  el compositor no dependa del hilo principal —posiblemente ocupado repintando el
+  canvas del hero en cada frame de scroll— para mantenerlo en su sitio.
+- **Pendiente de confirmar en dispositivo real**: el fix del header es la mitigación
+  estándar para el síntoma descrito, pero no se ha podido reproducir ni verificar aquí
+  (limitación conocida: sin barra de direcciones móvil real que animar). Si sigue
+  pasando tras esto, el siguiente sospechoso sería aligerar el coste por frame del
+  scroll del hero (el `drawImage` del canvas en cada tick), no ya el header en sí.
+- **Verificado**: `tsc` y `npm run build` limpios. `FinalCta` a ancho completo en los dos
+  bloques a 375px; `header` con `transform` de identidad confirmando la nueva capa de
+  composición; sin errores de consola.
+
+**2026-08-26 — Segunda pasada de landing: marco permanente, sistema tipográfico Inter/Tosh A, catalán**
+
+- **Marco del hero, iterado**: pasa de cerrarse a los pocos px de scroll a quedarse
+  **siempre visible** — deja de depender de `progress`, es `padding` fijo en `.sticky`
+  (`Hero.module.css`). Un 65% más fino (`clamp(10px,1.6vw,28px)` → `clamp(3.5px,0.56vw,9.8px)`).
+  `.stage` (la fotografía que enmarca) lleva `border-radius: 10px` — el marco blanco de
+  fuera queda recto, la esquina de la foto sí es curva.
+- **Sistema tipográfico revisado**: Tosh A se reserva para lo que va en mayúsculas (los
+  títulos, en general — ya lo estaba en la práctica, `--font-display` sólo se usa en
+  h1-h4 y la mayoría ya llevan `text-transform: uppercase`); todo lo demás pasa de
+  Manrope a **Inter** (`--font-sans`). Consecuencia directa: los números de "15+ años de
+  oficio" en `FinalCta` vuelven a `var(--font-display)` (Tosh A) — sustituye al acento
+  en Fraunces de una iteración anterior, que ya no encajaba con la petición explícita de
+  "los números en Tosh A". Fraunces queda sin usar en ningún sitio; se quita del
+  `<link>` de Google Fonts en `index.html`.
+- **`IntroSection` ("Diseño y calidad...") a pantalla completa**: `min-height: 100svh` +
+  contenido centrado verticalmente, igual en móvil que en desktop — antes sólo llevaba el
+  padding-block estándar de `.section` y se sentía apretado entre el hero y el resto.
+- **Selector de idioma rediseñado + catalán añadido**. Con tres idiomas ya no cabían como
+  dos botones en línea: pasa a un desplegable "ES ▾" (`LanguageSwitcher.tsx`), con
+  cierre por click fuera / Escape. El menú del panel móvil se abre hacia **arriba**
+  (`menuPosition="up"`) porque el panel recorta con `overflow: hidden` para su animación
+  de alto — abrir hacia abajo ahí lo habría cortado.
+  - **`ca.json` nuevo**: traducción completa a catalán, calcada estructuralmente de
+    `es.json` (340 claves, comprobado por script que no falta ni sobra ninguna). Cubre
+    también las páginas legales (Avís Legal / Privacitat / Cookies) y el banner de
+    cookies.
+  - `i18n/index.ts` registra `ca` como idioma soportado; `DocumentMeta.tsx` ya distingue
+    `ca`/`en`/`es` para el `lang` del `<html>`.
+- **`ServicesGrid`** (bloque beige): la muesca dorada pasa de 120px a **240px** (el
+  doble); se añade una segunda barra idéntica al **cierre** del bloque (`::after`), no
+  sólo al principio (`::before`). Tarjetas con `border-radius: 10px`. El nombre de la
+  categoría pasa de estar abajo a **arriba a la izquierda** (`align-items: flex-start` +
+  `text-align: left`) — el degradado del velo se invierte a la vez (oscurece arriba, no
+  abajo) para que siga siendo legible donde ahora vive el texto. Peso un escalón por
+  debajo de Regular: **Light** (400 → 300).
+- **`ProjectsShowcase`**: fondo **blanco**, no `--bg-alt` (gris clarito). `.stage` con
+  `border-radius: 10px`. Se quita el **hover** que adelantaba la previsualización — el
+  cambio de proyecto activo va sólo por tiempo, como se pidió. El título/descripción del
+  proyecto activo ya no vive en un sitio fijo: `.chips` pasa a ser una única rejilla de 2
+  filas (antes eran dos grids separados, `.meta` y `.chips`, que dependían de que sus
+  columnas coincidieran por casualidad) — fila 1 es el título, colocado en la columna del
+  proyecto activo vía `gridColumn` en línea; fila 2 son las 4 líneas de tiempo. Al
+  compartir la misma rejilla, el título cae siempre exactamente encima de su propio
+  índice. `<div role="list">` en vez de `<ul>`/`<li>`: la celda del título no es un
+  elemento de la lista, y mezclar ambos en un `<ul>` habría sido HTML inválido.
+- **`FinalCta`**: columnas 65/35 en vez de 50/50 (`.content:first-child`/`:last-child`).
+  "¿Tienes un proyecto en mente?" en una sola línea desde 901px (`white-space: nowrap`),
+  con tamaño fluido (`clamp(1.6rem, 3.2vw, 2.5rem)`) para no desbordar en tablet antes de
+  llegar al punto de quiebre de las columnas.
+- **Verificado** en el navegador a 1440px y 390px: marco del hero permanente y fino
+  (8px a 1440px) con esquina redondeada; `body` en Inter, `h1` en `tosh-a`; catalán
+  activo cambia `<html lang="ca">`, persiste en `localStorage` y traduce nav/CTA/tarjetas
+  correctamente; menú de idioma móvil se abre hacia arriba y cabe dentro de la ventana;
+  `ProjectsShowcase` con fondo blanco, esquina redondeada, título ya desplazado a la
+  columna 2 (confirma que la rotación por tiempo seguía funcionando); `FinalCta` en una
+  línea con columnas a 785px/423px (≈65/35 sobre 1208px de ancho útil); `IntroSection`
+  con `min-height` exacto al alto de ventana; barras doradas de `ServicesGrid` a 240px
+  las dos. `tsc` y `npm run build` limpios, sin errores de consola.
+
+**2026-08-26 — Look del hero: sin marquesina, logo bold, título más a la izquierda, marco blanco**
+
+Ajustes puntuales sobre la sección del zoom-scroll, a partir de dos capturas del cliente
+(una marcada con anotaciones de color, otra de referencia de estilo).
+
+- **Marquesina inferior eliminada** ("REFORMAS INTEGRALES · COCINAS · ..."): fuera
+  `<Marquee>`, `.strip` y su import de `Hero.tsx`. La clave `home.heroStrip` queda sin
+  usar en los locales — no se ha borrado, no molesta y podría reutilizarse.
+- **"ARQUELIA" del header, en negrita**. Volvió a ser texto en vez de imagen: no existe
+  una variante bold del wordmark en PNG, y con Tosh A real ya cargado (vía Typekit) no
+  hace falta un archivo por peso — el peso lo pone `font-weight: 700` en CSS. Esto
+  deshace el cambio "logo sin icono, en imagen" de una sesión anterior sólo en la parte
+  de la imagen; sigue siendo sólo el nombre, sin icono.
+- **Título del hero más pegado al borde izquierdo**. `.inner` dejó de usar la utilidad
+  compartida `.container` (que centra con márgenes iguales a los dos lados) y pasó a un
+  padding-left propio, menor — con `.container` el título quedaba a ~108px del borde en
+  un viewport de 1440px; ahora a 71px. El subtítulo pasa a una sola línea con
+  `white-space: nowrap` a partir de 640px (por debajo se deja que seg envuelva: forzar
+  una frase de 68 caracteres en una línea en un móvil se saldría de la pantalla).
+- **Marco blanco alrededor del hero, sólo al principio**. Pedido explícito con una
+  captura: al cargar la página (antes de cualquier scroll) hay un marco blanco fino
+  alrededor de toda la sección, como una foto enmarcada; en cuanto se empieza a hacer
+  scroll se cierra casi de inmediato y no vuelve a aparecer en el resto del recorrido de
+  zoom. Implementado como `padding` en `.sticky` (fondo blanco), calculado con una
+  variable CSS (`--frame-progress`, 0→1) que fija `Hero.tsx` por inline style a partir de
+  `progress` — el mismo `progress` de `usePinProgress` que ya mueve el título y pinta el
+  canvas. Se cierra en el primer 10% del recorrido (`FRAME_SPAN`), no en todo el zoom:
+  es el efecto de "abrir" la foto enmarcada al primer gesto de scroll, no un marco que
+  acompañe la animación entera.
+- **Verificado**: `tsc` y `npm run build` limpios. En el navegador: sin marquesina en el
+  DOM, logo "ARQUELIA" con `font-weight: 700` computado, subtítulo en una sola línea con
+  `white-space: nowrap` a 1440px, título a 71px del borde izquierdo (antes ~108px). El
+  cierre del marco en scroll real no se pudo verificar en vivo (limitación conocida del
+  panel: no compone fotogramas, y forzar el re-render de React con un rAF parcheado no es
+  fiable en este entorno) — se verificó en su lugar la fórmula CSS del marco directamente
+  (`--frame-progress` 0→1 sobre el nodo real produce `padding` 23px→0px linealmente) y el
+  valor inicial en carga (23px, coincide con `--frame-max` sin recorrido de scroll).
+
 **2026-08-25 — Peso tipográfico exacto por elemento; `@vercel/analytics` con el import equivocado**
 
 - **Corrección importante sobre la pasada anterior**: revisando el mockup elemento a

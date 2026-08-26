@@ -14,7 +14,8 @@ export function DocumentMeta() {
   const { t, i18n } = useTranslation()
 
   useEffect(() => {
-    document.documentElement.lang = i18n.language.startsWith('en') ? 'en' : 'es'
+    const lang = i18n.language
+    document.documentElement.lang = lang.startsWith('ca') ? 'ca' : lang.startsWith('en') ? 'en' : 'es'
     document.title = t('meta.title')
     setMeta('meta[name="description"]', 'content', t('meta.description'))
     setMeta('meta[property="og:title"]', 'content', t('meta.ogTitle'))

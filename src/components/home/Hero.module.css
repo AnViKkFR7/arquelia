@@ -5,14 +5,30 @@
   background: var(--black-950);
 }
 
+/* El marco blanco vive aquí, como padding fijo: antes se cerraba a los
+   pocos pixeles de scroll, pero se pidió que se quede siempre — es el
+   marco del "cuadro" durante todo el efecto de zoom, no sólo al arrancar. */
 .sticky {
   position: sticky;
   top: 0;
   height: 100svh;
+  overflow: hidden;
+  background: var(--white);
+  /* 65% más fino que el original (clamp(10px,1.6vw,28px) × 0.35). */
+  padding: clamp(3.5px, 0.56vw, 9.8px);
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   overflow: hidden;
+  /* Bordes interiores redondeados: el marco blanco de fuera queda recto,
+     pero la fotografía que enmarca sí tiene esquina curva. */
+  border-radius: 10px;
   color: var(--text-inverse);
 }
 
@@ -51,10 +67,15 @@
   );
 }
 
-/* ── Contenido ───────────────────────────────────────── */
+/* ── Contenido ───────────────────────────────────────────
+   A propósito no lleva la clase compartida `.container`: esa utilidad
+   centra el bloque con márgenes iguales a los dos lados, y aquí se pidió
+   que el título se pegara más al borde izquierdo, no que quedara centrado
+   con un padding-left menor dentro de una caja igualmente centrada. */
 .inner {
   position: relative;
   z-index: var(--z-base);
+  padding-inline: clamp(1.25rem, 4vw, 3rem) var(--gutter);
   padding-bottom: clamp(3.5rem, 8vw, 6rem);
   will-change: opacity, transform;
 }
@@ -64,9 +85,7 @@
      titular a pantalla completa del sitio. */
   font-size: clamp(3.25rem, 11vw, 5.5rem);
   /* "Tosh A Medium": revisando el mockup elemento a elemento, el titular del
-     hero no va en negrita — Bold sólo aparece en el wordmark de marca (una
-     imagen). Antes era 300 (peso ligero de Fraunces); antes de esto pasó por
-     700 al confundirlo con Bold. El mayúsculas sí se mantiene. */
+     hero no va en negrita — Bold sólo aparece en el wordmark de marca. */
   font-weight: 500;
   line-height: 0.96;
   letter-spacing: -0.01em;
@@ -102,6 +121,15 @@
   animation: fadeUp var(--t-slow) var(--ease) 620ms both;
 }
 
+/* En una sola línea a partir de aquí: por debajo el hueco no llega para
+   toda la frase sin desbordar. */
+@media (min-width: 640px) {
+  .subtitle {
+    max-width: none;
+    white-space: nowrap;
+  }
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -111,15 +139,6 @@
     opacity: 1;
     transform: none;
   }
-}
-
-/* ── Franja inferior ─────────────────────────────────── */
-.strip {
-  position: relative;
-  z-index: var(--z-base);
-  padding-block: var(--sp-4);
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-  color: rgba(255, 255, 255, 0.6);
 }
 
 /* ── Indicador de scroll ─────────────────────────────── */
@@ -165,7 +184,6 @@
     height: 100svh !important;
   }
   .canvas,
-  .eyebrow,
   .subtitle,
   .word > span {
     animation: none;

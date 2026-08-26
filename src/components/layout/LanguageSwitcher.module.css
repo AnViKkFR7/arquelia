@@ -1,47 +1,106 @@
 .switcher {
+  position: relative;
+}
+
+.trigger {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  padding: 2px;
-  border-radius: 10px;
+  gap: 0.35rem;
+  padding: 0.4rem 0.65rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.14);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.85);
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+
+.trigger:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.chevron {
+  transition: transform var(--t-base) var(--ease);
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+/* ── Menú ────────────────────────────────────────────── */
+.menu {
+  position: absolute;
+  top: calc(100% + var(--sp-2));
+  right: 0;
+  min-width: 148px;
+  padding: 0.4rem;
+  border-radius: 12px;
+  background: rgba(6, 6, 6, 0.94);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+
+.menuOpen {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* Panel móvil: el trigger vive cerca del borde inferior de un contenedor
+   con `overflow: hidden`, así que el menú se abre hacia arriba. */
+.menuUp {
+  top: auto;
+  bottom: calc(100% + var(--sp-2));
+  transform: translateY(6px);
+}
+
+.menuUp.menuOpen {
+  transform: none;
 }
 
 .option {
-  padding: 0.28rem 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: 0.55rem 0.6rem;
   border-radius: 8px;
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.5);
+  text-align: left;
+  color: rgba(255, 255, 255, 0.7);
   transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 }
 
-/* En táctil se agranda el área pulsable hasta el mínimo cómodo (44px) sin
-   cambiar el aspecto visual del control. */
-@media (hover: none) {
-  .option {
-    position: relative;
-    padding-block: 0.5rem;
-  }
-
-  .option::after {
-    content: '';
-    position: absolute;
-    inset: 50% 0 0 0;
-    height: 44px;
-    transform: translateY(-50%);
-  }
-}
-
 .option:hover {
-  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--white);
 }
 
-.active,
-.active:hover {
-  background: var(--white);
-  color: var(--black-950);
-  font-weight: 600;
+.active {
+  color: var(--white);
 }
+
+.optionCode {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--accent-bright);
+  width: 1.6em;
+}
+
+.optionName {
+  font-size: var(--fs-sm);
+}
+
+/* En táctil el área pulsable ya es cómoda (0.55rem de padding vertical con
+   el texto ronda los 44px), así que no hace falta el truco del pseudo-
+   elemento que usaban los botones en línea de antes. */

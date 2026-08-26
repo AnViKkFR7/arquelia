@@ -52,7 +52,7 @@
 
 .containerWrapper {
   width: 100%;
-  background-color: var(--line-inverse);
+  background-color: var(--bg-inverse);
 }
 
 .containerBottom {
