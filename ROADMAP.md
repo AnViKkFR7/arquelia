@@ -87,6 +87,63 @@
 
 ## Registro de trabajo
 
+**2026-08-26 — Por qué el zoom del hero se sentía lento en Vercel (y no era ni el servidor ni un "no cargues nada hasta el final")**
+
+Investigación en vivo, no sólo lectura de código: inspeccioné `https://www.modusprojects.nl/` (la referencia) y
+`https://arquelia-three.vercel.app/` (nuestro despliegue) con el propio navegador — Performance API,
+`getEntriesByType('resource')` para ver orden y peso real de las peticiones.
+
+- **Diagnóstico**: no es el servidor de Vercel ni su capa gratuita — el peso total de la referencia
+  (121 fotogramas × ~130KB ≈ 15,7MB) es del mismo orden que el nuestro (121 × ~138KB ≈ 16,3MB antes
+  de este cambio). La diferencia real estaba en **cómo se cargan**:
+  1. **Orden de carga.** Nuestro `HeroCanvas.tsx` cargaba en orden estricto 0,1,2,3... — con eso, si
+     la red va lenta o el usuario hace scroll rápido, sólo hay cobertura real en el primer tramo del
+     recorrido; el resto se queda clavado en el último fotograma cargado hasta que le toca, que es
+     justo el síntoma descrito ("hace zoom unos pocos fotogramas y se baja a la siguiente sección").
+     La referencia carga por **subdivisión binaria**: 0, el último, el del medio, los cuartos, los
+     octavos... (comprobado con las marcas de tiempo de sus propias peticiones: 0, 120, 60, 30, 90,
+     15, 45, 75, 105, 7...). Con esa poca cantidad ya hay cobertura repartida por *todo* el recorrido,
+     no sólo el principio. Implementado el mismo algoritmo en `binaryLoadOrder()`.
+  2. **Carga secuencial, no en paralelo.** El resto de fotogramas (después de los 8 "eager") se
+     esperaban uno a uno con `await` dentro de un bucle — ninguna ventaja de las conexiones
+     concurrentes que da HTTP/2. Ahora corren 6 descargas a la vez (`CONCURRENCY`) siguiendo el orden
+     binario, con un pool de workers.
+  3. **El móvil descargaba las imágenes de escritorio.** Los 121 fotogramas eran un único set
+     consolidado a 1920×1071 sin variante — una decisión de una sesión anterior para simplificar el
+     código, documentada como tal en el propio archivo, pero que llevaba a que el móvil (justo el
+     dispositivo con la conexión más lenta) descargara exactamente el mismo peso que un monitor
+     de escritorio. El script `design-refs/build_hero_frames.py` ya existía preparado para dos
+     variantes (desktop 1280×714 / mobile 880×1173 recortado al centro) pero se había dejado de usar;
+     lo único que tenía distinto de lo necesario era `step=2`/`step=3` (se salta fotogramas para
+     aligerar), lo que habría reducido la fluidez del scrub — con el vídeo fuente en sólo 121
+     fotogramas (5,04s a 24fps), saltarse alguno se nota. Cambiado a `step=1` en las dos variantes
+     (mismos 121 fotogramas que antes, sin perder suavidad) y regenerado con
+     `python design-refs/build_hero_frames.py`. Resultado medido por el propio script:
+     desktop 6,38MB (54KB/fotograma, un 61% menos que antes) y **móvil 4,81MB (41KB/fotograma, un
+     70% menos)**. `HeroCanvas.tsx` vuelve a pedir por variante (`/hero-frames/{desktop,mobile}/hero-NNNN.webp`)
+     en vez del set único anterior. Reversible sin más: los 121 fotogramas antiguos seguían en git,
+     así que si el resultado no convenciera basta con `git checkout` sobre `public/hero-frames/`.
+  4. **Repintado oportunista.** Antes, si el usuario paraba de hacer scroll en un punto donde sólo
+     había un fotograma aproximado cargado, y el fotograma exacto terminaba de llegar segundos
+     después, nunca se repintaba — sólo se repintaba al cambiar `progress`. Ahora cada fotograma que
+     termina de cargar comprueba si mejora lo que ya está dibujado para el punto de scroll actual
+     (`paintNearest`) y, si es así, se repinta sin esperar a un nuevo gesto de scroll.
+- **Sobre la pregunta de la pantalla de carga**: la referencia **no la usa**. Comprobado en vivo — la
+  página se muestra con cabecera, navegación y contenido normal desde el primer instante; sólo la
+  calidad del *scrub* del hero mejora progresivamente según van llegando fotogramas de fondo. Con la
+  estrategia de arriba (cobertura completa del recorrido casi de inmediato + descarga en paralelo +
+  fotogramas más ligeros) no debería hacer falta una pantalla de carga — habría sido tratar el
+  síntoma en vez de la causa, y en la mayoría de visitas (sobre todo repetidas, con el caché del
+  navegador ya caliente) se vería como un parpadeo innecesario antes de una carga que ya es rápida.
+  Si tras probar esto en Vercel se sigue sintiendo lento specialmente la primera visita, la siguiente
+  palanca sería el póster: ahora mismo ya se pinta al instante (es una sola imagen), así que no debería
+  haber ningún fotograma en blanco esperando red — sólo el detalle del *scrub* tarda en afinarse.
+- **Verificado**: `tsc` y `npm run build` limpios. En el navegador local, orden de petición confirmado
+  como subdivisión binaria exacta (1, 121, 61, 31, 91, 16, 46, 76, 106, 8, 23...); variante móvil sirve
+  desde `/hero-frames/mobile/`, escritorio desde `/hero-frames/desktop/`; sin errores de consola.
+  **Pendiente de confirmar en Vercel** (esa es la prueba real — este entorno no reproduce condiciones
+  de red lenta ni la latencia real del CDN).
+
 **2026-08-26 — Tres bugs de móvil: `FinalCta` apelotonado, header que "salta", franja negra en el hero**
 
 - **`FinalCta` apelotonado en móvil (bug real de especificidad CSS)**. Las reglas
