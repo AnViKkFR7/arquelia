@@ -87,6 +87,49 @@
 
 ## Registro de trabajo
 
+**2026-08-26 — Hero: hueco negro/blanco de verdad arreglado (`svh`→`dvh`), recorrido más largo, más calidad en los extremos**
+
+Tres ajustes a partir de dos vídeos reales del cliente en móvil (Chrome y Safari) y feedback
+directo comparando con modusprojects.nl.
+
+- **El hueco negro/blanco al hacer scroll — causa raíz encontrada, no sólo mitigada.** Los
+  vídeos lo dejan clarísimo: en Chrome aparece un hueco **negro** bajo la foto al empezar a
+  hacer scroll; en Safari, el mismo hueco pero **blanco**. Ese color distinto entre
+  navegadores fue la pista — no es un problema del canvas (el arreglo de la entrada
+  anterior, sobre el `resize` del canvas, abordaba un síntoma relacionado pero no éste).
+  Es el clásico desajuste `svh` vs. viewport real en móvil: `.sticky` y el alto de `.wrap`
+  estaban en `100svh` ("small viewport height", asume la barra de direcciones siempre
+  visible). En cuanto el usuario hace scroll y el navegador oculta esa barra, el viewport
+  real crece — y como estos elementos no crecían con él, quedaba un hueco sin cubrir por
+  debajo: el fondo de `.wrap` asomando (negro en Chrome) o directamente la sección
+  siguiente (blanco en Safari, según cuánto se quedara corto cada navegador). Cambiado
+  `100svh` → **`100dvh`** ("dynamic", seguía el alto real en todo momento) en `.sticky` y
+  en el alto inline de `.wrap` — con eso el elemento crece a la vez que el viewport y no
+  se abre el hueco. El coste es algo más de recálculo de layout mientras la barra anima,
+  que es un precio muy pequeño comparado con un hueco de color visible.
+- **Recorrido de scroll más largo**: el cliente comparó con la referencia y necesitaba
+  6-8 gestos de scroll para completar la animación frente a los ~4 de aquí. Subido
+  `SPAN_DESKTOP`/`SPAN_MOBILE` de 3,5/3 a **6/5,25** (×1,75), manteniendo la misma
+  proporción entre los dos. Es un único número por variante si hace falta afinarlo más
+  tras probarlo.
+- **Más calidad en el primer y el último fotograma**. Encontrado de paso: el póster
+  (lo que se ve antes de que cargue nada) va a calidad 80, pero el primer fotograma *real*
+  de la secuencia se quedaba en 56-58 — en cuanto la secuencia sustituye al póster, se
+  notaba una bajada de nitidez. Subidos el primero y el último (los dos que se quedan fijos
+  más tiempo: el primero mientras no se ha hecho scroll, el último cuando el zoom termina
+  y el pin se suelta) a calidad 88. Con sólo 2 fotogramas de 121 por variante, el coste en
+  peso total es insignificante (unos 213KB combinados) frente a la mejora en los dos
+  momentos más vistos. Incorporado como comportamiento del propio
+  `design-refs/build_hero_frames.py` (no un parche manual aparte) para que no se pierda si
+  alguien vuelve a regenerar la secuencia más adelante.
+- **Verificado**: `tsc` y `npm run build` limpios. En el navegador, `.wrap` mide
+  `600dvh`/`525dvh` según variante (confirma el ×1,75), `.sticky` sigue el alto real del
+  viewport; en disco, los 4 archivos reforzados (frame 1 y 121 de cada variante) casi
+  duplican su peso individual sin mover la aguja del total de la secuencia. El hueco en sí
+  no se puede reproducir en este entorno (no hay una barra de direcciones móvil real que
+  ocultar), así que el arreglo se apoya en entender la causa exacta, no en verlo desaparecer
+  aquí — pendiente de que el cliente lo confirme en el móvil.
+
 **2026-08-26 — Por qué el zoom del hero se sentía lento en Vercel (y no era ni el servidor ni un "no cargues nada hasta el final")**
 
 Investigación en vivo, no sólo lectura de código: inspeccioné `https://www.modusprojects.nl/` (la referencia) y

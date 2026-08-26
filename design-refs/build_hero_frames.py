@@ -43,6 +43,15 @@ VARIANTS = {
     "mobile": dict(width=880, height=1173, quality=56, step=1, crop=0.75),
 }
 
+# El primero y el último fotograma se ven fijos más tiempo que el resto: el
+# primero mientras el usuario todavía no ha hecho scroll (y además sustituye
+# al póster, que va a q80 — sin este boost, el remate era una foto más nítida
+# reemplazada por otra peor en cuanto arranca la secuencia) y el último
+# cuando el zoom termina y el pin se suelta, justo antes de la siguiente
+# sección. Con sólo estos dos de 121 el coste en peso total es insignificante.
+BOOST_QUALITY = 88
+BOOST_FRAMES = {1, "last"}
+
 
 def build(name: str, cfg: dict) -> dict:
     out_dir = os.path.join(OUT, name)
@@ -63,6 +72,7 @@ def build(name: str, cfg: dict) -> dict:
     written = 0
     total_bytes = 0
     read_index = 0
+    last_path, last_resized = None, None
 
     while True:
         ok, frame = cap.read()
@@ -80,8 +90,12 @@ def build(name: str, cfg: dict) -> dict:
 
         written += 1
         path = os.path.join(out_dir, f"hero-{written:04d}.webp")
-        cv2.imwrite(path, resized, [cv2.IMWRITE_WEBP_QUALITY, cfg["quality"]])
+        # El último no se sabe hasta que se acaba el vídeo, así que aquí se
+        # escribe con la calidad normal y se re-escribe al final si tocaba.
+        quality = BOOST_QUALITY if written in BOOST_FRAMES else cfg["quality"]
+        cv2.imwrite(path, resized, [cv2.IMWRITE_WEBP_QUALITY, quality])
         total_bytes += os.path.getsize(path)
+        last_path, last_resized = path, resized
 
         if read_index == 0:
             cv2.imwrite(
@@ -91,6 +105,11 @@ def build(name: str, cfg: dict) -> dict:
             )
 
         read_index += 1
+
+    if "last" in BOOST_FRAMES and last_path is not None:
+        total_bytes -= os.path.getsize(last_path)
+        cv2.imwrite(last_path, last_resized, [cv2.IMWRITE_WEBP_QUALITY, BOOST_QUALITY])
+        total_bytes += os.path.getsize(last_path)
 
     cap.release()
 

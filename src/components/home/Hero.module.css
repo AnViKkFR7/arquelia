@@ -7,11 +7,20 @@
 
 /* El marco blanco vive aquí, como padding fijo: antes se cerraba a los
    pocos pixeles de scroll, pero se pidió que se quede siempre — es el
-   marco del "cuadro" durante todo el efecto de zoom, no sólo al arrancar. */
+   marco del "cuadro" durante todo el efecto de zoom, no sólo al arrancar.
+   `dvh`, no `svh`: en móvil, al ocultarse la barra de direcciones durante
+   el scroll, el viewport real pasa a ser más alto que el `svh` "pequeño"
+   con el que se dimensionó este elemento — y como el `.wrap` de fuera
+   tampoco crecía a la vez (medía igual con `svh`), quedaba un hueco sin
+   cubrir por debajo (negro en Chrome, blanco en Safari, según lo que
+   asomara detrás) hasta que el navegador terminaba la transición. `dvh`
+   seguía el alto real del viewport en todo momento, así que no se abre
+   ese hueco — el coste es algo más de recálculo de layout mientras la
+   barra de direcciones anima, que es preferible al hueco visible. */
 .sticky {
   position: sticky;
   top: 0;
-  height: 100svh;
+  height: 100dvh;
   overflow: hidden;
   background: var(--white);
   /* 65% más fino que el original (clamp(10px,1.6vw,28px) × 0.35). */
@@ -181,7 +190,7 @@
 @media (prefers-reduced-motion: reduce) {
   /* Sin secuencia: no tiene sentido reservar 3 pantallas de recorrido. */
   .wrap {
-    height: 100svh !important;
+    height: 100dvh !important;
   }
   .canvas,
   .subtitle,

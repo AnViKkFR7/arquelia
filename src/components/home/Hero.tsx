@@ -6,11 +6,15 @@ import styles from './Hero.module.css'
 
 /**
  * Alto del recorrido en múltiplos de pantalla mientras el hero está anclado.
- * En móvil se acorta: el gesto de scroll con el dedo avanza mucho menos que
- * la rueda del ratón, y 3 pantallas se hacen eternas.
+ * En móvil se acorta un poco respecto al de escritorio: el gesto de scroll
+ * con el dedo avanza distinto que la rueda del ratón. Subido de 3.5/3 a
+ * 6/5.25 (~×1,75): el cliente lo comparó con modusprojects.nl, que necesita
+ * 6-8 gestos de scroll para completar la animación, frente a los ~4 que
+ * hacían falta aquí — la sensación de "carrete largo" es a propósito en la
+ * referencia, no un efecto de una conexión más lenta.
  */
-const SPAN_DESKTOP = 3.5
-const SPAN_MOBILE = 3
+const SPAN_DESKTOP = 6
+const SPAN_MOBILE = 5.25
 
 export function Hero() {
   const { t } = useTranslation()
@@ -30,7 +34,7 @@ export function Hero() {
   const titleOut = Math.min(progress / 0.32, 1)
 
   return (
-    <section ref={wrapRef} className={styles.wrap} style={{ height: `${span * 100}svh` }}>
+    <section ref={wrapRef} className={styles.wrap} style={{ height: `${span * 100}dvh` }}>
       <div className={styles.sticky}>
         <div className={styles.stage}>
           <HeroCanvas progress={progress} className={styles.canvas} />
