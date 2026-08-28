@@ -43,8 +43,16 @@ export function Hero() {
           <div
             className={styles.inner}
             style={{
-              opacity: 1 - titleOut,
-              transform: `translateY(${titleOut * -24}px)`,
+              // A diferencia de antes (opacity 1-titleOut acoplado a un
+              // desplazamiento mínimo de 24px, que se veía como un fundido
+              // casi estático): el titular ahora sale de escena sobre todo
+              // desplazándose hacia arriba — lo bastante para salir del
+              // recorte de `.stage` (overflow: hidden) antes de llegar al
+              // final — y sólo se apoya en una opacidad residual al final
+              // del trayecto por si en alguna proporción de pantalla no
+              // llegara a salir del todo por el borde superior.
+              opacity: 1 - Math.max(0, (titleOut - 0.7) / 0.3),
+              transform: `translateY(${titleOut * -70}vh)`,
               pointerEvents: titleOut > 0.8 ? 'none' : undefined,
             }}
           >

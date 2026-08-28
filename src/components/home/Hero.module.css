@@ -68,12 +68,6 @@
 .scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(6, 6, 6, 0.6) 0%,
-    rgba(6, 6, 6, 0.12) 34%,
-    rgba(6, 6, 6, 0.86) 100%
-  );
 }
 
 /* ── Contenido ───────────────────────────────────────────

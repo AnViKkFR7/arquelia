@@ -139,6 +139,18 @@
   transform: translateX(3px);
 }
 
+/* Mismo aspecto que `.link`, pero es un <button> (no navega a ninguna
+   ruta, sólo reabre el aviso de cookies) — de ahí el reset de estilos
+   nativos de botón. */
+.linkButton {
+  composes: link;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+
 .muted {
   font-size: var(--fs-sm);
   color: var(--text-inverse-subtle);

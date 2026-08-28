@@ -27,7 +27,7 @@
     "claim": "Your home, taken to the next level",
     "navigation": "Navigation",
     "legalHeading": "Legal",
-    "location": "Cornellà de Llobregat, Barcelona",
+    "location": "C/ Rubio i Ors, 130 - 08940 Cornellà de Llobregat, Barcelona",
     "developedBy": "Developed by Moira Ordo",
     "serviceLinks": [
       "Full renovations",
@@ -368,7 +368,7 @@
       },
       {
         "label": "Office",
-        "value": "Cornellà de Llobregat, Barcelona"
+        "value": "C/ Rubio i Ors, 130 - 08940 Cornellà de Llobregat, Barcelona"
       },
       {
         "label": "Hours",
@@ -547,11 +547,11 @@
         },
         {
           "heading": "4. What we use on this website",
-          "body": "This website only uses its own, persistent technical storage: the language you select (Spanish or English), saved in your browser's local storage so you don't have to choose it again on every visit. We do not install analytics, advertising or social-media cookies or similar technologies, and we do not share browsing data with third parties. Should analytical or third-party cookies be added in the future, your prior consent will be requested via the corresponding notice, and this policy will be updated accordingly."
+          "body": "This website uses its own, persistent technical storage (the language you select, saved in your browser's local storage) and, only if you accept via the cookie notice, Google Analytics analytics cookies, managed through Google Tag Manager, to know the number of visitors and how they browse the site. These analytics cookies are not installed until you give your express consent, and you can revoke it at any time from \"Cookie settings\" in the footer. We do not use advertising cookies and do not share browsing data with third parties for commercial purposes."
         },
         {
           "heading": "5. Legal basis",
-          "body": "This processing is based on article 22.2 of Spanish Law 34/2002, on Information Society Services and Electronic Commerce (LSSI-CE), which exempts cookies and equivalent technologies that are strictly necessary to provide a service expressly requested by the user from the duty to obtain consent. For this reason, this website’s cookie notice lets you accept or reject, but your choice does not affect the site’s operation while no non-essential cookies are in use."
+          "body": "The strictly necessary technical storage described (language) is based on article 22.2 of Spanish Law 34/2002, on Information Society Services and Electronic Commerce (LSSI-CE), which exempts cookies and equivalent technologies that are strictly necessary to provide a service expressly requested by the user from the duty to obtain consent. Google Analytics analytics cookies, not being strictly necessary, are only installed if you give your express consent via the cookie notice; your choice does not affect the site's basic operation, which remains functional whether you accept or reject."
         },
         {
           "heading": "6. Managing or withdrawing your consent",
@@ -569,7 +569,7 @@
     }
   },
   "cookieBanner": {
-    "text": "We use technical storage necessary for the site to work (for example, remembering your chosen language). We don't use analytics or advertising cookies.",
+    "text": "We use technical storage necessary for the site to work and, only if you accept, analytics cookies (Google Analytics) to understand how the site is used. We don't use advertising cookies.",
     "accept": "Accept",
     "reject": "Reject",
     "policyLink": "Cookie policy",

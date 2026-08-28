@@ -87,6 +87,78 @@
 
 ## Registro de trabajo
 
+**2026-08-28 — Hero: secuencia de 217 fotogramas (antes 121) y el titular sale de escena deslizándose, no sólo con un fundido**
+
+Dos ajustes a partir de una nueva grabación de comparación del cliente contra modusprojects.nl
+y una nueva secuencia de fotogramas que aportó (`public/9seconds-frames`, movida a
+`design-refs/frames/09-hero-zoom-9s/` — los masters en bruto viven ahí, no en `public/`, para
+no desplegar 35MB de fotogramas que la app no sirve directamente).
+
+- **Secuencia nueva, mismo plano de cámara, casi el doble de fotogramas intermedios.**
+  Comparado el primer y último fotograma de la secuencia nueva contra la anterior: es el mismo
+  encuadre de inicio y de fin, así que no es un plano distinto — es un renderizado más granular
+  del mismo movimiento (217 fotogramas / ~9s a 24fps, frente a los 121 / 5,04s de antes).
+  Confirma la hipótesis del cliente: la sensación "tosca" no era sólo de scroll-span corto, sino
+  también de que cada salto de fotograma a fotograma era más grande de lo ideal. Adaptado
+  `design-refs/build_hero_frames.py` para leer de una carpeta de fotogramas sueltos en vez de un
+  vídeo (`cv2.imread` por archivo en vez de `cv2.VideoCapture`), y regenerado
+  `public/hero-frames/{desktop,mobile}` desde la fuente nueva con el mismo tratamiento por
+  variante y el mismo boost de calidad en el primer/último fotograma de la entrada anterior.
+  **Coste real**: el peso total de la secuencia pasa de ~11MB a ~24MB combinando las dos
+  variantes (casi se duplica, proporcional al nº de fotogramas) — el orden de carga por
+  subdivisión binaria y el póster de arranque siguen mitigando el impacto percibido, pero es
+  más para descargar en total y merece que el cliente lo sepa, no sólo que "se ve mejor".
+- **El titular ahora sale por arriba, no se desvanece en el sitio.** Antes `opacity: 1-titleOut`
+  iba acoplado a un `translateY` de sólo 24px — visualmente era casi un fundido estático, no el
+  "sube y desaparece" de la referencia. Cambiado a `translateY(titleOut * -70vh)`: recorre
+  suficiente distancia como para salir del recorte de `.stage` (que ya tenía `overflow: hidden`)
+  antes de que el trayecto termine, así que lo que se ve es el texto deslizándose hacia arriba y
+  saliendo de encuadre por el borde superior — el fundido ahora sólo actúa de red de seguridad en
+  el último 30% del trayecto (`opacity: 1 - max(0, (titleOut-0.7)/0.3)`), por si en alguna
+  proporción de pantalla el bloque no llegara a salir del todo antes de que acabe la ventana de
+  0–0,32 de progreso.
+- **Nota sobre el vídeo de comparación del cliente**: en la grabación aportada, nuestro hero
+  termina el zoom y pasa a la siguiente sección en apenas ~2s de scroll, con el encuadre casi sin
+  moverse — eso encaja con el sitio *sin* el aumento de `SPAN_DESKTOP/MOBILE` (×1,75) ni el
+  arreglo de `dvh` de la entrada del 2026-08-26, que en ese momento sólo estaban en local, no
+  desplegados. Antes de evaluar si el recorrido "se siente" como el de la referencia, hace falta
+  desplegar también aquella entrada — si no, se estaría comparando la versión antigua.
+- **Verificado**: `tsc`/`vite build` limpios; regeneración de fotogramas confirmada por
+  `manifest.json` (217/217 en ambas variantes) y por tamaño en disco. La animación del titular no
+  se ha podido verificar con scroll real en este entorno (el sandbox de previsualización no
+  refleja el `window.scrollY` real de la página de forma fiable para este tipo de prueba) — la
+  lógica se ha verificado por cálculo, pero pendiente de confirmación visual del cliente en local
+  o en Vercel.
+
+**2026-08-27 — Analítica: Google Tag Manager + GA4 con aviso de cookies previo (no después)**
+
+A petición del cliente, que quiere ver tráfico (visitantes, páginas, clics) gratis. Se optó por
+GTM + GA4 en vez de, por ejemplo, PostHog, porque el cliente ya tenía intención de usar Google
+Analytics específicamente.
+
+- **El contenedor de GTM no se carga hasta que hay consentimiento expreso** (`src/lib/gtm.ts`):
+  en vez de jugar con el "Consent Mode" de Google para bloquear cookies mientras tanto, aquí
+  sencillamente no sale ni una petición a googletagmanager.com hasta que el usuario acepta el
+  aviso — más simple y sin ambigüedad legal.
+- Aviso de cookies nuevo (`CookieConsent.tsx`): reutiliza las claves de i18n `cookieBanner.*` que
+  ya existían en los locales (preparadas de antemano, sin usar hasta ahora) y actualiza el texto,
+  que antes afirmaba "no usamos cookies de analítica" — ya no es cierto. Actualizada también la
+  política de cookies (`legal.cookies`, secciones 4 y 5) en los tres idiomas para reflejar que sí
+  se usan cookies analíticas, sólo con consentimiento.
+- Enlace "Configurar cookies" añadido al pie de página para revocar/cambiar la elección — la
+  propia política de cookies ya prometía ese enlace desde antes de que existiera.
+- Cambios de ruta de la SPA avisados a GTM a mano (`usePageviewTracking.ts`): al no haber recarga
+  real entre páginas, GTM no se entera solo de la navegación de react-router.
+- `VITE_GTM_ID` como variable de entorno (`.env.example`), documentada pero sin rellenar aquí —
+  el ID real lo genera el cliente en tagmanager.google.com y lo añade a Vercel como variable
+  **Config** (no Secret: un ID de contenedor GTM no es sensible en absoluto, es visible en el
+  código fuente de cualquier página que lo use) y sólo en el entorno de Production, para no
+  mezclar tráfico de previews/desarrollo con las estadísticas reales.
+- **Verificado** en local: el aviso aparece en la primera visita, aceptar lo persiste en
+  `localStorage` sin errores de consola y hace desaparecer el aviso, y "Configurar cookies" lo
+  reabre. Sin `VITE_GTM_ID` configurado (como en este entorno), `loadGTM()` no hace nada — no
+  hay ningún tag real que verificar aquí todavía; falta la etiqueta de GA4 dentro de GTM.
+
 **2026-08-26 — Hero: hueco negro/blanco de verdad arreglado (`svh`→`dvh`), recorrido más largo, más calidad en los extremos**
 
 Tres ajustes a partir de dos vídeos reales del cliente en móvil (Chrome y Safari) y feedback

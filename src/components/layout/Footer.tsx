@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Reveal } from '../ui/Reveal'
+import { reopenCookieConsent } from './CookieConsent'
 import logoMark from '../../assets/brand/Transparente_blanco_logo_abajo_nombre.png'
 import styles from './Footer.module.css'
 
@@ -70,6 +71,9 @@ export function Footer() {
             <NavLink to="/privacidad" className={styles.link}>
               {t('footer.privacy')}
             </NavLink>
+            <button type="button" className={styles.linkButton} onClick={reopenCookieConsent}>
+              {t('cookieBanner.manage')}
+            </button>
           </div>
         </div>
       </div>

@@ -1,4 +1,9 @@
-"""Genera las secuencias de fotogramas del hero a partir del vídeo fuente.
+"""Genera las secuencias de fotogramas del hero a partir de la secuencia
+fuente ya renderizada (no un vídeo): 217 fotogramas a 24fps (~9s) entregados
+como .webp sueltos, más granular que el vídeo de origen anterior
+(00-hero-zoom-source.mp4, 121 fotogramas / 5,04s) y por eso con un scrub
+notablemente más suave a la misma velocidad de scroll — mismo recorrido de
+cámara, casi el doble de fotogramas intermedios.
 
 Salida en `public/hero-frames/` (estáticos, NO empaquetados por Vite):
 
@@ -8,10 +13,10 @@ Salida en `public/hero-frames/` (estáticos, NO empaquetados por Vite):
     poster-mobile.webp
     manifest.json              lo lee HeroCanvas para saber cuántos hay
 
-El recorte vertical en móvil es necesario: la fuente es 16:9 y en una pantalla
-en vertical un `cover` sobre 16:9 obligaría a ampliar ~4×, quedando borroso.
-Recortando al centro (que es justo hacia donde avanza la cámara) la ampliación
-baja a ~1,35× y se ve nítido.
+El recorte vertical en móvil es necesario: la fuente es ~16:9 y en una
+pantalla en vertical un `cover` sobre 16:9 obligaría a ampliar ~4×, quedando
+borroso. Recortando al centro (que es justo hacia donde avanza la cámara) la
+ampliación baja a ~1,35× y se ve nítido.
 
 Uso:  python design-refs/build_hero_frames.py
 """
@@ -22,20 +27,16 @@ import shutil
 import cv2
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-SRC = os.path.join(BASE, "videos", "00-hero-zoom-source.mp4")
+SRC_DIR = os.path.join(BASE, "frames", "09-hero-zoom-9s")
 OUT = os.path.abspath(os.path.join(BASE, "..", "public", "hero-frames"))
 
-# Ajustes elegidos midiendo peso real sobre este vídeo: tiene mucha vegetación
-# y textura de piedra, así que comprime bastante peor que una escena limpia.
+# Ajustes elegidos midiendo peso real sobre esta secuencia: tiene mucha
+# vegetación y textura de piedra, así que comprime bastante peor que una
+# escena limpia.
 #
-# `step=1` en las dos variantes a propósito: el vídeo fuente sólo tiene 121
-# fotogramas (5,04s a 24fps), así que saltarse alguno (step=2/3, como estaba
-# antes) se nota como el scrub más brusco/entrecortado. Ese consolidado a
-# 121 fotogramas sin saltos es justo lo que se hizo en una sesión anterior
-# — pero de paso se dejó de recortar/redimensionar por variante y ambas
-# (incluido el móvil) acabaron sirviendo el mismo fotograma a 1920×1071.
-# Aquí se recupera el ancho/alto por variante sin perder ningún fotograma:
-# mismo número que antes, pero cada uno a su tamaño real en pantalla.
+# `step=1` en las dos variantes a propósito: saltarse algún fotograma
+# (step=2/3) se nota como scrub más brusco/entrecortado, que es justo la
+# queja que motivó pasar a esta secuencia de 217 fotogramas en primer lugar.
 VARIANTS = {
     # nombre:   (ancho, alto, calidad, 1 de cada N fotogramas, recorte)
     "desktop": dict(width=1280, height=714, quality=58, step=1, crop=None),
@@ -48,18 +49,26 @@ VARIANTS = {
 # al póster, que va a q80 — sin este boost, el remate era una foto más nítida
 # reemplazada por otra peor en cuanto arranca la secuencia) y el último
 # cuando el zoom termina y el pin se suelta, justo antes de la siguiente
-# sección. Con sólo estos dos de 121 el coste en peso total es insignificante.
+# sección. Con sólo estos dos de 217 el coste en peso total es insignificante.
 BOOST_QUALITY = 88
 BOOST_FRAMES = {1, "last"}
 
 
-def build(name: str, cfg: dict) -> dict:
+def source_files() -> list[str]:
+    names = sorted(
+        f for f in os.listdir(SRC_DIR) if f.lower().endswith((".webp", ".png", ".jpg", ".jpeg"))
+    )
+    if not names:
+        raise SystemExit(f"No hay fotogramas en {SRC_DIR}")
+    return [os.path.join(SRC_DIR, n) for n in names]
+
+
+def build(name: str, cfg: dict, files: list[str]) -> dict:
     out_dir = os.path.join(OUT, name)
     os.makedirs(out_dir, exist_ok=True)
 
-    cap = cv2.VideoCapture(SRC)
-    src_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    src_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    first = cv2.imread(files[0])
+    src_h, src_w = first.shape[:2]
 
     # Ventana de recorte centrada, si la variante lo pide
     if cfg["crop"]:
@@ -71,18 +80,13 @@ def build(name: str, cfg: dict) -> dict:
 
     written = 0
     total_bytes = 0
-    read_index = 0
     last_path, last_resized = None, None
 
-    while True:
-        ok, frame = cap.read()
-        if not ok:
-            break
-
+    for read_index, src_path in enumerate(files):
         if read_index % cfg["step"] != 0:
-            read_index += 1
             continue
 
+        frame = cv2.imread(src_path)
         cropped = frame[:, x0:x1]
         resized = cv2.resize(
             cropped, (cfg["width"], cfg["height"]), interpolation=cv2.INTER_AREA
@@ -90,7 +94,7 @@ def build(name: str, cfg: dict) -> dict:
 
         written += 1
         path = os.path.join(out_dir, f"hero-{written:04d}.webp")
-        # El último no se sabe hasta que se acaba el vídeo, así que aquí se
+        # El último no se sabe hasta el final de la lista, así que aquí se
         # escribe con la calidad normal y se re-escribe al final si tocaba.
         quality = BOOST_QUALITY if written in BOOST_FRAMES else cfg["quality"]
         cv2.imwrite(path, resized, [cv2.IMWRITE_WEBP_QUALITY, quality])
@@ -104,14 +108,10 @@ def build(name: str, cfg: dict) -> dict:
                 [cv2.IMWRITE_WEBP_QUALITY, 80],
             )
 
-        read_index += 1
-
     if "last" in BOOST_FRAMES and last_path is not None:
         total_bytes -= os.path.getsize(last_path)
         cv2.imwrite(last_path, last_resized, [cv2.IMWRITE_WEBP_QUALITY, BOOST_QUALITY])
         total_bytes += os.path.getsize(last_path)
-
-    cap.release()
 
     mb = total_bytes / 1024 / 1024
     print(
@@ -122,11 +122,13 @@ def build(name: str, cfg: dict) -> dict:
     return {"count": written, "width": cfg["width"], "height": cfg["height"]}
 
 
+files = source_files()
+
 if os.path.isdir(OUT):
     shutil.rmtree(OUT)
 os.makedirs(OUT, exist_ok=True)
 
-manifest = {name: build(name, cfg) for name, cfg in VARIANTS.items()}
+manifest = {name: build(name, cfg, files) for name, cfg in VARIANTS.items()}
 
 with open(os.path.join(OUT, "manifest.json"), "w", encoding="utf-8") as f:
     json.dump(manifest, f, indent=2)

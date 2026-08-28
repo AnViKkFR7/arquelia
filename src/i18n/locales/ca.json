@@ -27,7 +27,7 @@
     "claim": "LA TEVA LLAR, A UN ALTRE NIVELL",
     "navigation": "Navegació",
     "legalHeading": "Legal",
-    "location": "Cornellà de Llobregat, Barcelona",
+    "location": "C/ Rubio i Ors, 130 - 08940 Cornellà de Llobregat, Barcelona",
     "developedBy": "Desenvolupat per Moira Ordo",
     "serviceLinks": [
       "Reformes integrals",
@@ -368,7 +368,7 @@
       },
       {
         "label": "Oficina",
-        "value": "Cornellà de Llobregat, Barcelona"
+        "value": "C/ Rubio i Ors, 130 - 08940 Cornellà de Llobregat, Barcelona"
       },
       {
         "label": "Horari",
@@ -547,11 +547,11 @@
         },
         {
           "heading": "4. Què fem servir en aquest lloc web",
-          "body": "Aquest lloc web només fa servir emmagatzematge tècnic propi i de sessió persistent: l'idioma que vostè selecciona (espanyol, anglès o català), desat a l'emmagatzematge local del seu navegador per no haver-lo de triar de nou a cada visita. No instal·lem cookies ni tecnologies similars d'analítica, publicitat o xarxes socials, i no compartim dades de navegació amb tercers. Si en el futur s'incorporen cookies analítiques o de tercers, se sol·licitarà el seu consentiment previ mitjançant l'avís corresponent, actualitzant aquesta política."
+          "body": "Aquest lloc web fa servir emmagatzematge tècnic propi i de sessió persistent (l'idioma que vostè selecciona, desat a l'emmagatzematge local del seu navegador) i, només si vostè ho accepta mitjançant l'avís de cookies, cookies analítiques de Google Analytics, gestionades a través de Google Tag Manager, per conèixer el nombre de visitants i com naveguen pel lloc. Aquestes cookies analítiques no s'instal·len fins que vostè atorga el seu consentiment exprés, i pot revocar-lo en qualsevol moment des de «Configurar cookies» al peu de pàgina. No fem servir cookies publicitàries ni compartim dades de navegació amb tercers amb finalitats comercials."
         },
         {
           "heading": "5. Base legal",
-          "body": "El tractament descrit s'empara en l'article 22.2 de la Llei 34/2002, de Serveis de la Societat de la Informació i de Comerç Electrònic (LSSI-CE), que eximeix del deure d'obtenir consentiment les cookies i tecnologies equivalents estrictament necessàries per prestar el servei expressament sol·licitat per l'usuari. Per aquesta raó, l'avís de cookies d'aquest lloc li permet acceptar o rebutjar, però la seva elecció no afecta el funcionament del lloc mentre no s'incorporin cookies no essencials."
+          "body": "L'emmagatzematge tècnic estrictament necessari descrit (idioma) s'empara en l'article 22.2 de la Llei 34/2002, de Serveis de la Societat de la Informació i de Comerç Electrònic (LSSI-CE), que eximeix del deure d'obtenir consentiment les cookies i tecnologies equivalents estrictament necessàries per prestar el servei expressament sol·licitat per l'usuari. Les cookies analítiques de Google Analytics, en no ser estrictament necessàries, només s'instal·len si vostè atorga el seu consentiment exprés mitjançant l'avís de cookies; la seva elecció no afecta el funcionament bàsic del lloc, que continua operatiu tant si accepta com si rebutja."
         },
         {
           "heading": "6. Com gestionar o revocar el seu consentiment",
@@ -569,7 +569,7 @@
     }
   },
   "cookieBanner": {
-    "text": "Fem servir emmagatzematge tècnic necessari per al funcionament del lloc (per exemple, recordar l'idioma triat). No fem servir cookies d'anàlisi ni de publicitat.",
+    "text": "Fem servir emmagatzematge tècnic necessari per al funcionament del lloc i, només si ho accepta, cookies analítiques (Google Analytics) per saber com es fa servir el lloc. No fem servir cookies de publicitat.",
     "accept": "Acceptar",
     "reject": "Rebutjar",
     "policyLink": "Política de cookies",
