@@ -91,6 +91,44 @@
 
 ## Registro de trabajo
 
+**2026-08-29 (7) — Envío del formulario movido de Vercel a una Supabase Edge Function**
+
+Con `RESEND_API_KEY`/`RESEND_FROM_EMAIL` ya puestas en Vercel y el proyecto de Supabase
+confirmado sin pausar, `api/contact.ts` seguía colgándose (igual que `api/track.ts`) — el
+`Promise.race` de la entrada anterior sí evita el cuelgue de cara al usuario, pero la petición a
+Resend en sí seguía sin completarse nunca dentro del plazo, algo del lado de la red saliente de
+esa función en Vercel, no de Resend ni de nuestro código. El cliente aportó un proyecto propio
+(Regiamare) donde el mismo patrón (formulario → Resend) funciona sin problemas, pero corriendo
+desde una **Supabase Edge Function** (Deno), no desde una función de Vercel — así que se migró
+el envío ahí en vez de seguir depurando a ciegas el lado de Vercel.
+
+- **`supabase/functions/send-contact-arquelia/index.ts`**: mismo contenido que tenía `api/contact.ts`
+  (validación en servidor, `escapeHtml`, la plantilla premium de la marca) portado a Deno — sin
+  módulos de Node, todo con `fetch` nativo, así que el traslado fue casi literal. Se despliega
+  aparte con la CLI de Supabase (`supabase functions deploy send-contact-arquelia --no-verify-jwt`), no
+  como parte del build/deploy de Vercel.
+- **`CTAForm.tsx`**: `submit()` ahora llama directo a
+  `${VITE_SUPABASE_URL}/functions/v1/send-contact-arquelia` con la anon key pública como `Authorization`
+  (ambas variables ya existían en el proyecto) — ya no pasa por `/api/contact`, que se ha
+  borrado.
+- **`RESEND_API_KEY` deja de ser una variable de entorno de Vercel** y pasa a ser un *secreto de
+  Supabase* (`supabase secrets set RESEND_API_KEY=...`) — mecanismos de configuración
+  completamente distintos, no es sólo copiar el mismo valor de un sitio a otro.
+- `supabase/config.toml` generado con `supabase init` (scaffold estándar, sólo local — no hace
+  falta correr Supabase en local para este proyecto, sólo para poder desplegar funciones a la
+  nube con la CLI).
+- **Nota para el futuro**: si esto resuelve el envío de emails, es una pista bastante fuerte de
+  que el problema de fondo estaba en la red de salida de las funciones de Vercel de este
+  proyecto/cuenta en concreto — lo que significa que `api/track.ts` (que sigue en Vercel,
+  hablando con Supabase) probablemente tenga la misma causa y en algún momento convenga
+  migrarlo también. No se ha tocado en esta entrada porque `ANALYTICS_INTEGRATION.md` define ese
+  archivo como un contrato compartido con el resto de webs del multi-tenant — cambiarlo
+  unilateralmente aquí desincroniza este proyecto de esa plantilla común.
+- **Verificado**: `tsc -b`/`vite build` limpios (la carpeta `supabase/functions` queda fuera de
+  los `tsconfig` del proyecto a propósito, Deno no es TypeScript de Node/navegador). El despliegue
+  de la función y el envío real no se ha podido probar en este entorno — hace falta la CLI de
+  Supabase autenticada con la cuenta real del cliente, algo que no puedo hacer por él.
+
 **2026-08-29 (6) — `vercel.json`: rutas directas como `/servicios` daban 404**
 
 Sin este archivo, Vercel sólo tiene un archivo físico para `/` (`index.html`) — cualquier ruta

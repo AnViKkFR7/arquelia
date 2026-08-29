@@ -94,9 +94,18 @@ export function CTAForm({ onDone }: CTAFormProps) {
     setSending(true)
     setSendError(false)
     try {
-      const res = await fetch('/api/contact', {
+      // Supabase Edge Function, no una función serverless de Vercel: ver
+      // supabase/functions/send-contact-arquelia/index.ts. La anon key es pública a
+      // propósito (la función se despliega con --no-verify-jwt para aceptar
+      // envíos sin sesión de usuario, imprescindible para un formulario
+      // público) — la clave que de verdad importa (RESEND_API_KEY) sólo
+      // vive como secreto de servidor en Supabase, nunca en el cliente.
+      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-contact-arquelia`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        },
         body: JSON.stringify(data),
       })
       if (!res.ok) throw new Error('send failed')

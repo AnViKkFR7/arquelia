@@ -1,12 +1,9 @@
-// Envío del formulario de presupuesto a info@arquelia.es vía Resend.
-// Vercel lo despliega como Serverless Function automáticamente al vivir en
-// /api, sin configuración adicional (mismo patrón que api/track.ts).
-const RESEND_API_KEY = process.env.RESEND_API_KEY!
-// Remitente verificado en Resend (Resend exige que el dominio de `from`
-// tenga los registros DNS de verificación dados de alta en su panel — no
-// puede ser cualquier dirección). El correo llega igualmente marcado como
-// que viene "en nombre de" Arquelia gracias al reply_to de más abajo.
-const FROM = process.env.RESEND_FROM_EMAIL || 'Arquelia <formulario@arquelia.es>'
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
+const FROM = 'Arquelia <info@arquelia.es>'
 const TO = 'info@arquelia.es'
 
 const SERVICE_LABELS: Record<string, string> = {
@@ -40,7 +37,7 @@ function escapeHtml(s: string): string {
     .replace(/'/g, '&#39;')
 }
 
-export function buildText(d: Required<ContactPayload>, serviceLabel: string): string {
+function buildText(d: Required<ContactPayload>, serviceLabel: string): string {
   return [
     'Nueva solicitud de presupuesto — Arquelia',
     '',
@@ -59,7 +56,7 @@ export function buildText(d: Required<ContactPayload>, serviceLabel: string): st
 // bien en Gmail/Apple Mail/Outlook: tablas (no flex/grid, Outlook de
 // escritorio las ignora), estilos en línea (muchos clientes recortan
 // <style>), sin fuentes externas (no se cargan de forma fiable en email).
-export function buildHtml(d: Required<ContactPayload>, serviceLabel: string): string {
+function buildHtml(d: Required<ContactPayload>, serviceLabel: string): string {
   const nombre = escapeHtml(d.nombre)
   const poblacion = escapeHtml(d.poblacion || '—')
   const email = escapeHtml(d.email)
@@ -145,36 +142,23 @@ export function buildHtml(d: Required<ContactPayload>, serviceLabel: string): st
 </html>`
 }
 
-// `AbortSignal.timeout` en el `fetch` a Resend no bastó en producción
-// (seguía colgándose hasta el `maxDuration`, un FUNCTION_INVOCATION_TIMEOUT
-// en vez de un error rápido) — probablemente porque el cuelgue ocurre en la
-// fase de conexión, una fase que el abort de fetch no siempre corta.
-// `Promise.race` con un temporizador de verdad no depende de que la
-// petición coopere: en cuanto pasa el plazo, el handler responde igual,
-// aunque la promesa perdedora se quede colgada de fondo.
-function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<never>((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)),
-  ])
-}
-
-export default async function handler(req: Request) {
-  try {
-    return await withTimeout(handle(req), 9000)
-  } catch {
-    return new Response('Timeout', { status: 504 })
+Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
+  if (req.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+      status: 405,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
   }
-}
-
-async function handle(req: Request) {
-  if (req.method !== 'POST') return new Response('Method not allowed', { status: 405 })
 
   let body: ContactPayload
   try {
     body = (await req.json()) as ContactPayload
   } catch {
-    return new Response('Bad request', { status: 400 })
+    return new Response(JSON.stringify({ error: 'Bad request' }), {
+      status: 400,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
   }
 
   const nombre = (body.nombre ?? '').trim()
@@ -187,18 +171,29 @@ async function handle(req: Request) {
   // El cliente ya valida esto, pero el servidor nunca se fía de eso solo:
   // es la última barrera antes de gastar una petición real a Resend.
   if (!nombre || !EMAIL_RE.test(email) || telefono.replace(/\D/g, '').length < 9) {
-    return new Response('Bad request', { status: 400 })
+    return new Response(JSON.stringify({ error: 'Bad request' }), {
+      status: 400,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
+  }
+
+  const RESEND_ARQUELIA_API_KEY = Deno.env.get('RESEND_ARQUELIA_API_KEY')
+  if (!RESEND_ARQUELIA_API_KEY) {
+    console.error('RESEND_ARQUELIA_API_KEY no configurada (supabase secrets set RESEND_ARQUELIA_API_KEY=...)')
+    return new Response(JSON.stringify({ error: 'Server misconfigured' }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
   }
 
   const serviceLabel = (servicio && SERVICE_LABELS[servicio]) || 'Sin especificar'
   const data = { servicio, nombre, poblacion, email, telefono, descripcion }
 
-  let res: Response
   try {
-    res = await fetch('https://api.resend.com/emails', {
+    const resendResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${RESEND_API_KEY}`,
+        Authorization: `Bearer ${RESEND_ARQUELIA_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -209,19 +204,26 @@ async function handle(req: Request) {
         html: buildHtml(data, serviceLabel),
         text: buildText(data, serviceLabel),
       }),
-      // Ayuda cuando funciona, pero no es la protección real — esa es
-      // `withTimeout` más arriba (ver su comentario).
-      signal: AbortSignal.timeout(8000),
     })
-  } catch {
-    return new Response('Error', { status: 502 })
+
+    if (!resendResponse.ok) {
+      const errText = await resendResponse.text()
+      console.error('Resend API error:', errText)
+      return new Response(JSON.stringify({ error: 'Failed to send email' }), {
+        status: 502,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+  } catch (err) {
+    console.error('Error llamando a Resend:', err)
+    return new Response(JSON.stringify({ error: 'Failed to send email' }), {
+      status: 502,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
   }
 
-  if (!res.ok) return new Response('Error', { status: 502 })
-  return new Response(null, { status: 204 })
-}
-
-// 12s de margen sobre los 9s de `withTimeout`: si algún día éste fallara,
-// que sea el 504 propio el que se vea, no un FUNCTION_INVOCATION_TIMEOUT en
-// bruto del plan Hobby (que por defecto deja hasta 5 minutos).
-export const config = { runtime: 'nodejs', maxDuration: 12 }
+  return new Response(JSON.stringify({ success: true }), {
+    status: 200,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  })
+})
