@@ -3,7 +3,17 @@
 // /api, sin configuración adicional.
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+// El plan Hobby de Vercel deja hasta 5 minutos por función antes de devolver
+// un 504 — si Supabase no responde (proyecto en pausa, red bloqueada...) sin
+// esto el visitante se queda esperando minutos en vez de ver un error claro
+// en segundos. `fetch` con AbortSignal.timeout en vez de fiarse del timeout
+// por defecto del cliente de Supabase.
+const fetchWithTimeout: typeof fetch = (input, init) =>
+  fetch(input, { ...init, signal: AbortSignal.timeout(8000) })
+
+const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+  global: { fetch: fetchWithTimeout },
+})
 
 const ALLOWED_EVENT_TYPES = new Set(['page_view', 'cta_click'])
 
@@ -84,4 +94,8 @@ export default async function handler(req: Request) {
   return new Response(null, { status: 204 })
 }
 
-export const config = { runtime: 'nodejs' }
+// maxDuration bajo a propósito: por defecto Vercel deja hasta 5 minutos
+// (plan Hobby) antes de devolver un 504 — de sobra para esconder un fallo
+// de red durante minutos en vez de segundos. 15s da margen sobre los 8s del
+// timeout de `fetchWithTimeout` de arriba sin acercarse a esos 5 minutos.
+export const config = { runtime: 'nodejs', maxDuration: 15 }

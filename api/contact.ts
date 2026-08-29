@@ -1,34 +1,13 @@
-// Envío del formulario de presupuesto a info@arquelia.es vía SMTP directo
-// (nodemailer) contra el buzón de correo que ya existe en el hosting de
-// arquelia.es — sin dar de alta ninguna cuenta nueva de terceros (nada de
-// Resend/SendGrid/etc.). Necesita las credenciales SMTP que da el panel de
-// ese hosting (cPanel, IONOS...), normalmente en "Cuentas de correo" →
-// "Configurar cliente de correo" o similar.
-// Vercel despliega esto como Serverless Function automáticamente al vivir
-// en /api, sin configuración adicional (mismo patrón que api/track.ts).
-import nodemailer from 'nodemailer'
-
-const SMTP_HOST = process.env.SMTP_HOST!
-const SMTP_PORT = Number(process.env.SMTP_PORT ?? 587)
-// true sólo para el puerto 465 (TLS implícito) — el 587 típico usa STARTTLS,
-// que nodemailer negocia solo cuando `secure` es false.
-const SMTP_SECURE = SMTP_PORT === 465
-const SMTP_USER = process.env.SMTP_USER!
-const SMTP_PASS = process.env.SMTP_PASS!
-// Por defecto, el mismo buzón hace de remitente y de destinatario — es el
-// caso normal para un formulario de contacto (te escribes a ti mismo desde
-// tu propia cuenta autenticada). `SMTP_FROM` sólo hace falta si se quiere
-// enviar desde una dirección distinta a la que autentica (p. ej. una
-// dirección "no-reply@" aparte, si el hosting permite crearla).
-const FROM = process.env.SMTP_FROM || SMTP_USER
+// Envío del formulario de presupuesto a info@arquelia.es vía Resend.
+// Vercel lo despliega como Serverless Function automáticamente al vivir en
+// /api, sin configuración adicional (mismo patrón que api/track.ts).
+const RESEND_API_KEY = process.env.RESEND_API_KEY!
+// Remitente verificado en Resend (Resend exige que el dominio de `from`
+// tenga los registros DNS de verificación dados de alta en su panel — no
+// puede ser cualquier dirección). El correo llega igualmente marcado como
+// que viene "en nombre de" Arquelia gracias al reply_to de más abajo.
+const FROM = process.env.RESEND_FROM_EMAIL || 'Arquelia <formulario@arquelia.es>'
 const TO = 'info@arquelia.es'
-
-const transporter = nodemailer.createTransport({
-  host: SMTP_HOST,
-  port: SMTP_PORT,
-  secure: SMTP_SECURE,
-  auth: { user: SMTP_USER, pass: SMTP_PASS },
-})
 
 const SERVICE_LABELS: Record<string, string> = {
   integral: 'Reforma integral',
@@ -184,7 +163,7 @@ export default async function handler(req: Request) {
   const servicio = body.servicio ?? null
 
   // El cliente ya valida esto, pero el servidor nunca se fía de eso solo:
-  // es la última barrera antes de gastar una conexión SMTP real.
+  // es la última barrera antes de gastar una petición real a Resend.
   if (!nombre || !EMAIL_RE.test(email) || telefono.replace(/\D/g, '').length < 9) {
     return new Response('Bad request', { status: 400 })
   }
@@ -192,20 +171,36 @@ export default async function handler(req: Request) {
   const serviceLabel = (servicio && SERVICE_LABELS[servicio]) || 'Sin especificar'
   const data = { servicio, nombre, poblacion, email, telefono, descripcion }
 
+  let res: Response
   try {
-    await transporter.sendMail({
-      from: FROM,
-      to: TO,
-      replyTo: email,
-      subject: `Nueva solicitud de presupuesto — ${nombre} (${serviceLabel})`,
-      html: buildHtml(data, serviceLabel),
-      text: buildText(data, serviceLabel),
+    res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: FROM,
+        to: TO,
+        reply_to: email,
+        subject: `Nueva solicitud de presupuesto — ${nombre} (${serviceLabel})`,
+        html: buildHtml(data, serviceLabel),
+        text: buildText(data, serviceLabel),
+      }),
+      // El plan Hobby de Vercel deja hasta 5 minutos por función antes de
+      // devolver un 504 — sin esto, si Resend (o la red) no respondiera, el
+      // visitante se quedaría esperando minutos en vez de ver un error en
+      // segundos. Ver la misma lección aprendida en api/track.ts.
+      signal: AbortSignal.timeout(8000),
     })
   } catch {
     return new Response('Error', { status: 502 })
   }
 
+  if (!res.ok) return new Response('Error', { status: 502 })
   return new Response(null, { status: 204 })
 }
 
-export const config = { runtime: 'nodejs' }
+// maxDuration bajo a propósito: ver el comentario junto al timeout de la
+// petición a Resend más arriba.
+export const config = { runtime: 'nodejs', maxDuration: 15 }

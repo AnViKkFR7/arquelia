@@ -91,6 +91,32 @@
 
 ## Registro de trabajo
 
+**2026-08-29 (4) — Vuelta a Resend, con la lección de los timeouts aplicada a los dos endpoints**
+
+El SMTP directo contra IONOS se probó en producción y `api/contact.ts` (y también `api/track.ts`
+contra Supabase) se colgaban devolviendo `504 Gateway Timeout` — con el plan Hobby de Vercel
+dejando hasta 5 minutos por función antes de rendirse, un cuelgue de red se sentía como que la
+web no respondía, no como un error rápido. En vez de perseguir la causa exacta (proyecto de
+Supabase en pausa, IONOS filtrando conexiones desde IPs de nube — ambas plausibles, ninguna
+confirmada), el cliente prefirió volver a Resend directamente.
+
+- **`api/contact.ts`**: vuelto a la petición REST a `api/resend.com/emails` de la entrada
+  2026-08-29 (2) (la plantilla `buildHtml`/`buildText` no se tocó, sigue igual). Quitada la
+  dependencia `nodemailer` (+ `@types/nodemailer`).
+- **Lección aplicada a los dos endpoints, no sólo a éste**: tanto la petición a Resend como el
+  cliente de Supabase de `api/track.ts` ahora llevan `AbortSignal.timeout(8000)` (Supabase, vía
+  un `fetch` inyectado en `createClient(..., { global: { fetch } })`) y `maxDuration: 15` en su
+  `config` — si algo de red falla, ahora se sabrá en ~10-15s con un error claro, no tras un
+  cuelgue de minutos. Esto no estaba en ninguna versión anterior del código y habría ahorrado
+  bastante tiempo de diagnóstico si hubiera estado desde el principio.
+- `.env`/`.env.example`: quitadas `SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASS`, vueltas
+  `RESEND_API_KEY`/`RESEND_FROM_EMAIL`. La contraseña real de IONOS que había quedado en el
+  `.env` local se ha borrado (ya no se usa para nada).
+- **Verificado**: `tsc -b`/`vite build` limpios.
+- **Pendiente del lado del cliente**: crear cuenta en resend.com, verificar el dominio
+  `arquelia.es` y añadir `RESEND_API_KEY`/`RESEND_FROM_EMAIL` en Vercel (tipo **Secret**,
+  Production).
+
 **2026-08-29 (3) — Envío del formulario cambiado de Resend a SMTP directo (sin cuenta de terceros)**
 
 El cliente pidió evitar depender de un servicio nuevo si se podía. Sin integración de ningún
