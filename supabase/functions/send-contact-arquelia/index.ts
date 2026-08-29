@@ -120,9 +120,6 @@ function buildHtml(d: Required<ContactPayload>, serviceLabel: string): string {
                 ${descripcion}
               </div>
 
-              <div style="margin-top:32px;padding-top:20px;border-top:1px solid #e6e5e3;font:400 13px/1.6 ${font};color:#6b6a66;">
-                Responde directamente a este correo para escribir a ${nombre} — el "responder" ya va dirigido a su email.
-              </div>
             </td>
           </tr>
 

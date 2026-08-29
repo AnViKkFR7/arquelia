@@ -91,6 +91,41 @@
 
 ## Registro de trabajo
 
+**2026-08-29 (8) — `track` también migrado a Edge Function; los nombres de función se scopean por empresa**
+
+Con el email ya funcionando desde la Edge Function, `api/track.ts` (que seguía en Vercel) daba
+el mismo error de siempre — confirma que el problema de fondo era efectivamente la red de salida
+de las funciones de Vercel de este proyecto/cuenta, no algo específico de Resend. Migrado
+también a Supabase.
+
+- **`supabase/functions/track-arquelia/index.ts`**: mismo contenido que tenía `api/track.ts`
+  (validación de `company_id`, caché de `analytics_event_definitions`, inserción en
+  `analytics_events`) portado a Deno. `SUPABASE_URL`
+  y `SUPABASE_SERVICE_ROLE_KEY` no hacen falta como secreto — toda Edge Function del proyecto ya
+  los recibe inyectados automáticamente, a diferencia de Vercel donde había que darlos de alta a
+  mano.
+- **La geolocalización gratuita de Vercel (`x-vercel-ip-*`) no tiene equivalente en Supabase.**
+  Para no perder el dato de país/ciudad que el cliente pidió explícitamente, se añadió una
+  consulta a `ip-api.com` (gratis, sin cuenta ni API key en su plan básico) a partir de la IP en
+  `x-forwarded-for`, con su propio timeout corto (2s) y en su propio `try/catch` — si falla o
+  tarda, el evento se registra igual, sólo que sin país/ciudad, nunca bloquea ni rompe el resto.
+- **Hallazgo importante — colisión de nombres**: al desplegar las dos funciones al mismo
+  proyecto de Supabase multi-tenant (compartido con Navagli y otras empresas), un nombre
+  genérico como `track` o `send-contact` chocaría con la función del mismo nombre que despliegue
+  cualquier otra empresa en ese mismo proyecto — a diferencia de Vercel, donde cada empresa tiene
+  su propio proyecto separado y `api/track.ts` nunca colisiona con el de nadie más. Por eso las
+  dos funciones llevan el sufijo `-arquelia`: `track-arquelia`, `send-contact-arquelia`. Si se
+  repite este patrón (Vercel → Supabase) en otras webs del multi-tenant por el mismo problema de
+  red, hace falta el mismo sufijo con el nombre de esa empresa, si no pisará la de Arquelia.
+- Borrado `api/` por completo (ya no queda ninguna función en Vercel) — `tsconfig.node.json`
+  vuelve a incluir sólo `vite.config.ts`, y `vercel.json` vuelve al rewrite simple `/(.*)`  sin
+  la exclusión de `/api/` (ya no hay nada que excluir).
+- `.env`/`.env.example` limpiados de `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`RESEND_API_KEY`
+  del lado servidor — ninguna vive ya en Vercel ni en un `.env` de este repo.
+- **Verificado**: `tsc -b`/`vite build` limpios. El despliegue y la ingesta real de eventos no se
+  ha podido probar en este entorno — pendiente de que el cliente despliegue con la CLI de
+  Supabase y confirme.
+
 **2026-08-29 (7) — Envío del formulario movido de Vercel a una Supabase Edge Function**
 
 Con `RESEND_API_KEY`/`RESEND_FROM_EMAIL` ya puestas en Vercel y el proyecto de Supabase

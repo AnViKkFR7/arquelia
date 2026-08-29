@@ -8,7 +8,13 @@
  * para las tablas multi-tenant) — se reutiliza aquí en vez de introducir un
  * `VITE_COMPANY_ID` nuevo y redundante.
  */
-const ENDPOINT = '/api/track'
+// Supabase Edge Function, no una función serverless de Vercel: ver
+// supabase/functions/track-arquelia/index.ts — las llamadas salientes desde
+// las funciones de Vercel de este proyecto se colgaban sin completarse
+// nunca (mismo problema que tenía el envío de email, resuelto igual). El
+// nombre lleva el sufijo de la empresa porque el proyecto de Supabase es
+// multi-tenant — sin él, colisionaría con la función de otra empresa.
+const ENDPOINT = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/track-arquelia`
 const COMPANY_ID = import.meta.env.VITE_ARQUELIA_COMPANY_ID as string | undefined
 
 // Un id aleatorio por PESTAÑA/SESIÓN, en memoria — no en localStorage ni en
