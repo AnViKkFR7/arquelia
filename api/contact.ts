@@ -145,7 +145,29 @@ export function buildHtml(d: Required<ContactPayload>, serviceLabel: string): st
 </html>`
 }
 
+// `AbortSignal.timeout` en el `fetch` a Resend no bastó en producción
+// (seguía colgándose hasta el `maxDuration`, un FUNCTION_INVOCATION_TIMEOUT
+// en vez de un error rápido) — probablemente porque el cuelgue ocurre en la
+// fase de conexión, una fase que el abort de fetch no siempre corta.
+// `Promise.race` con un temporizador de verdad no depende de que la
+// petición coopere: en cuanto pasa el plazo, el handler responde igual,
+// aunque la promesa perdedora se quede colgada de fondo.
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)),
+  ])
+}
+
 export default async function handler(req: Request) {
+  try {
+    return await withTimeout(handle(req), 9000)
+  } catch {
+    return new Response('Timeout', { status: 504 })
+  }
+}
+
+async function handle(req: Request) {
   if (req.method !== 'POST') return new Response('Method not allowed', { status: 405 })
 
   let body: ContactPayload
@@ -187,10 +209,8 @@ export default async function handler(req: Request) {
         html: buildHtml(data, serviceLabel),
         text: buildText(data, serviceLabel),
       }),
-      // El plan Hobby de Vercel deja hasta 5 minutos por función antes de
-      // devolver un 504 — sin esto, si Resend (o la red) no respondiera, el
-      // visitante se quedaría esperando minutos en vez de ver un error en
-      // segundos. Ver la misma lección aprendida en api/track.ts.
+      // Ayuda cuando funciona, pero no es la protección real — esa es
+      // `withTimeout` más arriba (ver su comentario).
       signal: AbortSignal.timeout(8000),
     })
   } catch {
@@ -201,6 +221,7 @@ export default async function handler(req: Request) {
   return new Response(null, { status: 204 })
 }
 
-// maxDuration bajo a propósito: ver el comentario junto al timeout de la
-// petición a Resend más arriba.
-export const config = { runtime: 'nodejs', maxDuration: 15 }
+// 12s de margen sobre los 9s de `withTimeout`: si algún día éste fallara,
+// que sea el 504 propio el que se vea, no un FUNCTION_INVOCATION_TIMEOUT en
+// bruto del plan Hobby (que por defecto deja hasta 5 minutos).
+export const config = { runtime: 'nodejs', maxDuration: 12 }

@@ -91,6 +91,56 @@
 
 ## Registro de trabajo
 
+**2026-08-29 (6) — `vercel.json`: rutas directas como `/servicios` daban 404**
+
+Sin este archivo, Vercel sólo tiene un archivo físico para `/` (`index.html`) — cualquier ruta
+de react-router a la que se llegue directamente (escribiéndola en la barra de direcciones,
+recargando la página, o un enlace externo) no tiene archivo real detrás, así que Vercel
+devuelve 404 antes de que React Router llegue siquiera a ejecutarse. Navegar haciendo clic
+dentro de la web sí funcionaba porque ahí el enrutado es enteramente client-side, sin que el
+navegador pida nada nuevo al servidor.
+
+- Añadido `vercel.json` con un *rewrite* que manda cualquier ruta que no empiece por `api/` a
+  `index.html`, para que React Router la resuelva del lado del cliente. El patrón
+  `/((?!api/).*)` excluye explícitamente `/api/*` para no interceptar `api/track.ts` ni
+  `api/contact.ts` — sin esa exclusión, esas dos funciones dejarían de responder porque toda
+  petición a `/api/algo` también caería en el mismo rewrite hacia `index.html`.
+  Los archivos estáticos reales (JS, CSS, `hero-frames/*.webp`, etc.) no se ven afectados: Vercel
+  comprueba primero si existe un archivo físico en esa ruta antes de aplicar el rewrite —
+  comportamiento estándar y el mismo patrón que usa prácticamente cualquier SPA en Vercel.
+- **Verificado**: JSON validado con `JSON.parse`. No se ha podido probar el propio *rewrite* en
+  este entorno (hace falta un despliegue real de Vercel para que el enrutado a nivel de
+  plataforma entre en juego; `vite dev`/`vite preview` no lo reproducen) — pendiente de
+  confirmación tras desplegar, navegando directamente a una URL como `arquelia.es/servicios` o
+  recargando la página estando en ella.
+
+**2026-08-29 (5) — El `AbortSignal.timeout` de fetch no bastaba: `Promise.race` con temporizador de verdad**
+
+En producción, con la entrada anterior ya desplegada, los dos endpoints seguían colgándose —
+ya no como `504 Gateway Timeout` sino como `FUNCTION_INVOCATION_TIMEOUT` (la página de error
+propia de Vercel al llegar al `maxDuration`), confirmando que sí se aplicó el `maxDuration: 15`
+pero que el `AbortSignal.timeout(8000)` de los `fetch` no estaba cortando la espera. Hipótesis
+más probable: el cuelgue ocurre en la fase de conexión (TCP/TLS a un host que no responde) más
+que en la de esperar respuesta, y el abort de `fetch` no siempre corta esa fase concreta según
+el runtime.
+
+- Añadida `withTimeout()` en `api/track.ts` y `api/contact.ts`: un `Promise.race` contra un
+  `setTimeout` de verdad (9s), envolviendo el handler entero, no sólo la llamada de red
+  concreta. No depende de que la librería (`fetch`, `@supabase/supabase-js`) coopere con el
+  abort — en cuanto pasa el plazo, el handler devuelve una `Response` igual, aunque la promesa
+  perdedora se quede colgada de fondo sin que le afecte a la respuesta ya enviada.
+- `maxDuration` bajado de 15s a 12s (margen sobre los 9s de `withTimeout`, para que si éste
+  fallara alguna vez se vea el 504 propio y no el `FUNCTION_INVOCATION_TIMEOUT` en bruto).
+- Esto es una red de seguridad, **no** arregla la causa real de por qué Supabase/Resend no
+  responden — sólo convierte un cuelgue de minutos en un error de ~9s. La causa de fondo sigue
+  sin confirmarse (ver checklist pendiente).
+- **Verificado**: `tsc -b`/`vite build` limpios.
+- **Pendiente**: confirmar en el dashboard de Supabase que el proyecto no está en pausa (los
+  gratuitos se pausan solos tras ~1 semana sin actividad) — es la causa más probable del cuelgue
+  de `api/track.ts`. Para `api/contact.ts`, confirmar que `RESEND_API_KEY`/`RESEND_FROM_EMAIL`
+  ya están puestas en Vercel (si faltan, Resend debería responder rápido con 401, no colgarse,
+  pero conviene descartarlo).
+
 **2026-08-29 (4) — Vuelta a Resend, con la lección de los timeouts aplicada a los dos endpoints**
 
 El SMTP directo contra IONOS se probó en producción y `api/contact.ts` (y también `api/track.ts`

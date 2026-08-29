@@ -3,17 +3,23 @@
 // /api, sin configuración adicional.
 import { createClient } from '@supabase/supabase-js'
 
-// El plan Hobby de Vercel deja hasta 5 minutos por función antes de devolver
-// un 504 — si Supabase no responde (proyecto en pausa, red bloqueada...) sin
-// esto el visitante se queda esperando minutos en vez de ver un error claro
-// en segundos. `fetch` con AbortSignal.timeout en vez de fiarse del timeout
-// por defecto del cliente de Supabase.
-const fetchWithTimeout: typeof fetch = (input, init) =>
-  fetch(input, { ...init, signal: AbortSignal.timeout(8000) })
+const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
-  global: { fetch: fetchWithTimeout },
-})
+// `AbortSignal.timeout` en el `fetch` de Supabase no bastó en producción
+// (seguía colgándose hasta el `maxDuration` de más abajo, un FUNCTION_
+// INVOCATION_TIMEOUT en vez de un error rápido) — probablemente porque el
+// cuelgue ocurre en la fase de conexión (TCP/TLS a un host que no responde,
+// p. ej. un proyecto de Supabase en pausa), una fase que el abort de fetch
+// no siempre corta en todos los runtimes. `Promise.race` con un temporizador
+// de verdad no depende de que la librería de red coopere: en cuanto pasa el
+// plazo, el handler devuelve una Response igualmente, aunque la promesa
+// perdedora se quede colgada de fondo.
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)),
+  ])
+}
 
 const ALLOWED_EVENT_TYPES = new Set(['page_view', 'cta_click'])
 
@@ -36,6 +42,14 @@ async function activeEventKeys(companyId: string): Promise<Set<string>> {
 }
 
 export default async function handler(req: Request) {
+  try {
+    return await withTimeout(handle(req), 9000)
+  } catch {
+    return new Response('Timeout', { status: 504 })
+  }
+}
+
+async function handle(req: Request) {
   if (req.method !== 'POST') return new Response('Method not allowed', { status: 405 })
 
   let body: {
@@ -94,8 +108,7 @@ export default async function handler(req: Request) {
   return new Response(null, { status: 204 })
 }
 
-// maxDuration bajo a propósito: por defecto Vercel deja hasta 5 minutos
-// (plan Hobby) antes de devolver un 504 — de sobra para esconder un fallo
-// de red durante minutos en vez de segundos. 15s da margen sobre los 8s del
-// timeout de `fetchWithTimeout` de arriba sin acercarse a esos 5 minutos.
-export const config = { runtime: 'nodejs', maxDuration: 15 }
+// 12s de margen sobre los 9s de `withTimeout`: si algún día éste fallara,
+// que sea el 504 propio el que se vea, no un FUNCTION_INVOCATION_TIMEOUT en
+// bruto del plan Hobby (que por defecto deja hasta 5 minutos).
+export const config = { runtime: 'nodejs', maxDuration: 12 }
