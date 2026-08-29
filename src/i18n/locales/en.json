@@ -434,7 +434,8 @@
       "emailRequired": "We need an email to get back to you.",
       "emailInvalid": "That email doesn't look valid.",
       "phoneRequired": "We need a contact phone number.",
-      "phoneInvalid": "That phone number doesn't look valid."
+      "phoneInvalid": "That phone number doesn't look valid.",
+      "sendFailed": "Couldn't send it. Please try again or write to us at info@arquelia.es."
     },
     "summary": {
       "project": "Project",
@@ -452,6 +453,7 @@
     "back": "Back",
     "continue": "Continue",
     "submit": "Send request",
+    "submitting": "Sending…",
     "done": {
       "eyebrow": "Request sent",
       "thanks": "Thank you{{name}}.",

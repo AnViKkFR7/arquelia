@@ -35,7 +35,11 @@ export function FinalCta() {
                   <span className={styles.factLabel}>{f.label}</span>
                 </div>
               ))}
-            </div><div className={styles.action}>
+            </div><div className={styles.action} data-track-event="clic_en_formulario_arquelia">
+              {/* ButtonSlider no reenvía props arbitrarias al <button> — el
+                  atributo va en este contenedor porque la detección de
+                  clics es delegada (`closest('[data-track-event]')`), así
+                  que igualmente lo capta sin tocar el componente compartido. */}
               <ButtonSlider text={t('home.finalCta.requestBudget')} onClick={openForm} />
             </div>
           </Reveal>

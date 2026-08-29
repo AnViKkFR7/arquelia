@@ -434,7 +434,8 @@
       "emailRequired": "Necessitem un email per respondre't.",
       "emailInvalid": "Aquest email no sembla vàlid.",
       "phoneRequired": "Necessitem un telèfon de contacte.",
-      "phoneInvalid": "Aquest telèfon no sembla vàlid."
+      "phoneInvalid": "Aquest telèfon no sembla vàlid.",
+      "sendFailed": "No s'ha pogut enviar. Torna-ho a provar o escriu-nos a info@arquelia.es."
     },
     "summary": {
       "project": "Projecte",
@@ -452,6 +453,7 @@
     "back": "Enrere",
     "continue": "Continuar",
     "submit": "Enviar sol·licitud",
+    "submitting": "Enviant…",
     "done": {
       "eyebrow": "Sol·licitud enviada",
       "thanks": "Gràcies{{name}}.",

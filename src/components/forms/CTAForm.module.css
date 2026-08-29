@@ -329,6 +329,13 @@
   animation: errorIn var(--t-fast) var(--ease) both;
 }
 
+.sendError {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-sm);
+  color: #b4442f;
+  animation: errorIn var(--t-fast) var(--ease) both;
+}
+
 @keyframes errorIn {
   from {
     opacity: 0;

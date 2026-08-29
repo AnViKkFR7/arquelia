@@ -4,11 +4,13 @@ import { Header } from './Header'
 import { Footer } from './Footer'
 import { DocumentMeta } from './DocumentMeta'
 import { usePageviewTracking } from '../../hooks/usePageviewTracking'
+import { useAnalyticsPageview } from '../../hooks/useAnalyticsPageview'
 import styles from './Layout.module.css'
 
 export function Layout() {
   const { pathname } = useLocation()
   usePageviewTracking()
+  useAnalyticsPageview()
 
   // Cada ruta arranca arriba, sin animar el salto.
   useEffect(() => {

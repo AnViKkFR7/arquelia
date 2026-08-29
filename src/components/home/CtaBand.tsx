@@ -34,7 +34,13 @@ export function CtaBand({ title, text, plain }: CtaBandProps) {
 
         <Reveal variant="up" delay={160}>
           <div className={styles.actions}>
-            <Button variant="gold" size="lg" onClick={openForm} arrow>
+            <Button
+              variant="gold"
+              size="lg"
+              onClick={openForm}
+              arrow
+              data-track-event="clic_en_formulario_arquelia"
+            >
               {t('home.cta.request')}
             </Button>
             <a href="tel:+34600000000" className={styles.phone}>

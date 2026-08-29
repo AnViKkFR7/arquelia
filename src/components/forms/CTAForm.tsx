@@ -5,7 +5,6 @@ import { Button } from '../ui/Button'
 import {
   SERVICE_OPTIONS,
   emptyCTAFormData,
-  buildMessageBody,
   type CTAFormData,
   type ServiceOption,
 } from '../../types/ctaForm'
@@ -46,6 +45,8 @@ export function CTAForm({ onDone }: CTAFormProps) {
   const [data, setData] = useState<CTAFormData>(emptyCTAFormData)
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [sent, setSent] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [sendError, setSendError] = useState(false)
   const firstFieldRef = useRef<HTMLInputElement | null>(null)
 
   const update = <K extends keyof CTAFormData>(key: K, value: CTAFormData[K]) =>
@@ -89,10 +90,22 @@ export function CTAForm({ onDone }: CTAFormProps) {
     setStep((s) => Math.min(s + 1, TOTAL - 1))
   }
 
-  const submit = () => {
-    // TODO (F6): enviar a info@arquelia.es vía Supabase Edge Function + Resend.
-    console.info('Solicitud de presupuesto\n', buildMessageBody(data))
-    setSent(true)
+  const submit = async () => {
+    setSending(true)
+    setSendError(false)
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+      if (!res.ok) throw new Error('send failed')
+      setSent(true)
+    } catch {
+      setSendError(true)
+    } finally {
+      setSending(false)
+    }
   }
 
   if (sent) {
@@ -283,6 +296,7 @@ export function CTAForm({ onDone }: CTAFormProps) {
               {t('ctaForm.privacyPre')} <Link to="/privacidad">{t('ctaForm.privacyLink')}</Link>
               {t('ctaForm.privacyPost')}
             </p>
+            {sendError && <p className={styles.sendError}>{t('ctaForm.errors.sendFailed')}</p>}
           </>
         )}
       </div>
@@ -302,8 +316,14 @@ export function CTAForm({ onDone }: CTAFormProps) {
             {t('ctaForm.continue')}
           </Button>
         ) : (
-          <Button variant="gold" onClick={submit} arrow>
-            {t('ctaForm.submit')}
+          <Button
+            variant="gold"
+            onClick={submit}
+            disabled={sending}
+            arrow
+            data-track-event="clic_enviar_form_arquelia"
+          >
+            {sending ? t('ctaForm.submitting') : t('ctaForm.submit')}
           </Button>
         )}
       </footer>

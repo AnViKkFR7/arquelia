@@ -65,7 +65,12 @@ export function Header() {
           <span className={styles.langDesktop}>
             <LanguageSwitcher />
           </span>
-          <button type="button" className={styles.cta} onClick={openForm}>
+          <button
+            type="button"
+            className={styles.cta}
+            onClick={openForm}
+            data-track-event="clic_en_formulario_arquelia"
+          >
             {t('nav.cta')}
           </button>
           <button
@@ -105,6 +110,7 @@ export function Header() {
               setMenuOpen(false)
               openForm()
             }}
+            data-track-event="clic_en_formulario_arquelia"
           >
             {t('nav.cta')}
           </button>

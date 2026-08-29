@@ -61,12 +61,16 @@
 - [x] Cifras / trayectoria
 - [x] CTA final
 
-### F6 · Contacto ✅ (salvo envío real)
+### F6 · Contacto ✅
 - [x] Layout dos columnas: formulario + datos de empresa (columna derecha *sticky*)
 - [x] Formulario por fases, reutilizable en toda la web vía modal y embebido en Contacto
 - [x] Pantalla de confirmación "¡Gracias!" (ref. vídeo 04)
-- [ ] **Envío real de email a `info@arquelia.es`** (Supabase Edge Function + Resend).
-      Hoy `buildMessageBody()` genera el cuerpo y lo escribe en consola — falta el transporte.
+- [x] **Envío real de email a `info@arquelia.es`** — `api/contact.ts` (Vercel Serverless
+      Function, no Supabase Edge Function como se apuntó aquí originalmente — mismo patrón que
+      `api/track.ts`, más simple al no meter una segunda plataforma serverless). Envía por SMTP
+      directo (`nodemailer`) contra el buzón real de `info@arquelia.es`, sin cuenta de terceros
+      (nada de Resend/SendGrid) — pendiente sólo las credenciales SMTP de ese buzón, ver
+      entradas 2026-08-29 (2) y (3) del registro de trabajo.
 
 ### F7 · Cierre ⬜
 - [ ] Páginas legales (aviso legal, cookies, privacidad)
@@ -86,6 +90,140 @@
 | Cifras reales (años, nº de proyectos) | Cliente | Franja de datos de la landing |
 
 ## Registro de trabajo
+
+**2026-08-29 (3) — Envío del formulario cambiado de Resend a SMTP directo (sin cuenta de terceros)**
+
+El cliente pidió evitar depender de un servicio nuevo si se podía. Sin integración de ningún
+tipo no es posible — enviar correo siempre implica hablar con un servidor de correo de una
+forma u otra — pero sí se puede evitar dar de alta una cuenta nueva: `api/contact.ts` ahora usa
+`nodemailer` para hablar por SMTP directamente con el buzón que ya existe en el hosting de
+`info@arquelia.es` (cPanel/IONOS/lo que sea, confirmado por el cliente), autenticándose con las
+credenciales reales de ese correo — nada de Resend/SendGrid/etc.
+
+- El mismo buzón hace de remitente y de destinatario (`SMTP_USER` = `FROM` por defecto): es el
+  caso normal de un formulario de contacto, escribirse a uno mismo desde la propia cuenta
+  autenticada. `SMTP_FROM` queda como variable opcional sólo si algún día se quiere una
+  dirección de envío distinta (p. ej. un "no-reply@" aparte).
+- Nuevas variables de servidor: `SMTP_HOST`, `SMTP_PORT` (587 por defecto, STARTTLS; 465 activa
+  TLS implícito automáticamente vía `secure: SMTP_PORT === 465`), `SMTP_USER`, `SMTP_PASS` — las
+  da el panel del hosting de ese correo, normalmente en "Configurar cliente de correo".
+  Sustituyen a `RESEND_API_KEY`/`RESEND_FROM_EMAIL` en `.env`/`.env.example`.
+- `buildHtml`/`buildText` (la plantilla premium del correo) no cambian nada — sólo cambió el
+  transporte, no el contenido.
+- Añadida la dependencia `nodemailer` (+ `@types/nodemailer`). No es "una integración" en el
+  sentido de una cuenta/API de terceros — es una librería que habla SMTP estándar, el mismo
+  protocolo que usa cualquier cliente de correo.
+- **Verificado**: `tsc -b`/`vite build` limpios (nodemailer sólo se usa en `api/`, nunca se
+  empaqueta en el bundle del cliente). El flujo de error de `CTAForm.tsx` no cambió — no hizo
+  falta reverificarlo en el navegador, el cambio es enteramente del lado del servidor.
+- **Pendiente del lado del cliente**: conseguir del panel de su hosting de correo el host, el
+  puerto y la contraseña real del buzón `info@arquelia.es`, y añadirlos en Vercel (tipo
+  **Secret**) como `SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASS`.
+
+**2026-08-29 (2) — Envío real del formulario: `api/contact.ts` + email de aviso con formato premium**
+
+Cierra el TODO histórico "Envío real de email a info@arquelia.es" — mismo patrón que
+`api/track.ts` (Serverless Function de Vercel, sin Supabase Edge Functions de por medio),
+usando Resend por API REST directa (sin añadir su SDK como dependencia nueva, un único POST).
+
+- **`api/contact.ts`**: valida en servidor (nunca se fía sólo de la validación del cliente:
+  nombre no vacío, email con formato válido, teléfono con 9+ dígitos) antes de gastar una
+  petición real a Resend. Escapa todo el texto que viene del visitante antes de meterlo en el
+  HTML del correo (`escapeHtml`) — si no, un envío con `<script>` o markup roto en la
+  descripción se habría colado tal cual en el correo que lee el equipo de Arquelia.
+  `reply_to` va al email del propio lead, así que responder al correo ya escribe directo a esa
+  persona sin copiar/pegar nada. Necesita `RESEND_API_KEY` y `RESEND_FROM_EMAIL` (dirección de
+  un dominio verificado en Resend — no vale cualquiera) como variables de servidor.
+- **Plantilla del email, pensada para que se vea a la altura de un servicio premium**: cabecera
+  negra con el wordmark ARQUELIA y una línea dorada, nombre del lead en grande, el tipo de
+  servicio como una "chip" dorada, los datos de contacto en una lista limpia con separadores
+  finos, la descripción en un bloque gris suave, y un pie con la razón social. Con tabla (no
+  flex/grid, Outlook de escritorio las ignora), estilos en línea (muchos clientes recortan
+  `<style>`) y fuentes de sistema (las webfonts del sitio no cargan de forma fiable en email) —
+  restricciones típicas de email HTML, no un descuido de no reusar el CSS del sitio.
+  `buildHtml`/`buildText` exportadas aparte para poder generar una vista previa sin desplegar
+  nada (usado para verificar el diseño en este mismo turno).
+- **`CTAForm.tsx`**: `submit()` pasa de un `console.info` + `setSent(true)` síncrono a una
+  llamada real a `/api/contact` con estados de carga (`sending`, botón deshabilitado y con
+  "Enviando…") y de error (`sendError`, mensaje con la dirección de contacto como alternativa si
+  el envío falla) — antes no había forma de que un fallo real del envío se reflejara en la UI.
+- **Verificado**: `tsc -b`/`vite build` limpios. Generada una vista previa real del email con
+  `buildHtml` y datos de ejemplo, enviada al usuario para revisión visual (no se puede
+  renderizar en el navegador de este entorno por su sandbox de `file://`). En el navegador,
+  confirmado el flujo de error: sin `/api/contact` disponible (no hay backend real bajo `vite
+  dev` a secas, hace falta `vercel dev` con las variables de Resend), el botón vuelve a "Enviar
+  solicitud" en vez de quedarse colgado en "Enviando…", y aparece el mensaje de error correcto.
+  **Pendiente del lado del cliente**: crear la cuenta en resend.com, verificar el dominio
+  `arquelia.es` (registros DNS) y añadir `RESEND_API_KEY`/`RESEND_FROM_EMAIL` en Vercel — sin
+  eso, el formulario seguirá mostrando el error de envío en producción.
+
+**2026-08-29 — Analítica propia: implementado `ANALYTICS_INTEGRATION.md` (endpoint de ingesta + instrumentación de cliente)**
+
+Siguiendo el documento que define moira ordo para todo el multi-tenant (pegado en la raíz del
+repo como `ANALYTICS_INTEGRATION.md`), sin tocar GTM/GA4 (siguen ahí, en paralelo — el cliente
+no ha pedido quitarlos).
+
+- **`api/track.ts`**: Serverless Function de Vercel que recibe `page_view`/`cta_click`, valida
+  `company_id` contra la tabla `companies`, resuelve país/ciudad/dispositivo gratis desde las
+  cabeceras de Vercel (`x-vercel-ip-*`, sin geo-IP de terceros) y sólo inserta un `cta_click` si
+  su `event_key` está dado de alta y activo para esta empresa en `analytics_event_definitions`
+  (si no, se descarta en silencio — nunca rompe el sitio). Necesita `SUPABASE_URL` y
+  `SUPABASE_SERVICE_ROLE_KEY` como variables de servidor en Vercel (nunca con prefijo `VITE_`).
+- **`src/lib/analytics.ts`**: reutiliza `VITE_ARQUELIA_COMPANY_ID`, que ya existía en el
+  proyecto, en vez de introducir el `VITE_COMPANY_ID` genérico del documento. Un listener de
+  clic delegado (`initAutoTracking`, llamado una vez en `main.tsx`) mide cualquier elemento con
+  `data-track-event="..."` sin tener que cablear una función nueva por botón. `sendBeacon`, no
+  `fetch`: no se pierde el evento si el usuario navega justo después del clic.
+- **`src/hooks/useAnalyticsPageview.ts`**: a diferencia de `usePageviewTracking` (GTM), que se
+  salta la primera carga porque ya la cubre el propio arranque del script de GTM, aquí no hay
+  ningún script externo — si no se cuenta la primera vista aquí, no la cuenta nadie.
+- Instrumentado `data-track-event="clic_enviar_form_arquelia"` en el botón final de envío de
+  `CTAForm.tsx`, y `data-track-event="clic_en_formulario_arquelia"` en los tres sitios que abren
+  el modal: el CTA del header (desktop y menú móvil), `CtaBand` y `FinalCta`. Este último usa
+  `ButtonSlider`, un componente compartido que no reenvía props arbitrarias al `<button>` interno
+  — el atributo va en el `<div>` contenedor en su lugar, que la detección delegada
+  (`closest('[data-track-event]')`) captura igual sin tocar el componente compartido.
+- `tsconfig.node.json` ahora incluye `api/` (antes sólo `vite.config.ts`) para que `tsc -b`
+  también compruebe tipos ahí — sin esto, un error en `api/track.ts` no lo habría detectado
+  nunca el build local, sólo Vercel al desplegar.
+- **Verificado**: `tsc -b` y `vite build` limpios; en el navegador, confirmado que el flujo
+  completo del formulario (4 pasos) dispara el beacon con el `event_key` correcto al llegar al
+  botón de envío, y que cada cambio de página dispara su propio `page_view` — sin backend real
+  en este entorno (hace falta `vercel dev` + la Service role key real para probar la inserción en
+  Supabase de punta a punta), los `POST /api/track` devuelven 404 con `vite dev` a secas, que es
+  lo esperable y no indica ningún fallo del lado del cliente.
+
+**2026-08-28 (2) — Hero: primer/último fotograma en alta resolución sin tocar lo que carga primero**
+
+El cliente sustituyó el primer y último fotograma de `design-refs/frames/09-hero-zoom-9s/` por
+PNG sin comprimir a resolución nativa (3852×2148 — el resto de la secuencia sigue en webp a
+2560×1428), para que esos dos, los que más tiempo se ven fijos, salieran más nítidos. Working
+esto directamente tenía dos riesgos, investigados antes de tocar nada:
+
+- **Bug latente que esta mezcla de resoluciones destapó**: `build_hero_frames.py` calculaba la
+  ventana de recorte para móvil una sola vez, leyendo el tamaño del primer archivo — válido
+  mientras todos los fotogramas median lo mismo, roto en cuanto dos miden distinto del resto.
+  Movido a `crop_window()`, calculado por fotograma dentro del bucle.
+- **La preocupación real del cliente — "¿esto ralentiza la primera visita?"**: no, con una
+  condición. `HeroCanvas` sólo pinta directamente al entrar el **póster** (`poster-desktop.webp`
+  / `poster-mobile.webp`) — es lo único que bloquea el primer renderizado del hero; los 217
+  fotogramas de la secuencia (incluidos el 1º y el 217º) se cargan todos en segundo plano, nunca
+  en la ruta crítica. El primer intento de generar los fotogramas boosteados reescalaba también
+  el póster a la resolución nativa del PNG sin querer (mismo archivo de origen, mismo
+  redimensionado) — eso sí habría ralentizado la primera visita, así que se corrigió: el póster
+  ahora se genera siempre aparte, a la resolución normal de cada variante, nunca a la boosteada.
+- **La resolución boosteada, sólo para esos dos fotogramas.** Añadido `resolve_size()`: el primer
+  y el último fotograma de cada variante pueden salir hasta el doble de grandes que el resto
+  (`boost_scale=2`), pero nunca más que lo que el original permite sin ampliar — en desktop eso
+  da exactamente 2560×1428 (el doble real, cabe de sobra en el PNG nativo); en móvil, limitado
+  por el recorte central, da 1611×2147 (el máximo que la ventana de recorte nativa puede dar,
+  ligeramente menos del doble). Coste real: 4 archivos (2 fotogramas × 2 variantes) pasan
+  de ~250KB a ~300-465KB — un ~1MB extra sobre el total de la secuencia (~25MB), pero el póster
+  (lo único que de verdad importa para la velocidad de la primera visita) se queda exactamente
+  igual de ligero que antes (132KB desktop / 82KB móvil).
+- **Verificado**: dimensiones y pesos de los 4 fotogramas boosteados y de los 2 pósters
+  confirmados en disco tras la regeneración; `tsc`/`vite build` limpios (no hay cambios de
+  código TS/React en esta entrada, sólo del script de Python y de los activos generados).
 
 **2026-08-28 — Hero: secuencia de 217 fotogramas (antes 121) y el titular sale de escena deslizándose, no sólo con un fundido**
 
