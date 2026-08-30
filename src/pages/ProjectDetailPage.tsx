@@ -169,7 +169,11 @@ export function ProjectDetailPage() {
             <aside className={styles.aside}>
               <span className={styles.asideLabel}>{t('projectDetail.aside.label')}</span>
               <p className={styles.asideText}>{t('projectDetail.aside.text')}</p>
-              <div className={styles.asideCta}>
+              {/* ButtonSlider no reenvía props arbitrarias al <a> interno — el
+                  atributo va en el contenedor porque la detección de clics es
+                  delegada (`closest('[data-track-event]')`), igual que en
+                  FinalCta.tsx. */}
+              <div className={styles.asideCta} data-track-event="clic_ir_a_contacto_arquelia">
                 <ButtonSlider to="/contacto" text={t('projectDetail.aside.cta')} ></ButtonSlider>
               </div>
             </aside>

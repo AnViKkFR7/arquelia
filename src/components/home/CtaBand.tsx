@@ -39,7 +39,7 @@ export function CtaBand({ title, text, plain }: CtaBandProps) {
               size="lg"
               onClick={openForm}
               arrow
-              data-track-event="clic_en_formulario_arquelia"
+              data-track-event="clic_form_arquelia"
             >
               {t('home.cta.request')}
             </Button>

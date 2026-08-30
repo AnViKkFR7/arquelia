@@ -91,6 +91,53 @@
 
 ## Registro de trabajo
 
+**2026-08-29 (10) — Nuevo evento `clic_ir_a_contacto_arquelia`; diagnóstico del evento de abrir el formulario**
+
+El cliente veía sólo el evento de enviar el formulario, no el de abrirlo, pese a que
+`clic_form_arquelia` ya estaba instrumentado en los 4 sitios que abren el modal (header
+desktop/móvil, `CtaBand`, `FinalCta` — confirmado revisando el código, seguían ahí desde la
+sesión de analítica). La explicación más probable no es de código: el backend descarta en
+silencio cualquier `event_key` que no exista como evento activo en `analytics_event_definitions`
+para la empresa — si sólo se dio de alta `clic_enviar_form_arquelia` en el admin y no
+`clic_form_arquelia`, es exactamente el síntoma descrito. Pendiente de que el cliente
+compruebe esto último en el panel de admin.
+
+- Añadido `clic_ir_a_contacto_arquelia` en los tres enlaces que navegan a `/contacto` (el enlace
+  "Contacto" del panel móvil del header, el del pie de página, y el CTA de la barra lateral en
+  `ProjectDetailPage`) — distinto de abrir el modal, es específicamente "llegar a la página de
+  contacto", que el cliente pidió trackear aparte.
+- Mismo patrón que `FinalCta.tsx` para el CTA de `ProjectDetailPage`: `ButtonSlider` no reenvía
+  props arbitrarias a su `<a>` interno, así que el atributo va en el `<div>` contenedor
+  (`styles.asideCta`), que la detección delegada (`closest('[data-track-event]')`) capta igual.
+- **Verificado**: `tsc -b`/`vite build` limpios; confirmado que `clic_ir_a_contacto_arquelia`
+  llega al bundle de producción. **Pendiente**: que el cliente dé de alta (y active) este evento
+  nuevo en el admin, y que confirme si `clic_form_arquelia` ya existía ahí — si no, es
+  la causa de que no se contara hasta ahora.
+
+**2026-08-29 (9) — CORS de `track-arquelia`: el comodín `'*'` no vale con `sendBeacon`**
+
+En producción, la llamada desde arquelia.es a `track-arquelia` fallaba en el navegador con
+`Response to preflight request doesn't pass access control check: The value of the
+'Access-Control-Allow-Origin' header ... must not be the wildcard '*' when the request's
+credentials mode is 'include'`.
+
+- **Causa**: `navigator.sendBeacon` (usado en `src/lib/analytics.ts` para no bloquear la
+  navegación ni perder el evento si el usuario cambia de página justo después del clic) envía
+  siempre con credenciales incluidas — no hay forma de configurarlo desde la API, a diferencia
+  de `fetch`. La especificación CORS prohíbe `Access-Control-Allow-Origin: *` en cuanto el modo
+  de credenciales es `include` (si no, cualquier web podría leer respuestas con cookies de otro
+  origen). `send-contact-arquelia` no tiene este problema porque lo llama un `fetch` normal sin
+  `credentials: 'include'`, que por defecto no manda credenciales entre orígenes distintos.
+- **Arreglo**: `corsHeaders` pasó de ser un objeto fijo a una función `corsHeaders(req)` que
+  refleja el `Origin` real de la petición en vez de un comodín, y añade
+  `Access-Control-Allow-Credentials: true` (obligatorio también en cuanto no se usa el comodín) y
+  `Vary: Origin` (para que un proxy/CDN intermedio no sirva a un origen la respuesta cacheada
+  pensada para otro).
+- **Verificado**: no se ha podido reproducir el preflight CORS real en este entorno (hace falta
+  un navegador real haciendo una petición cross-origin de verdad, no algo que `vite build`
+  compruebe) — pendiente de que el cliente redespliegue la función y confirme que el error de
+  consola desaparece.
+
 **2026-08-29 (8) — `track` también migrado a Edge Function; los nombres de función se scopean por empresa**
 
 Con el email ya funcionando desde la Edge Function, `api/track.ts` (que seguía en Vercel) daba
@@ -327,7 +374,7 @@ no ha pedido quitarlos).
   salta la primera carga porque ya la cubre el propio arranque del script de GTM, aquí no hay
   ningún script externo — si no se cuenta la primera vista aquí, no la cuenta nadie.
 - Instrumentado `data-track-event="clic_enviar_form_arquelia"` en el botón final de envío de
-  `CTAForm.tsx`, y `data-track-event="clic_en_formulario_arquelia"` en los tres sitios que abren
+  `CTAForm.tsx`, y `data-track-event="clic_form_arquelia"` en los tres sitios que abren
   el modal: el CTA del header (desktop y menú móvil), `CtaBand` y `FinalCta`. Este último usa
   `ButtonSlider`, un componente compartido que no reenvía props arbitrarias al `<button>` interno
   — el atributo va en el `<div>` contenedor en su lugar, que la detección delegada

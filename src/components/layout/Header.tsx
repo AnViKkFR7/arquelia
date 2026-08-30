@@ -69,7 +69,7 @@ export function Header() {
             type="button"
             className={styles.cta}
             onClick={openForm}
-            data-track-event="clic_en_formulario_arquelia"
+            data-track-event="clic_form_arquelia"
           >
             {t('nav.cta')}
           </button>
@@ -95,6 +95,7 @@ export function Header() {
               end={link.to === '/'}
               className={styles.panelLink}
               style={{ transitionDelay: menuOpen ? `${80 + i * 45}ms` : '0ms' }}
+              data-track-event={link.key === 'contact' ? 'clic_ir_a_contacto_arquelia' : undefined}
             >
               <span className={styles.panelIndex}>0{i + 1}</span>
               {t(`nav.${link.key}`)}
@@ -110,7 +111,7 @@ export function Header() {
               setMenuOpen(false)
               openForm()
             }}
-            data-track-event="clic_en_formulario_arquelia"
+            data-track-event="clic_form_arquelia"
           >
             {t('nav.cta')}
           </button>

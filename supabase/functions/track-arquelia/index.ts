@@ -2,22 +2,33 @@
 // Movido de una función serverless de Vercel a una Supabase Edge Function:
 // las llamadas salientes desde las funciones de Vercel de este proyecto se
 // colgaban sin completarse nunca (mismo síntoma que tenía el envío de
-// email, resuelto igual — ver supabase/functions/send-contact).
+// email, resuelto igual — ver supabase/functions/send-contact-arquelia).
 //
-// Deploy: supabase functions deploy track --no-verify-jwt
+// Deploy: supabase functions deploy track-arquelia --no-verify-jwt
 // No hace falta configurar ningún secreto: SUPABASE_URL y
 // SUPABASE_SERVICE_ROLE_KEY ya vienen inyectados automáticamente en toda
 // Edge Function del mismo proyecto.
 import { createClient } from 'npm:@supabase/supabase-js@2'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+// `navigator.sendBeacon` (que usa el cliente para este endpoint) envía
+// siempre con credenciales incluidas, sin forma de configurarlo — y el
+// CORS del navegador prohíbe el comodín '*' en Access-Control-Allow-Origin
+// en cuanto el modo de credenciales es 'include' (si no, cualquier web
+// podría leer respuestas con cookies de otra). Hay que reflejar el origen
+// real de la petición en vez de un comodín, y declarar explícitamente que
+// se permiten credenciales.
+function corsHeaders(req: Request) {
+  return {
+    'Access-Control-Allow-Origin': req.headers.get('origin') ?? '*',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Credentials': 'true',
+    Vary: 'Origin',
+  }
 }
 
 const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!)
 
-// Ver el mismo razonamiento en supabase/functions/send-contact/index.ts:
+// Ver el mismo razonamiento en supabase/functions/send-contact-arquelia/index.ts:
 // un `Promise.race` con un temporizador de verdad no depende de que la
 // librería de red coopere con un abort.
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
@@ -78,17 +89,19 @@ async function lookupGeo(ip: string | null): Promise<Geo> {
 }
 
 Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders(req) })
   try {
     return await withTimeout(handle(req), 9000)
   } catch {
-    return new Response('Timeout', { status: 504, headers: corsHeaders })
+    return new Response('Timeout', { status: 504, headers: corsHeaders(req) })
   }
 })
 
 async function handle(req: Request): Promise<Response> {
+  const cors = corsHeaders(req)
+
   if (req.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405, headers: corsHeaders })
+    return new Response('Method not allowed', { status: 405, headers: cors })
   }
 
   let body: {
@@ -101,25 +114,25 @@ async function handle(req: Request): Promise<Response> {
   try {
     body = (await req.json()) as typeof body
   } catch {
-    return new Response('Bad request', { status: 400, headers: corsHeaders })
+    return new Response('Bad request', { status: 400, headers: cors })
   }
 
   const { company_id, event_type, event_key, path, session_id } = body
   if (!company_id || !event_type || !ALLOWED_EVENT_TYPES.has(event_type) || !session_id) {
-    return new Response('Bad request', { status: 400, headers: corsHeaders })
+    return new Response('Bad request', { status: 400, headers: cors })
   }
 
   // company_id debe existir — evita inyectar tráfico a una empresa que no
   // sea la que corresponde a este despliegue.
   const { data: company } = await supabase.from('companies').select('id').eq('id', company_id).maybeSingle()
-  if (!company) return new Response('Bad request', { status: 400, headers: corsHeaders })
+  if (!company) return new Response('Bad request', { status: 400, headers: cors })
 
   // Un clic con event_key que la empresa no ha dado de alta (o desactivado
   // desde el admin) se descarta en silencio: nunca da error al visitante.
   if (event_type === 'cta_click') {
-    if (!event_key) return new Response('Bad request', { status: 400, headers: corsHeaders })
+    if (!event_key) return new Response('Bad request', { status: 400, headers: cors })
     const keys = await activeEventKeys(company_id)
-    if (!keys.has(event_key)) return new Response(null, { status: 204, headers: corsHeaders })
+    if (!keys.has(event_key)) return new Response(null, { status: 204, headers: cors })
   }
 
   const forwardedFor = req.headers.get('x-forwarded-for')
@@ -141,6 +154,6 @@ async function handle(req: Request): Promise<Response> {
     city,
   })
 
-  if (error) return new Response('Error', { status: 500, headers: corsHeaders })
-  return new Response(null, { status: 204, headers: corsHeaders })
+  if (error) return new Response('Error', { status: 500, headers: cors })
+  return new Response(null, { status: 204, headers: cors })
 }
