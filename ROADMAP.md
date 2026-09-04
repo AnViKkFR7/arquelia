@@ -91,6 +91,13 @@
 
 ## Registro de trabajo
 
+**2026-08-30 (5) — Favicon cambiado a `Original_negro.png`**
+
+`<link rel="icon">` y `<link rel="apple-touch-icon">` en `index.html` apuntaban a
+`Favicon_transparente.png` — cambiados los dos a `public/brand/logos/Original_negro.png` (la
+"A" dorada sobre fondo negro). No hay `manifest.json` ni otras referencias al favicon anterior
+en el proyecto. Verificado en `dist/index.html` tras el build.
+
 **2026-08-30 (4) — Por qué Google mostraba la web en inglés como primer resultado; scroll suave en el logo**
 
 - **Idioma por defecto**: el cliente veía la web en inglés como primer resultado al buscar
