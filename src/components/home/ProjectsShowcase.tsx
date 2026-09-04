@@ -111,7 +111,6 @@ export function ProjectsShowcase() {
                 sin ser un elemento de la lista. */}
             <div className={styles.chips} role="list">
               <div className={styles.metaCell} style={{ gridColumn: active + 1 }}>
-                <span className={styles.stageTitle}>{items[active].title}</span>
                 <span className={styles.stageDesc}>{items[active].desc}</span>
               </div>
               {items.map((item, i) => (

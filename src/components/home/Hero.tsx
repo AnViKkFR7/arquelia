@@ -38,7 +38,11 @@ export function Hero() {
       <div className={styles.sticky}>
         <div className={styles.stage}>
           <HeroCanvas progress={progress} className={styles.canvas} />
-          <div className={styles.scrim} />
+          {/* A pleno vigor nada más entrar, y se retira al mismo ritmo que
+              el título/subtítulo (mismo `titleOut` que usa `.inner` más
+              abajo) — pedido explícito: que la viñeta y el texto
+              desaparezcan a la vez, no en momentos distintos del scroll. */}
+          <div className={styles.scrim} style={{ opacity: 1 - titleOut }} />
 
           <div
             className={styles.inner}

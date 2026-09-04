@@ -83,6 +83,17 @@ export function Footer() {
           arriba: necesita ocupar el ancho entero de la pantalla, no sólo
           el ancho de línea del contenido. */}
       <div className={styles.bottom}>
+        {/* Línea propia, centrada y a todo el ancho — no metida a presión
+            entre otros datos de contacto. Texto plano, no enlaces: unos
+            cuantos hipervínculos a la misma landing con un # distinto por
+            localidad no aporta nada real de cara a Google (no son páginas
+            nuevas, y puede leerse como relleno de palabras clave) — lo que
+            sí ayuda es que el nombre de cada zona aparezca como texto real
+            en el sitio, coherente con el mismo dato ya mostrado en
+            Contacto. */}
+        <div className={`container ${styles.serviceAreaRow}`}>
+          <span className={styles.serviceArea}>{t('footer.serviceArea')}</span>
+        </div>
         <div className={`container ${styles.bottomInner}`}>
           <span>
             &copy; {year} Arquelia. {t('footer.rights')}

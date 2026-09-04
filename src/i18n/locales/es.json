@@ -4,7 +4,25 @@
     "description": "Arquelia. Reformas integrales, cocinas, baños e interiorismo de alta gama en Cataluña. Acabados al milímetro y un único interlocutor de principio a fin.",
     "ogTitle": "Arquelia — Construcción y reformas premium",
     "ogDescription": "Reformas integrales e interiorismo de alta gama en Cataluña.",
-    "locale": "es_ES"
+    "locale": "es_ES",
+    "pages": {
+      "services": {
+        "title": "Reformas de cocinas, baños e integrales en Cataluña | Arquelia",
+        "description": "Reformas de cocina, de baño e integrales en Barcelona y toda Cataluña. Un único equipo, presupuesto cerrado y acabados de alta gama."
+      },
+      "projects": {
+        "title": "Proyectos de reforma entregados | Arquelia",
+        "description": "Reformas integrales, de cocina y de baño ya entregadas por Arquelia en Barcelona, el Baix Llobregat y el resto de Cataluña."
+      },
+      "about": {
+        "title": "Sobre Arquelia — Reformas premium en Cataluña",
+        "description": "Conoce al equipo detrás de Arquelia: construcción y reformas de alta gama en Barcelona y Cataluña, con un único interlocutor por obra."
+      },
+      "contact": {
+        "title": "Presupuesto gratuito para tu reforma | Arquelia",
+        "description": "Solicita presupuesto para tu reforma en Barcelona o Cataluña. Primera visita sin coste y respuesta en menos de 24h laborables."
+      }
+    }
   },
   "nav": {
     "home": "Inicio",
@@ -28,6 +46,7 @@
     "navigation": "Navegación",
     "legalHeading": "Legal",
     "location": "C/ Rubio i Ors, 130 - 08940 Cornellà de Llobregat, Barcelona",
+    "serviceArea": "Reformas en Barcelona, Cornellà de Llobregat, Sant Just Desvern, Esplugues de Llobregat, Sant Cugat del Vallès y Sitges.",
     "developedBy": "Desarrollado por Moira Ordo",
     "serviceLinks": [
       "Reformas integrales",
@@ -48,16 +67,16 @@
   },
   "home": {
     "heroTitle": "Tu hogar llevado a otro nivel",
-    "heroSubtitle": "Reformas y construcciones de alta calidad en Barcelona y alrededores.",
+    "heroSubtitle": "Reformas integrales de alta gama en Barcelona y Cataluña. Cocinas, baños e interiorismo con acabados al milímetro.",
     "heroStrip": "Reformas integrales · Cocinas · Baños · Interiorismo · Rehabilitación",
     "intro": {
-      "title": "Diseño y calidad en cada proyecto.",
-      "text": "En Arquelia transformamos hogares para crear espacios únicos, pensados para quienes buscan algo más. Combinamos años de experiencia, materiales de primera calidad y una cuidada atención al detalle para ofrecer reformas exclusivas y una experiencia a la altura de cada proyecto."
+      "title": "Lo que prometemos, lo cumplimos en obra.",
+      "text": "No hacemos reformas en serie. Aceptamos un número limitado de proyectos al año para poder dedicar a cada uno el tiempo, el equipo propio y la atención que merece — desde el primer boceto hasta la última junta."
     },
     "servicesGrid": {
       "eyebrow": "Servicios",
       "title": "Nuestros servicios",
-      "lead": "Diseñamos reformas con un enfoque integral, cuidando cada detalle para crear espacios funcionales, elegantes y duraderos.",
+      "lead": "De la cocina a la fachada: un mismo equipo, un mismo estándar de acabado, un único interlocutor para todo el proyecto.",
       "items": [
         {
           "id": "cocina",
@@ -80,7 +99,7 @@
     "projectsShowcase": {
       "eyebrow": "Proyectos",
       "title": "Proyectos",
-      "lead": "Cada reforma es una oportunidad para transformar un espacio en algo único. En Arquelia cuidamos cada detalle para crear obras que combinan funcionalidad, estética y una ejecución impecable.",
+      "lead": "Estas son reformas reales, entregadas y habitadas. Filtra por tipo de proyecto para ver el nivel de acabado que puedes esperar en el tuyo.",
       "seeAllAria": "Ver todos los proyectos",
       "items": [
         {
@@ -118,7 +137,7 @@
           "label": "Interlocutor por obra"
         }
       ],
-      "requestBudget": "Solicita presupuesto"
+      "requestBudget": "Solicitar presupuesto"
     },
     "cta": {
       "title": "¿Tienes un proyecto en mente?",
@@ -239,14 +258,14 @@
     },
     "cta": {
       "title": "¿Listo para transformar tu espacio?",
-      "text": "Cuéntanos qué tienes en mente. La primera visita y el presupuesto son gratuitos."
+      "text": "Cuéntanos qué tienes en mente. Te visitamos, lo estudiamos y te damos un presupuesto cerrado — la primera visita no tiene coste."
     }
   },
   "projects": {
     "hero": {
       "eyebrow": "Proyectos",
       "title": "Reformas que hablan por sí solas",
-      "lead": "Una selección de obras entregadas en Barcelona y alrededores. Cada una con su propio carácter, todas con el mismo estándar de ejecución."
+      "lead": "Una selección de obras entregadas en Barcelona y Cataluña. Cada una con su propio carácter, todas con el mismo estándar de ejecución."
     },
     "loading": "Cargando proyectos…",
     "empty": "Aún no hay proyectos publicados. Vuelve pronto.",
@@ -298,11 +317,9 @@
     },
     "intro": {
       "lead": "Arquelia nace de la voluntad de hacer las cosas bien, sin atajos.",
-      "p1": "Detrás de cada proyecto hay un equipo que entiende la construcción como un oficio de precisión, donde el trato con el cliente pesa tanto como el último acabado de obra. Reformamos hogares, locales y oficinas en toda Cataluña bajo la razón social",
-      "p1Strong": "P & B Cornellà Construcciones, S.L.",
+      "p1": "Detrás de cada proyecto hay un equipo que entiende la construcción como un oficio de precisión, donde el trato con el cliente pesa tanto como el último acabado de obra. Reformamos hogares, locales y oficinas en toda Cataluña.",
       "p2": "No trabajamos por volumen. Aceptamos los proyectos que podemos atender de verdad, con el equipo propio y el tiempo que cada obra merece. Eso significa menos obras a la vez y más atención en cada una."
     },
-    "band": "Precisión · Materiales nobles · Palabra dada",
     "pillars": {
       "eyebrow": "Tres pilares",
       "title": "Una forma de trabajar",
@@ -571,10 +588,15 @@
     }
   },
   "cookieBanner": {
-    "text": "Usamos almacenamiento técnico necesario para el funcionamiento del sitio (por ejemplo, recordar el idioma elegido). No usamos cookies de análisis ni de publicidad.",
+    "text": "Usamos almacenamiento técnico necesario para el funcionamiento del sitio y, sólo si lo acepta, cookies analíticas (Google Analytics) para saber cómo se usa la web. No usamos cookies de publicidad.",
     "accept": "Aceptar",
     "reject": "Rechazar",
     "policyLink": "Política de cookies",
     "manage": "Configurar cookies"
+  },
+  "notFound": {
+    "title": "Esta página no existe",
+    "text": "El enlace puede estar mal escrito o la página ya no está disponible. Vuelve al inicio o revisa nuestros proyectos y servicios.",
+    "cta": "Volver al inicio"
   }
 }

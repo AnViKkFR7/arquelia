@@ -76,6 +76,9 @@
 .title {
   position: relative;
   z-index: var(--z-base);
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
   width: 100%;
   padding: var(--sp-5);
   text-align: left;
@@ -83,6 +86,17 @@
   /* Un peso por debajo de Regular: Light. */
   font-weight: 300;
   color: var(--text-inverse);
+}
+
+/* Da sensación de enlace/acceso, no sólo una etiqueta encima de la foto. */
+.arrow {
+  color: var(--accent-bright);
+  font-weight: 500;
+  transition: transform var(--t-fast) var(--ease);
+}
+
+.card:hover .arrow {
+  transform: translateX(3px);
 }
 
 @media (max-width: 700px) {

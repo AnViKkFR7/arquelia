@@ -4,7 +4,25 @@
     "description": "Arquelia. Reformes integrals, cuines, banys i interiorisme d'alta gamma a Catalunya. Acabats al mil·límetre i un únic interlocutor de principi a fi.",
     "ogTitle": "Arquelia — Construcció i reformes prèmium",
     "ogDescription": "Reformes integrals i interiorisme d'alta gamma a Catalunya.",
-    "locale": "ca_ES"
+    "locale": "ca_ES",
+    "pages": {
+      "services": {
+        "title": "Reformes de cuines, banys i integrals a Catalunya | Arquelia",
+        "description": "Reformes de cuina, de bany i integrals a Barcelona i tot Catalunya. Un únic equip, pressupost tancat i acabats d'alta gamma."
+      },
+      "projects": {
+        "title": "Projectes de reforma entregats | Arquelia",
+        "description": "Reformes integrals, de cuina i de bany ja entregades per Arquelia a Barcelona, el Baix Llobregat i la resta de Catalunya."
+      },
+      "about": {
+        "title": "Sobre Arquelia — Reformes prèmium a Catalunya",
+        "description": "Coneix l'equip darrere d'Arquelia: construcció i reformes d'alta gamma a Barcelona i Catalunya, amb un únic interlocutor per obra."
+      },
+      "contact": {
+        "title": "Pressupost gratuït per a la teva reforma | Arquelia",
+        "description": "Sol·licita pressupost per a la teva reforma a Barcelona o Catalunya. Primera visita sense cost i resposta en menys de 24h laborables."
+      }
+    }
   },
   "nav": {
     "home": "Inici",
@@ -28,6 +46,7 @@
     "navigation": "Navegació",
     "legalHeading": "Legal",
     "location": "C/ Rubio i Ors, 130 - 08940 Cornellà de Llobregat, Barcelona",
+    "serviceArea": "Reformes a Barcelona, Cornellà de Llobregat, Sant Just Desvern, Esplugues de Llobregat, Sant Cugat del Vallès i Sitges.",
     "developedBy": "Desenvolupat per Moira Ordo",
     "serviceLinks": [
       "Reformes integrals",
@@ -48,16 +67,16 @@
   },
   "home": {
     "heroTitle": "La teva llar, a un altre nivell",
-    "heroSubtitle": "Reformes i construccions d'alta qualitat a Barcelona i rodalies.",
+    "heroSubtitle": "Reformes integrals d'alta gamma a Barcelona i Catalunya. Cuines, banys i interiorisme amb acabats al mil·límetre.",
     "heroStrip": "Reformes integrals · Cuines · Banys · Interiorisme · Rehabilitació",
     "intro": {
-      "title": "Disseny i qualitat en cada projecte.",
-      "text": "A Arquelia transformem llars per crear espais únics, pensats per a qui busca alguna cosa més. Combinem anys d'experiència, materials de primera qualitat i una cura atenció al detall per oferir reformes exclusives i una experiència a l'altura de cada projecte."
+      "title": "El que prometem, ho complim a l'obra.",
+      "text": "No fem reformes en sèrie. Acceptem un nombre limitat de projectes l'any per poder dedicar a cadascun el temps, l'equip propi i l'atenció que mereix — des del primer esbós fins a l'última junta."
     },
     "servicesGrid": {
       "eyebrow": "Serveis",
       "title": "Els nostres serveis",
-      "lead": "Dissenyem reformes amb un enfocament integral, tenint cura de cada detall per crear espais funcionals, elegants i duradors.",
+      "lead": "De la cuina a la façana: un mateix equip, un mateix estàndard d'acabat, un únic interlocutor per a tot el projecte.",
       "items": [
         {
           "id": "cocina",
@@ -80,7 +99,7 @@
     "projectsShowcase": {
       "eyebrow": "Projectes",
       "title": "Projectes",
-      "lead": "Cada reforma és una oportunitat per transformar un espai en alguna cosa única. A Arquelia tenim cura de cada detall per crear obres que combinen funcionalitat, estètica i una execució impecable.",
+      "lead": "Aquestes són reformes reals, entregades i habitades. Filtra per tipus de projecte per veure el nivell d'acabat que pots esperar en el teu.",
       "seeAllAria": "Veure tots els projectes",
       "items": [
         {
@@ -118,7 +137,7 @@
           "label": "Interlocutor per obra"
         }
       ],
-      "requestBudget": "Sol·licita pressupost"
+      "requestBudget": "Sol·licitar pressupost"
     },
     "cta": {
       "title": "Tens un projecte en ment?",
@@ -239,14 +258,14 @@
     },
     "cta": {
       "title": "Llest per transformar el teu espai?",
-      "text": "Explica'ns què tens en ment. La primera visita i el pressupost són gratuïts."
+      "text": "Explica'ns què tens en ment. Et visitem, ho estudiem i et donem un pressupost tancat — la primera visita no té cost."
     }
   },
   "projects": {
     "hero": {
       "eyebrow": "Projectes",
       "title": "Reformes que parlen per si soles",
-      "lead": "Una selecció d'obres entregades a Barcelona i rodalies. Cadascuna amb el seu propi caràcter, totes amb el mateix estàndard d'execució."
+      "lead": "Una selecció d'obres entregades a Barcelona i Catalunya. Cadascuna amb el seu propi caràcter, totes amb el mateix estàndard d'execució."
     },
     "loading": "Carregant projectes…",
     "empty": "Encara no hi ha projectes publicats. Torna aviat.",
@@ -298,11 +317,9 @@
     },
     "intro": {
       "lead": "Arquelia neix de la voluntat de fer les coses bé, sense dreceres.",
-      "p1": "Darrere de cada projecte hi ha un equip que entén la construcció com un ofici de precisió, on el tracte amb el client pesa tant com l'últim acabat d'obra. Reformem llars, locals i oficines a tot Catalunya sota la raó social",
-      "p1Strong": "P & B Cornellà Construcciones, S.L.",
+      "p1": "Darrere de cada projecte hi ha un equip que entén la construcció com un ofici de precisió, on el tracte amb el client pesa tant com l'últim acabat d'obra. Reformem llars, locals i oficines a tot Catalunya.",
       "p2": "No treballem per volum. Acceptem els projectes que podem atendre de veritat, amb l'equip propi i el temps que cada obra mereix. Això significa menys obres alhora i més atenció a cadascuna."
     },
-    "band": "Precisió · Materials nobles · Paraula donada",
     "pillars": {
       "eyebrow": "Tres pilars",
       "title": "Una manera de treballar",
@@ -576,5 +593,10 @@
     "reject": "Rebutjar",
     "policyLink": "Política de cookies",
     "manage": "Configurar cookies"
+  },
+  "notFound": {
+    "title": "Aquesta pàgina no existeix",
+    "text": "L'enllaç pot estar mal escrit o la pàgina ja no està disponible. Torna a l'inici o consulta els nostres projectes i serveis.",
+    "cta": "Tornar a l'inici"
   }
 }

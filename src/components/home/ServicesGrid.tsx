@@ -39,7 +39,12 @@ export function ServicesGrid() {
               style={{ backgroundImage: `url(${IMAGES[item.id]})` }}
             >
               <span className={styles.veil} />
-              <span className={styles.title}>{item.title}</span>
+              <span className={styles.title}>
+                {item.title}
+                <span className={styles.arrow} aria-hidden="true">
+                  &gt;
+                </span>
+              </span>
             </Link>
           </Reveal>
         ))}

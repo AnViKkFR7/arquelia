@@ -9,6 +9,7 @@ import { ProjectDetailPage } from './pages/ProjectDetailPage'
 import { AboutPage } from './pages/AboutPage'
 import { ContactPage } from './pages/ContactPage'
 import { LegalPage } from './pages/LegalPage'
+import { NotFoundPage } from './pages/NotFoundPage'
 // `/next` es el punto de entrada específico de Next.js: internamente
 // importa de `next/navigation`, un paquete que no existe aquí (este
 // proyecto es un SPA con Vite, no Next.js) — por eso el build fallaba con
@@ -33,6 +34,7 @@ function App() {
             <Route path="aviso-legal" element={<LegalPage slug="notice" />} />
             <Route path="cookies" element={<LegalPage slug="cookies" />} />
             <Route path="privacidad" element={<LegalPage slug="privacy" />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
         <Analytics />

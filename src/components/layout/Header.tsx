@@ -57,7 +57,24 @@ export function Header() {
           ))}
         </nav>
 
-        <NavLink to="/" className={styles.logo} aria-label={t('nav.homeAria')}>
+        <NavLink
+          to="/"
+          className={styles.logo}
+          aria-label={t('nav.homeAria')}
+          onClick={() => {
+            // Si ya estás en la home, un NavLink a la misma ruta no
+            // recarga ni cambia `pathname` — el `scrollTo` de `Layout` que
+            // resetea el scroll en cada cambio de ruta nunca llega a
+            // dispararse. Aquí sí hace falta forzarlo a mano. `smooth`, no
+            // `instant` como el de `Layout`: ahí el salto es entre páginas
+            // distintas (no hay nada que "recorrer" de una a otra), pero
+            // aquí es la misma página — pedido explícito que se sienta como
+            // un scroll de verdad, no un salto brusco.
+            if (window.location.pathname === '/') {
+              window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+            }
+          }}
+        >
           ARQUELIA
         </NavLink>
 

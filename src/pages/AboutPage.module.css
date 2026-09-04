@@ -36,14 +36,6 @@
   font-weight: 500;
 }
 
-/* ── Franja ──────────────────────────────────────────── */
-.band {
-  padding-block: var(--sp-5);
-  background: var(--bg-inverse);
-  color: var(--accent-bright);
-  border-block: 1px solid var(--line-inverse);
-}
-
 /* ── Pilares ─────────────────────────────────────────── */
 .pillars {
   background: var(--bg);

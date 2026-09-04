@@ -21,7 +21,7 @@
 .scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(6, 6, 6, 0.72) 0%, rgba(6, 6, 6, 0.5) 45%, rgba(6, 6, 6, 0.9) 100%);
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0.72) 0%, rgba(6, 6, 6, 0.5) 63%, rgba(6, 6, 6, 0.9) 100%);
 }
 
 .inner {
@@ -49,6 +49,22 @@
   margin-top: var(--sp-5);
   max-width: 18ch;
   font-weight: 300;
+}
+
+/* Título corto pensado para caber en dos líneas, no cuatro, en vez del
+   límite de caracteres por defecto. Pedido como "hasta un 60%", pero a este
+   tamaño de fuente 60% seguía partiendo cada línea en dos — comprobado que
+   hacen falta ~90% del hero para que las dos líneas del título quepan cada
+   una en un único renglón, que es el objetivo real por encima del
+   porcentaje concreto. */
+.titleWide {
+  max-width: 90%;
+}
+
+@media (max-width: 640px) {
+  .titleWide {
+    max-width: 100%;
+  }
 }
 
 .lead {

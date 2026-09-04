@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next'
 import { PageHero } from '../components/ui/PageHero'
 import { SectionHeader } from '../components/ui/SectionHeader'
 import { Reveal } from '../components/ui/Reveal'
-import { Marquee } from '../components/ui/Marquee'
 import { CtaBand } from '../components/home/CtaBand'
 import styles from './AboutPage.module.css'
 
@@ -38,6 +37,7 @@ export function AboutPage() {
         }
         image={heroImg}
         tall
+        wide
       />
 
       {/* Texto de empresa */}
@@ -49,19 +49,12 @@ export function AboutPage() {
 
           <Reveal variant="up" delay={100}>
             <div className={styles.introText}>
-              <p>
-                {t('about.intro.p1')} <strong>{t('about.intro.p1Strong')}</strong>
-              </p>
+              <p>{t('about.intro.p1')}</p>
               <p>{t('about.intro.p2')}</p>
             </div>
           </Reveal>
         </div>
       </section>
-
-      {/* Franja de marquesina */}
-      <div className={styles.band}>
-        <Marquee text={t('about.band')} separator="◆" speed={62} />
-      </div>
 
       {/* Tres pilares */}
       <section className={`section ${styles.pillars}`}>

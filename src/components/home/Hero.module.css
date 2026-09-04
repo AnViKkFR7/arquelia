@@ -65,9 +65,17 @@
   }
 }
 
+/* Viñeta: oscurece los bordes de la imagen, no el centro — la habÍa antes,
+   se quitó porque el cliente la sentía demasiado oscura en general, y ahora
+   vuelve pero sólo a la entrada (ver la opacidad en línea que fija
+   Hero.tsx) y bastante más sutil que un lavado uniforme, para no repetir
+   esa sensación. */
 .scrim {
   position: absolute;
   inset: 0;
+  z-index: var(--z-base);
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(6, 6, 6, 0.63) 100%);
+  pointer-events: none;
 }
 
 /* ── Contenido ───────────────────────────────────────────

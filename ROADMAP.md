@@ -91,6 +91,138 @@
 
 ## Registro de trabajo
 
+**2026-08-30 (4) — Por qué Google mostraba la web en inglés como primer resultado; scroll suave en el logo**
+
+- **Idioma por defecto**: el cliente veía la web en inglés como primer resultado al buscar
+  "Arquelia" en Google. Causa: `i18next-browser-languagedetector` tenía `order: ['localStorage',
+  'navigator']` — sin preferencia guardada, adivinaba el idioma a partir del navegador de quien
+  cargara la página. El problema de fondo es estructural, no un bug puntual: esto es una SPA sin
+  servidor propio, con una única URL por página (no `/en/`, `/ca/` aparte) — Google indexa una
+  sola versión de cada URL, la que su rastreador vio al renderizarla, y el idioma que reporta el
+  navegador de ese rastreador no tiene por qué ser español. Ese es el idioma que queda fijado en
+  el resultado de búsqueda para todo el mundo, sin relación con el idioma de quien busque.
+  Detectar por geolocalización/nacionalidad de verdad (lo que el cliente propuso como ideal)
+  exigiría servir contenido distinto según el visitante desde el servidor, algo que este sitio no
+  hace al ser una SPA — fuera de alcance sin cambiar de arquitectura. Con esa vía descartada, y
+  tal como pidió el cliente ante esa limitación, quitado `'navigator'` del orden de detección:
+  ahora, sin preferencia guardada, siempre se parte de español (`fallbackLng: 'es'`, ya estaba
+  puesto pero nunca llegaba a usarse porque `navigator` casi siempre resolvía algo antes). Quien
+  cambie de idioma a mano lo sigue viendo en visitas siguientes (`caches: ['localStorage']`, sin
+  tocar).
+- **Logo del header**: el `scrollTo` a 0 que se añadió la entrada anterior iba en `behavior:
+  'instant'` (copiado del de `Layout`, que resetea el scroll entre páginas distintas sin nada
+  que recorrer) — pero aquí es la misma página, y se pidió que se sintiera como un scroll de
+  verdad. Cambiado a `behavior: 'smooth'`.
+- **Verificado**: bundle de producción confirmado con `order:["localStorage"]` (sin
+  `navigator`). En el navegador: con `localStorage` vacío, cae a español; cambiar a inglés desde
+  el selector y recargar la página mantiene inglés (`i18nextLng` en `localStorage`) — la elección
+  manual sigue funcionando exactamente igual que antes, sólo cambia qué pasa cuando no hay
+  ninguna elección guardada. `tsc -b`/`vite build` limpios.
+
+**2026-08-30 (3) — Service/BreadcrumbList JSON-LD; logo al inicio; vuelve la viñeta del hero, ahora sincronizada con el scroll**
+
+- **`StructuredData.tsx`**: añadido `hasOfferCatalog` con los 7 servicios de `services.catalog.items`
+  como `Offer`/`Service` — mismo contenido que ya existía en la página de Servicios, sólo en
+  formato JSON-LD.
+- **`BreadcrumbSchema.tsx`** (nuevo, montado en `Layout` junto a `StructuredData`): migas de pan
+  por ruta para las páginas estáticas (Inicio > Servicios, Inicio > Proyectos...). El detalle de
+  un proyecto (`/proyectos/:id`) se queda fuera a propósito — llevaría el nombre real del
+  proyecto como tercer nivel, que este componente no tiene sin que `ProjectDetailPage` se lo
+  pase; mejor no emitir nada que emitir una miga genérica o inexacta.
+- **Logo del header**: al hacer clic ya estando en la home, un `NavLink` a la misma ruta no
+  cambia `pathname` y el `scrollTo` de `Layout` (que resetea el scroll en cada cambio de ruta)
+  nunca llegaba a dispararse — añadido un `onClick` que fuerza el scroll arriba a mano cuando ya
+  se está en `/`.
+- **Viñeta del hero, de vuelta**: `.scrim` llevaba tiempo siendo un `<div>` vacío sin fondo — el
+  gradiente se quitó en algún momento anterior (el cliente la sentía "demasiado oscura") pero el
+  elemento se quedó en el JSX. Ahora vuelve como viñeta radial (oscurece los bordes, no el
+  centro — antes probablemente era un lavado más uniforme, de ahí la queja) y con su opacidad
+  atada al mismo `titleOut` que ya usa el título/subtítulo para desvanecerse: a pleno vigor al
+  entrar, se retira exactamente al mismo ritmo que el texto, no en un momento aparte del scroll.
+- **Verificado** en el navegador: los dos JSON-LD nuevos presentes con el contenido esperado
+  (`hasOfferCatalog` con 7 servicios; `BreadcrumbList` con Inicio→Servicios en `/servicios`);
+  clic en el logo estando en la home lleva `scrollY` a 0; opacidad de la viñeta confirmada en 1
+  al cargar, ~0.45 a mitad del primer tramo de scroll, 0 al llegar al final de ese tramo (mismo
+  punto en el que el título ya ha desaparecido). `tsc -b`/`vite build` limpios.
+
+**2026-08-30 (2) — Zona de servicio reubicada en el footer; segunda pasada de SEO sólo de código**
+
+- **Footer**: `footer.serviceArea` ya no vive apretujado bajo la dirección en la columna de
+  contacto (se sentía "como un pegote", tal cual lo describió el cliente) — ahora es su propia
+  línea centrada y a todo el ancho, encima de la fila de copyright en la banda inferior
+  (`.serviceAreaRow`), separada visualmente en vez de mezclada con otros datos de contacto.
+- **404 real** (`NotFoundPage.tsx`, ruta `path="*"`): antes cualquier URL rota o mal escrita
+  renderizaba una página en blanco con un 200 real — el rewrite de SPA en `vercel.json` sirve
+  `index.html` para cualquier ruta, así que sin una ruta comodín no había ningún contenido que
+  mostrar. Es un "soft 404" que Google desaconseja explícitamente. `DocumentMeta.tsx` marca esta
+  ruta (y cualquier otra que no sea una de las conocidas) como `noindex, follow` — sin backend
+  propio no hay forma de devolver un código 404 HTTP de verdad, así que esto es la mitigación
+  estándar para SPAs sin SSR: que al menos no se indexe como contenido real aunque la respuesta
+  siga siendo 200.
+- Revisado el resto del sitio buscando más mejoras de SEO que no tocaran nada visual/estructural
+  de las páginas existentes — el texto alternativo de imágenes ya estaba bien puesto en todos
+  los `<img>` (comprobado, no hay ningún hueco real ahí, sólo el logo del footer con `alt=""` a
+  propósito por ser decorativo/redundante).
+  - `sitemap.xml` con `<lastmod>` en cada URL (antes no lo llevaba).
+  - Quedan sin implementar por ser más trabajo o requerir una decisión — mencionados en el chat,
+    no en el código: `BreadcrumbList` JSON-LD en páginas interiores, `Service` JSON-LD por tipo
+    de reforma, y precargar la imagen del hero para Core Web Vitals (no se tocó por no poder
+    verificar aquí mismo su impacto real en el LCP).
+- **Verificado**: `tsc -b`/`vite build` limpios. En el navegador: la zona de servicio confirmada
+  como fila propia centrada (no dentro de la columna de contacto); `/esta-ruta-no-existe` renderiza
+  `NotFoundPage` con `<meta name="robots" content="noindex, follow">`, mientras que una ruta real
+  como `/servicios` mantiene `index, follow`.
+
+**2026-08-30 — Copys nuevos (ES/EN/CA), ajustes de UI y primera pasada de SEO técnico**
+
+- **Copys**: sustituidos y retraducidos a los tres idiomas el subtítulo del hero, el título y
+  texto de la intro, el lead de servicios/proyectos, "Solicita" → "Solicitar presupuesto" (ya
+  usado así en otro botón, ahora consistente), el texto del CTA final, el lead del hero de
+  proyectos, y el párrafo de "Sobre nosotros" (quitada la mención a la razón social — `p1Strong`
+  eliminado de los tres locales, ya no se usaba en ningún otro sitio).
+- **Servicios (home)**: añadido un `>` a cada tarjeta (Cocina/Baños/Reforma Integral/
+  Rehabilitación) para que se lean como enlaces, con una pequeña animación al pasar el ratón.
+- **Carrusel de proyectos (home)**: quitado el título flotante encima de la descripción
+  (`.stageTitle`); la etiqueta de cada índice bajo la barra de progreso (`.chipLabel`) pasa de
+  `--fs-xs` a `clamp(0.95rem, 1.4vw, 1.15rem)` y hace ahora de único título visible.
+- **Sobre nosotros**: quitada la franja de marquesina rotatoria (`<Marquee>` + `about.band`,
+  eliminado de los tres locales — el componente `Marquee` en sí se queda, lo sigue usando
+  `ProjectDetailPage`). Título del hero a dos líneas en vez de cuatro: nuevo prop `wide` en
+  `PageHero` (opt-in, sólo afecta a esta página). Pedido como "hasta un 60% del ancho" pero
+  comprobado en el navegador que a este tamaño de fuente hacían falta ~90% para que las dos
+  líneas cupieran cada una en un renglón — se priorizó el objetivo real (dos líneas) sobre el
+  porcentaje exacto que se había propuesto como medio para conseguirlo.
+- **SEO técnico** — de fondo, primera pasada real (no había nada de esto):
+  - `public/robots.txt` y `public/sitemap.xml` (páginas estáticas; los proyectos individuales
+    son dinámicos/vienen de Supabase, no se pueden enumerar en un sitemap estático — pendiente
+    si se quiere cubrir, un paso de build que los liste o que el propio admin los genere).
+  - `DocumentMeta.tsx` reescrito: antes `<title>`/meta description eran los mismos en toda la
+    web; ahora cambian por ruta (`meta.pages.{services,projects,about,contact}` nuevo en los
+    tres locales) y además gestiona `rel="canonical"` y `og:url` dinámicos (creando la etiqueta
+    si no existe, no sólo actualizándola).
+  - `og:image` nueva (`public/og-image.jpg`, 1200×630, recortada de una foto de proyecto ya
+    existente) + `og:image:width/height` + `twitter:card` — antes no había ninguna imagen para
+    las vistas previas al compartir un enlace.
+  - `StructuredData.tsx`: JSON-LD `HomeAndConstructionBusiness` con dirección, teléfono, horario
+    y `areaServed` — reutilizando los mismos datos que ya se mostraban en Contacto (`zone.text`),
+    no inventados aquí.
+  - **Sobre la idea de enlaces de localidad en el footer** ("Reformas en Gavà", "Reformas en
+    Viladecans"... cada uno a la misma landing con un `#` distinto): no se implementó tal cual —
+    varios hipervínculos internos a la misma página con anclas distintas no cuentan como páginas
+    nuevas para Google y puede leerse como relleno de palabras clave, no como una señal real. En
+    su lugar, texto plano (sin enlace) en el footer con las localidades ya listadas en
+    `contact.zone.text` (`footer.serviceArea`, nuevo en los tres locales) — el mismo dato, sin el
+    artificio de los anclas.
+- **Pendiente / fuera de lo que el código puede resolver solo**: verificar el sitio en Google
+  Search Console (subir el sitemap, confirmar indexación), completar/optimizar la ficha de
+  Google Business Profile (el mayor factor de SEO local, no vive en el código), y — más a largo
+  plazo — si se quiere contenido real por localidad (no sólo una mención en el footer), haría
+  falta una página propia por zona con contenido único, no una landing compartida con anclas.
+- **Verificado**: `tsc -b`/`vite build` limpios en cada paso. Confirmado en el navegador: título
+  de pestaña cambia por ruta, banda de marquesina desaparecida, hero de "Sobre nosotros" a 2
+  líneas reales (comprobado con `getBoundingClientRect`, no sólo visualmente), los 4 `>` de
+  servicios presentes, y el `.stageTitle` fuera del carrusel con `.chipLabel` a 18.4px (antes 12).
+
 **2026-08-29 (10) — Nuevo evento `clic_ir_a_contacto_arquelia`; diagnóstico del evento de abrir el formulario**
 
 El cliente veía sólo el evento de enviar el formulario, no el de abrirlo, pese a que

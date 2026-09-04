@@ -9,10 +9,13 @@ interface PageHeroProps {
   image?: string
   /** Ocupa toda la altura de pantalla. */
   tall?: boolean
+  /** Título a un ancho mayor (hasta ~60% del hero) en vez de los 18ch por
+   * defecto — para un titular corto en dos líneas en vez de cuatro. */
+  wide?: boolean
 }
 
 /** Cabecera común de las páginas interiores. */
-export function PageHero({ eyebrow, title, lead, image, tall }: PageHeroProps) {
+export function PageHero({ eyebrow, title, lead, image, tall, wide }: PageHeroProps) {
   return (
     <section
       className={`${styles.hero} ${tall ? styles.tall : ''} ${image ? styles.hasImage : ''}`}
@@ -22,7 +25,7 @@ export function PageHero({ eyebrow, title, lead, image, tall }: PageHeroProps) {
 
       <div className={`container ${styles.inner}`}>
         <span className={`eyebrow ${styles.eyebrow}`}>{eyebrow}</span>
-        <h1 className={styles.title}>{title}</h1>
+        <h1 className={`${styles.title} ${wide ? styles.titleWide : ''}`}>{title}</h1>
         {lead && <p className={styles.lead}>{lead}</p>}
       </div>
     </section>

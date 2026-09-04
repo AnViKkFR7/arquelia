@@ -58,15 +58,6 @@
   text-align: left;
 }
 
-.stageTitle {
-  font-family: var(--font-display);
-  /* "Tosh A Medium" en el mockup, no negrita. */
-  font-weight: 500;
-  font-size: var(--fs-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
 .stageDesc {
   max-width: 52ch;
   font-size: var(--fs-sm);
@@ -131,9 +122,11 @@
 .chipLabel {
   display: block;
   margin-top: var(--sp-3);
-  font-size: var(--fs-xs);
-  /* "Tosh A Medium": las etiquetas de los índices, igual que el título del
-     escenario que representan. */
+  font-family: var(--font-display);
+  /* Ahora es el único título visible del proyecto (antes había uno propio,
+     `.stageTitle`, encima de la descripción — se quitó y este pasó a
+     hacer ese papel, de ahí el tamaño mayor que antes). */
+  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
   font-weight: 500;
   color: rgba(255, 255, 255, 0.7);
   transition: color var(--t-fast) var(--ease);

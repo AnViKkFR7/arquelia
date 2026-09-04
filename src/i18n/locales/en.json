@@ -4,7 +4,25 @@
     "description": "Arquelia. Full renovations, kitchens, bathrooms and high-end interior design in Catalonia. Millimetre-precise finishes and a single point of contact from start to finish.",
     "ogTitle": "Arquelia — Premium construction and renovations",
     "ogDescription": "Full renovations and high-end interior design in Catalonia.",
-    "locale": "en_US"
+    "locale": "en_US",
+    "pages": {
+      "services": {
+        "title": "Kitchen, bathroom and full renovations in Catalonia | Arquelia",
+        "description": "Kitchen, bathroom and full renovations in Barcelona and across Catalonia. A single team, a fixed quote, high-end finishes."
+      },
+      "projects": {
+        "title": "Delivered renovation projects | Arquelia",
+        "description": "Full, kitchen and bathroom renovations already delivered by Arquelia in Barcelona, the Baix Llobregat area and the rest of Catalonia."
+      },
+      "about": {
+        "title": "About Arquelia — Premium renovations in Catalonia",
+        "description": "Meet the team behind Arquelia: premium construction and renovations in Barcelona and Catalonia, with a single point of contact per project."
+      },
+      "contact": {
+        "title": "Free quote for your renovation | Arquelia",
+        "description": "Request a quote for your renovation in Barcelona or Catalonia. Free first visit, response within 24 business hours."
+      }
+    }
   },
   "nav": {
     "home": "Home",
@@ -28,6 +46,7 @@
     "navigation": "Navigation",
     "legalHeading": "Legal",
     "location": "C/ Rubio i Ors, 130 - 08940 Cornellà de Llobregat, Barcelona",
+    "serviceArea": "Renovations in Barcelona, Cornellà de Llobregat, Sant Just Desvern, Esplugues de Llobregat, Sant Cugat del Vallès and Sitges.",
     "developedBy": "Developed by Moira Ordo",
     "serviceLinks": [
       "Full renovations",
@@ -48,16 +67,16 @@
   },
   "home": {
     "heroTitle": "Your home, taken to the next level",
-    "heroSubtitle": "High-quality renovations and construction in Barcelona and the surrounding area.",
+    "heroSubtitle": "High-end full renovations in Barcelona and Catalonia. Kitchens, bathrooms and interior design finished to the millimetre.",
     "heroStrip": "Full renovations · Kitchens · Bathrooms · Interior design · Restoration",
     "intro": {
-      "title": "Design and quality in every project.",
-      "text": "At Arquelia we transform homes into unique spaces, designed for those who want something more. We combine years of experience, top-quality materials and careful attention to detail to deliver exclusive renovations and an experience worthy of every project."
+      "title": "What we promise, we deliver on site.",
+      "text": "We don't do renovations at scale. We take on a limited number of projects each year so we can give each one the time, in-house team and attention it deserves — from the first sketch to the last joint."
     },
     "servicesGrid": {
       "eyebrow": "Services",
       "title": "Our services",
-      "lead": "We design renovations with a comprehensive approach, taking care of every detail to create functional, elegant and long-lasting spaces.",
+      "lead": "From the kitchen to the façade: one team, one standard of finish, a single point of contact for the whole project.",
       "items": [
         {
           "id": "cocina",
@@ -80,7 +99,7 @@
     "projectsShowcase": {
       "eyebrow": "Projects",
       "title": "Projects",
-      "lead": "Every renovation is a chance to turn a space into something unique. At Arquelia we take care of every detail to create work that combines function, aesthetics and flawless execution.",
+      "lead": "These are real renovations, delivered and lived in. Filter by project type to see the level of finish you can expect in yours.",
       "seeAllAria": "See all projects",
       "items": [
         {
@@ -239,14 +258,14 @@
     },
     "cta": {
       "title": "Ready to transform your space?",
-      "text": "Tell us what you have in mind. The first visit and the quote are free."
+      "text": "Tell us what you have in mind. We'll visit, assess it, and give you a fixed quote — the first visit is free."
     }
   },
   "projects": {
     "hero": {
       "eyebrow": "Projects",
       "title": "Renovations that speak for themselves",
-      "lead": "A selection of works delivered in Barcelona and the surrounding area. Each with its own character, all with the same standard of execution."
+      "lead": "A selection of works delivered in Barcelona and Catalonia. Each with its own character, all with the same standard of execution."
     },
     "loading": "Loading projects…",
     "empty": "No projects published yet. Check back soon.",
@@ -298,11 +317,9 @@
     },
     "intro": {
       "lead": "Arquelia was born from the will to do things properly, with no shortcuts.",
-      "p1": "Behind every project is a team that treats construction as a craft of precision, where how we treat the client matters as much as the last finish on site. We renovate homes, premises and offices across Catalonia under the legal name",
-      "p1Strong": "P & B Cornellà Construcciones, S.L.",
+      "p1": "Behind every project is a team that treats construction as a craft of precision, where how we treat the client matters as much as the last finish on site. We renovate homes, premises and offices across Catalonia.",
       "p2": "We don't work by volume. We take on the projects we can genuinely deliver, with our own team and the time each job deserves. That means fewer jobs at once, and more attention on each one."
     },
-    "band": "Precision · Noble materials · Our word",
     "pillars": {
       "eyebrow": "Three pillars",
       "title": "A way of working",
@@ -576,5 +593,10 @@
     "reject": "Reject",
     "policyLink": "Cookie policy",
     "manage": "Cookie settings"
+  },
+  "notFound": {
+    "title": "This page doesn't exist",
+    "text": "The link may be mistyped or the page may no longer be available. Head back home or check out our projects and services.",
+    "cta": "Back to home"
   }
 }
