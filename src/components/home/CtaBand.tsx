@@ -25,7 +25,7 @@ export function CtaBand({ title, text, plain }: CtaBandProps) {
 
       <div className={`container-narrow ${styles.inner}`}>
         <Reveal variant="up">
-          <h2 className={styles.title}>{title ?? t('home.cta.title')}</h2>
+          <h2 className={styles.title}>{title ?? t('home.cta.title').toUpperCase()}</h2>
         </Reveal>
 
         <Reveal variant="up" delay={80}>

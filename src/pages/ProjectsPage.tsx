@@ -39,7 +39,7 @@ export function ProjectsPage() {
         ))}
       </div>
 
-      <CtaBand title={t('projects.cta.title')} text={t('projects.cta.text')} />
+      <CtaBand title={t('projects.cta.title').toUpperCase()} text={t('projects.cta.text')} />
     </>
   )
 }
