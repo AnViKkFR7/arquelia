@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PageHero } from '../components/ui/PageHero'
 import { SectionHeader } from '../components/ui/SectionHeader'
 import { Reveal } from '../components/ui/Reveal'
-import { ServiceCard } from '../components/services/ServiceCard'
+import { FeaturedServiceCard } from '../components/services/FeaturedServiceCard'
 import { ProcessTimeline, type ProcessStep } from '../components/services/ProcessTimeline'
 import { CtaBand } from '../components/home/CtaBand'
 import styles from './ServicesPage.module.css'
@@ -12,14 +12,17 @@ import heroImg from '../assets/servicios_header_2.webp'
 import cocinaImg from '../assets/cocina_abierta.webp'
 import banoImg from '../assets/baño_03.webp'
 import salonImg from '../assets/salon_01.webp'
+import fachadaImg from '../assets/fachada.webp'
 
-const FEATURED_IMAGES: Record<string, string> = { cocina: cocinaImg, bano: banoImg, integral: salonImg }
-
-interface FeaturedCard {
-  id: string
-  label: string
-  prefix: string
-  suffix: string
+// Mismo id que usa `services.catalog.items` — las tarjetas destacadas son
+// un subconjunto de ese catálogo (título y descripción incluidos), no un
+// contenido aparte que haya que mantener sincronizado a mano.
+const FEATURED_IDS = ['cocina', 'bano', 'integral', 'rehabilitacion']
+const FEATURED_IMAGES: Record<string, string> = {
+  cocina: cocinaImg,
+  bano: banoImg,
+  integral: salonImg,
+  rehabilitacion: fachadaImg,
 }
 
 interface CatalogItem {
@@ -32,8 +35,10 @@ export function ServicesPage() {
   const { t } = useTranslation()
   const [activeStep, setActiveStep] = useState(0)
 
-  const featured = t('services.featured', { returnObjects: true }) as FeaturedCard[]
   const catalog = t('services.catalog.items', { returnObjects: true }) as CatalogItem[]
+  const featured = FEATURED_IDS.map((id) => catalog.find((c) => c.id === id)).filter(
+    (c): c is CatalogItem => c != null
+  )
   const processSteps = t('services.process.steps', { returnObjects: true }) as ProcessStep[]
 
   return (
@@ -50,13 +55,7 @@ export function ServicesPage() {
         <div className={`container ${styles.featuredGrid}`}>
           {featured.map((f, i) => (
             <Reveal key={f.id} variant="up" delay={i * 100}>
-              <ServiceCard
-                label={f.label}
-                prefix={f.prefix}
-                suffix={f.suffix}
-                image={FEATURED_IMAGES[f.id]}
-                offset={i as 0 | 1 | 2}
-              />
+              <FeaturedServiceCard title={f.title} desc={f.desc} image={FEATURED_IMAGES[f.id]} hasArrow={false} />
             </Reveal>
           ))}
         </div>

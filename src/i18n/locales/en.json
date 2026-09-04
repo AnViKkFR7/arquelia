@@ -152,26 +152,6 @@
       "title": "Every renovation, a craft of precision",
       "lead": "From a single-room job to a full restoration: the same level of care in design, materials and execution."
     },
-    "featured": [
-      {
-        "id": "cocina",
-        "label": "Kitchens",
-        "prefix": "Bespoke",
-        "suffix": "renovations"
-      },
-      {
-        "id": "bano",
-        "label": "Bathrooms",
-        "prefix": "Designer",
-        "suffix": "renovations"
-      },
-      {
-        "id": "integral",
-        "label": "Full reno",
-        "prefix": "Move-in ready",
-        "suffix": "renovation"
-      }
-    ],
     "catalog": {
       "eyebrow": "Catalogue",
       "title": "Everything we cover",
@@ -257,7 +237,7 @@
       ]
     },
     "cta": {
-      "title": "Ready to transform your space?",
+      "title": "READY TO TRANSFORM YOUR SPACE?",
       "text": "Tell us what you have in mind. We'll visit, assess it, and give you a fixed quote — the first visit is free."
     }
   },

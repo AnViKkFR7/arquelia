@@ -3,18 +3,18 @@
   background: var(--bg);
 }
 
+/* Cuatro tarjetas ahora (antes tres): misma rejilla 2/4 que "Nuestros
+   servicios" en portada, con el mismo estilo de tarjeta. */
 .featuredGrid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--sp-6);
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-4);
 }
 
-/* Tres columnas sólo cuando hay ancho de sobra: por debajo, la frase de cada
-   tarjeta queda demasiado apretada. */
-@media (min-width: 900px) {
+@media (min-width: 700px) {
   .featuredGrid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--sp-4);
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--sp-5);
   }
 }
 

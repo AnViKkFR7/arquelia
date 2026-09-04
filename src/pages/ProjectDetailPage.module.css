@@ -26,6 +26,17 @@
   background: linear-gradient(180deg, rgba(6, 6, 6, 0.5) 0%, rgba(6, 6, 6, 0.2) 40%, rgba(6, 6, 6, 0.92) 100%);
 }
 
+.heroTitleContainer {
+  position: relative;
+  z-index: var(--z-base);
+  padding: var(--sp-8) var(--gutter) var(--sp-16);
+}
+
+.heroTitleContainer h1 {
+  font-size: clamp(2rem, 6vw,3.8rem);
+  line-height: 1.1;
+}
+
 .heroBottom {
   position: relative;
   z-index: var(--z-base);
@@ -153,6 +164,7 @@
   background: rgba(244, 244, 243, 0.95);
   backdrop-filter: blur(4px);
   padding: var(--sp-5);
+  border-radius: 10px;
 }
 
 .statValue {
@@ -242,7 +254,7 @@
   flex-direction: column;
   align-items: flex-start;
   padding: var(--sp-8);
-  background: var(--bg-inverse);
+  background: var(--anthracite);
   color: var(--text-inverse);
 }
 

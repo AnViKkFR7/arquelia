@@ -15,21 +15,14 @@ interface ProcessTimelineProps {
 
 function Row({
   step,
-  index,
-  total,
   isActive,
   onSelect,
 }: {
   step: ProcessStep
-  index: number
-  total: number
   isActive: boolean
   onSelect: () => void
 }) {
   const { ref, inView } = useInView<HTMLDivElement>({ threshold: 0.35 })
-
-  // Sangría creciente: cada fila entra un poco más a la derecha que la anterior.
-  const indent = (index / Math.max(total - 1, 1)) * 100
 
   return (
     <div
@@ -43,7 +36,6 @@ function Row({
       <button
         type="button"
         className={styles.button}
-        style={{ '--indent': `${indent}px` } as React.CSSProperties}
         onClick={onSelect}
         onMouseEnter={onSelect}
         aria-expanded={isActive}
@@ -61,21 +53,16 @@ function Row({
 }
 
 /**
- * Lista de proceso numerada con sangría creciente y descripción desplegable.
+ * Lista de proceso numerada, alineada a la izquierda, con descripción
+ * desplegable. Antes cada fila entraba con más sangría que la anterior
+ * ("escalera") — se quitó, pedido explícito.
  * Referencia: vídeo 03, tramo 1.5–8s.
  */
 export function ProcessTimeline({ steps, activeIndex, onSelect }: ProcessTimelineProps) {
   return (
     <div className={styles.timeline}>
       {steps.map((step, i) => (
-        <Row
-          key={step.n}
-          step={step}
-          index={i}
-          total={steps.length}
-          isActive={i === activeIndex}
-          onSelect={() => onSelect(i)}
-        />
+        <Row key={step.n} step={step} isActive={i === activeIndex} onSelect={() => onSelect(i)} />
       ))}
     </div>
   )

@@ -122,7 +122,6 @@
 .chipLabel {
   display: block;
   margin-top: var(--sp-3);
-  font-family: var(--font-display);
   /* Ahora es el único título visible del proyecto (antes había uno propio,
      `.stageTitle`, encima de la descripción — se quitó y este pasó a
      hacer ese papel, de ahí el tamaño mayor que antes). */

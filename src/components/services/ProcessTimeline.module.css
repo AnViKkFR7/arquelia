@@ -49,15 +49,7 @@
   text-align: left;
   width: 100%;
   padding-block: var(--sp-4);
-  padding-left: var(--indent, 0px);
   border-bottom: 1px solid var(--line);
-  transition: padding-left var(--t-slow) var(--ease);
-}
-
-@media (max-width: 767px) {
-  .button {
-    padding-left: 0;
-  }
 }
 
 .n {

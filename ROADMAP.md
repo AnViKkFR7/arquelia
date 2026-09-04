@@ -91,6 +91,38 @@
 
 ## Registro de trabajo
 
+**2026-08-30 (6) — Favicon revertido; tarjetas de /servicios al estilo de portada; CTA en mayúsculas; pasos sin escalera**
+
+- **Favicon**: vuelto a `Transparente_solo_logo.png` (se había cambiado a `Original_negro.png`
+  en la entrada anterior).
+- **Tarjetas destacadas de /servicios** (`FeaturedServiceCard.tsx`, nuevo — sustituye a
+  `ServiceCard.tsx`, borrado por quedar sin uso): mismo estilo que "Nuestros servicios" en
+  portada (imagen, título arriba a la izquierda con `>`), pedido explícito. Para que no fueran
+  exactamente iguales: al hover se oscurecen con un tinte radial (mismo recurso que la viñeta
+  del hero) y aparece una descripción breve desde abajo de la tarjeta. Añadida una cuarta
+  tarjeta, Rehabilitación (antes sólo Cocina/Baño/Integral) — foto `src/assets/fachada.webp`
+  (añadida por el cliente mientras se trabajaba en esto), redimensionada de 1860×846/370KB a
+  900×409/73KB: de sobra para el tamaño real de la tarjeta (~350-400px), no hacía falta el
+  archivo a resolución completa.
+  Título y descripción de las 4 tarjetas ya no viven en un array `services.featured` aparte
+  (con `label`/`prefix`/`suffix`, pensados para el patrón anterior "FOR ⟨MARINE⟩ LIVING" que
+  ya no se usa) — se derivan directamente de `services.catalog.items` filtrando por id, así
+  que no hay contenido duplicado que mantener sincronizado a mano. Eliminado ese array de los
+  tres locales.
+- **`services.cta.title` en mayúsculas** ("¿LISTO PARA TRANSFORMAR TU ESPACIO?") en los tres
+  idiomas — cambio en el propio texto, no en el CSS de `CtaBand` (compartido con la home y
+  "Sobre nosotros", que no llevaban ese cambio pedido).
+- **Los seis pasos del proceso, alineados a la izquierda**: `ProcessTimeline.tsx` calculaba una
+  sangría creciente por fila (`indent = index/(total-1) × 100`, aplicada como `padding-left`) —
+  quitada del todo, junto con los props `index`/`total` que sólo servían para ese cálculo.
+- De paso, arreglados dos errores de compilación en `ProjectDetailPage.tsx` que impedían el
+  build (`Marquee` importado sin usarse, una `i` de un `.map` sin usar) — cambios ajenos a esta
+  entrada que habían quedado de una edición anterior del cliente en ese archivo.
+- **Verificado** en el navegador: las 4 tarjetas con sus títulos y flechas correctas; al hacer
+  hover sobre "Reforma de cocina" se oscurece y aparece "Diseño funcional y materiales de alta
+  gama para el corazón de la casa." desde abajo; el CTA en mayúsculas; los 6 pasos ya sin
+  escalonado. `tsc -b`/`vite build` limpios.
+
 **2026-08-30 (5) — Favicon cambiado a `Original_negro.png`**
 
 `<link rel="icon">` y `<link rel="apple-touch-icon">` en `index.html` apuntaban a

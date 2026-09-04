@@ -152,26 +152,6 @@
       "title": "Cada reforma, un ofici de precisió",
       "lead": "Des d'una intervenció puntual fins a una rehabilitació completa: mateix nivell d'exigència en disseny, materials i execució."
     },
-    "featured": [
-      {
-        "id": "cocina",
-        "label": "Cuines",
-        "prefix": "Reformes de",
-        "suffix": "a mida"
-      },
-      {
-        "id": "bano",
-        "label": "Banys",
-        "prefix": "Reformes de",
-        "suffix": "d'autor"
-      },
-      {
-        "id": "integral",
-        "label": "Integral",
-        "prefix": "Reforma",
-        "suffix": "clau en mà"
-      }
-    ],
     "catalog": {
       "eyebrow": "Catàleg",
       "title": "Tot el que cobrim",
@@ -257,7 +237,7 @@
       ]
     },
     "cta": {
-      "title": "Llest per transformar el teu espai?",
+      "title": "LLEST PER TRANSFORMAR EL TEU ESPAI?",
       "text": "Explica'ns què tens en ment. Et visitem, ho estudiem i et donem un pressupost tancat — la primera visita no té cost."
     }
   },

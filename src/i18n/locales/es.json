@@ -152,26 +152,6 @@
       "title": "Cada reforma, un oficio de precisión",
       "lead": "Desde una intervención puntual hasta una rehabilitación completa: mismo nivel de exigencia en diseño, materiales y ejecución."
     },
-    "featured": [
-      {
-        "id": "cocina",
-        "label": "Cocinas",
-        "prefix": "Reformas de",
-        "suffix": "a medida"
-      },
-      {
-        "id": "bano",
-        "label": "Baños",
-        "prefix": "Reformas de",
-        "suffix": "de autor"
-      },
-      {
-        "id": "integral",
-        "label": "Integral",
-        "prefix": "Reforma",
-        "suffix": "llave en mano"
-      }
-    ],
     "catalog": {
       "eyebrow": "Catálogo",
       "title": "Todo lo que cubrimos",
@@ -257,7 +237,7 @@
       ]
     },
     "cta": {
-      "title": "¿Listo para transformar tu espacio?",
+      "title": "¿LISTO PARA TRANSFORMAR TU ESPACIO?",
       "text": "Cuéntanos qué tienes en mente. Te visitamos, lo estudiamos y te damos un presupuesto cerrado — la primera visita no tiene coste."
     }
   },

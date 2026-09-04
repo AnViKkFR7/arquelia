@@ -1,0 +1,111 @@
+/* Base igual que ServicesGrid.module.css (portada) a propósito — mismo
+   estilo pedido explícitamente. Lo que las distingue vive en `.tint` y
+   `.desc` más abajo. */
+.card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--grey-300) center / cover no-repeat;
+  cursor: pointer;
+  transition: transform var(--t-slow) var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0.72) 0%, rgba(6, 6, 6, 0) 45%);
+  transition: background var(--t-base) var(--ease);
+}
+
+.card:hover .veil {
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0.8) 0%, rgba(6, 6, 6, 0.1) 25%);
+}
+
+/* Tinte al hover, mismo recurso que la viñeta del hero (radial, oscurece
+   bordes y fondo sin ser un lavado plano) — el rasgo que diferencia estas
+   tarjetas de las de portada. */
+.tint {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 25%, rgba(6, 6, 6, 0.62) 100%);
+  opacity: 0;
+  transition: opacity var(--t-base) var(--ease);
+}
+
+.card:hover .tint {
+  opacity: 1;
+}
+
+.title {
+  position: relative;
+  z-index: var(--z-base);
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  width: 100%;
+  padding: var(--sp-5);
+  text-align: left;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  font-weight: 300;
+  color: var(--text-inverse);
+}
+
+.arrow {
+  color: var(--accent-bright);
+  font-weight: 500;
+  transition: transform var(--t-fast) var(--ease);
+}
+
+.card:hover .arrow {
+  transform: translateX(3px);
+}
+
+/* Descripción breve: entra desde abajo de la tarjeta al hover, no está
+   nunca en el estado de reposo. */
+.desc {
+  position: absolute;
+  z-index: var(--z-base);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--sp-5);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+  color: rgba(255, 255, 255, 0.9);
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform var(--t-base) var(--ease), opacity var(--t-base) var(--ease);
+}
+
+.card:hover .desc {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ── Táctil ──────────────────────────────────────────────
+   No hay hover: el toque hace de interruptor, mismo resultado que :hover. */
+@media (hover: none) {
+  .card.isActive .veil {
+    background: linear-gradient(180deg, rgba(6, 6, 6, 0.8) 0%, rgba(6, 6, 6, 0.1) 25%);
+  }
+
+  .card.isActive .tint {
+    opacity: 1;
+  }
+
+  .card.isActive .arrow {
+    transform: translateX(3px);
+  }
+
+  .card.isActive .desc {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

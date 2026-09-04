@@ -13,7 +13,7 @@ interface ShowcaseItem {
 const IMAGES = [
   '/mockup-images/reforma_atico_integral_mockup.webp',
   '/mockup-images/reforma_cocina_bano_mockup.webp',
-  '/mockup-images/rehabilitar_fachadas_mockup_v2.webp',
+  '/src/assets/fachada.webp',
   '/mockup-images/suelo_parquet_mockup.webp',
 ]
 

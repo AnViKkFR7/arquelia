@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getProjectById, getPublishedProjects } from '../lib/projects'
-import { Marquee } from '../components/ui/Marquee'
 import { Reveal } from '../components/ui/Reveal'
 import { Button } from '../components/ui/Button'
 import { SectionHeader } from '../components/ui/SectionHeader'
@@ -95,11 +94,12 @@ export function ProjectDetailPage() {
         style={project.coverUrl ? { backgroundImage: `url(${project.coverUrl})` } : undefined}
       >
         <span className={styles.heroScrim} />
-
+        <div className={`container ${styles.heroTitleContainer}`}>
+          <Reveal variant="fade">
+            <h1 className={styles.heroTitle}>{project.title}</h1>
+          </Reveal>
+        </div>
         <div className={styles.heroBottom}>
-          <div className={styles.marquee}>
-            <Marquee text={project.title} separator="◆" speed={52} />
-          </div>
 
           {isNarrow && stats.length > 1 && (
             <div className="container">
@@ -111,7 +111,7 @@ export function ProjectDetailPage() {
           )}
 
           <div className={`container ${styles.stats}`}>
-            {stats.map((s, i) => {
+            {stats.map((s) => {
               const content = (
                 <>
                   <span className={styles.statValue}>{s.value}</span>
@@ -124,9 +124,9 @@ export function ProjectDetailPage() {
                   {content}
                 </div>
               ) : (
-                <Reveal key={s.label} variant="up" delay={i * 80} className={styles.stat}>
+                <div key={s.label} className={styles.stat}>
                   {content}
-                </Reveal>
+                </div>
               )
             })}
           </div>
