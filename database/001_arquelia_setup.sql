@@ -15,7 +15,6 @@
 --    imprime — lo necesitará el frontend (variable de entorno) para
 --    filtrar los items de Arquelia.
 -- =====================================================================
-
 DO $$
 DECLARE
   v_admin_user   uuid := '<ADMIN_USER_UUID>'; -- <-- SUSTITUIR
