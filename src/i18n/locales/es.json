@@ -534,7 +534,7 @@
       "sections": [
         {
           "heading": "1. ¿Qué son las cookies?",
-          "body": "Las cookies son pequeños archivos de texto que un sitio web puede instalar en su navegador o dispositivo al visitarlo. Bajo el mismo régimen legal se incluyen también otras tecnologías de almacenamiento y recuperación de datos, como el almacenamiento local del navegador (localStorage), que este sitio utiliza en lugar de cookies propiamente dichas para el único fin descrito más abajo."
+          "body": "Las cookies son pequeños archivos de texto que un sitio web puede instalar en su navegador o dispositivo al visitarlo. Bajo el mismo régimen legal se incluyen también otras tecnologías de almacenamiento y recuperación de datos, como el almacenamiento local del navegador (localStorage), que este sitio utiliza en lugar de cookies propiamente dichas para los fines descritos más abajo."
         },
         {
           "heading": "2. Tipos de cookies según su finalidad",
@@ -546,15 +546,15 @@
         },
         {
           "heading": "4. Qué usamos en este sitio web",
-          "body": "Este sitio web únicamente utiliza almacenamiento técnico propio y de sesión persistente: el idioma que usted selecciona (español o inglés), guardado en el almacenamiento local de su navegador para no tener que volver a elegirlo en cada visita. No instalamos cookies ni tecnologías similares de analítica, publicidad o redes sociales, y no compartimos datos de navegación con terceros. Si en el futuro se incorporan cookies analíticas o de terceros, se solicitará su consentimiento previo mediante el correspondiente aviso, actualizando esta política."
+          "body": "Este sitio web utiliza tres capas, que conviene distinguir. (a) Almacenamiento técnico necesario: guarda en el almacenamiento local de su navegador el idioma que selecciona y su decisión sobre este aviso, para no volver a preguntárselo en cada visita. (b) Medición propia sin cookies: cuenta visitas, páginas vistas, clics en teléfono, correo electrónico y formulario, hasta dónde se lee cada página y el tiempo que se permanece en ella. No utiliza cookies ni guarda nada en su dispositivo, no almacena su dirección IP ni le identifica: el servidor calcula un código anónimo que cambia cada día y no permite seguirle de un día a otro. Los datos en bruto se eliminan a los 35 días. (c) Cookies de analítica de terceros (Google Analytics, mediante Google Tag Manager): sólo se cargan si usted las acepta expresamente. No utilizamos cookies de publicidad ni de redes sociales."
         },
         {
           "heading": "5. Base legal",
-          "body": "El tratamiento descrito se ampara en el artículo 22.2 de la Ley 34/2002, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), que exime del deber de obtener consentimiento a las cookies y tecnologías equivalentes estrictamente necesarias para prestar el servicio expresamente solicitado por el usuario. Por esta razón, el aviso de cookies de este sitio le permite aceptar o rechazar, pero su elección no afecta al funcionamiento del sitio mientras no se incorporen cookies no esenciales."
+          "body": "El almacenamiento técnico necesario está exento de consentimiento por el artículo 22.2 de la Ley 34/2002 (LSSI-CE). La medición propia sin cookies no accede al dispositivo del usuario, por lo que tampoco requiere consentimiento previo conforme a ese artículo; se basa en el interés legítimo de Arquelia en conocer el uso del sitio y mejorarlo (artículo 6.1.f del RGPD), y usted puede oponerse en cualquier momento (artículo 21 del RGPD) desde el enlace «Configurar cookies» del pie de página. También respetamos la señal Global Privacy Control de su navegador. Las cookies de analítica de Google Analytics se basan en su consentimiento (artículo 22.2 de la LSSI-CE y 6.1.a del RGPD), que es libre y puede retirar en cualquier momento. Rechazar las cookies no desactiva la medición propia sin cookies: para ello, desactive la opción «Medición sin cookies»."
         },
         {
           "heading": "6. Cómo gestionar o revocar su consentimiento",
-          "body": "Puede aceptar o rechazar el uso de cookies no esenciales desde el aviso que aparece en su primera visita. Puede cambiar su elección en cualquier momento desde el enlace «Configurar cookies» disponible en el pie de página de este sitio web, lo que volverá a mostrarle el aviso."
+          "body": "Desde el aviso que aparece en su primera visita puede aceptarlo todo, quedarse sólo con lo necesario o elegir cada capa por separado. Su decisión se guarda durante 12 meses, pasados los cuales se le volverá a preguntar. Puede cambiarla en cualquier momento desde el enlace «Configurar cookies» del pie de página, lo que volverá a mostrarle el aviso."
         },
         {
           "heading": "7. Cómo configurar su navegador",
@@ -568,9 +568,23 @@
     }
   },
   "cookieBanner": {
-    "text": "Usamos almacenamiento técnico necesario para el funcionamiento del sitio y, sólo si lo acepta, cookies analíticas (Google Analytics) para saber cómo se usa la web. No usamos cookies de publicidad.",
-    "accept": "Aceptar",
-    "reject": "Rechazar",
+    "text": "Medimos las visitas de forma anónima y sin cookies (puedes desactivarlo). Si lo aceptas, también usamos cookies analíticas de Google Analytics para saber cómo se usa la web. No usamos cookies de publicidad.",
+    "accept": "Aceptar todo",
+    "reject": "Solo necesarias",
+    "customize": "Personalizar",
+    "save": "Guardar preferencias",
+    "necessary": {
+      "title": "Necesarias",
+      "desc": "Imprescindibles para que el sitio funcione, como recordar tu idioma. Siempre activas."
+    },
+    "measurement": {
+      "title": "Medición sin cookies",
+      "desc": "Cuenta visitas y clics de forma anónima, sin cookies ni identificarte. Activa por defecto; puedes oponerte aquí."
+    },
+    "analytics": {
+      "title": "Analítica (Google Analytics)",
+      "desc": "Cookies para saber cómo se usa la web. Solo se cargan si las aceptas."
+    },
     "policyLink": "Política de cookies",
     "manage": "Configurar cookies"
   },

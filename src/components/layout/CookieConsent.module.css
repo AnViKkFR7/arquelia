@@ -30,13 +30,16 @@
 
 @media (min-width: 768px) {
   .banner {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
     left: auto;
     right: var(--sp-8);
-    max-width: 480px;
+    max-width: 520px;
   }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
 }
 
 .text {
@@ -52,8 +55,8 @@
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--sp-3);
-  flex-shrink: 0;
 }
 
 .reject,
@@ -87,3 +90,85 @@
 .accept:hover {
   background: var(--accent-bright);
 }
+
+/* ── Panel de preferencias ── */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--line-inverse);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  cursor: pointer;
+}
+
+.optionTitle {
+  color: var(--white);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+}
+
+.optionDesc {
+  margin-top: 0.15rem;
+  font-size: var(--fs-xs, 0.8125rem);
+  line-height: var(--lh-body);
+}
+
+/* Interruptor accesible: un checkbox real (teclado y lectores de pantalla)
+   dibujado como interruptor. */
+.switch {
+  appearance: none;
+  flex-shrink: 0;
+  position: relative;
+  width: 2.5rem;
+  height: 1.4rem;
+  border-radius: 999px;
+  background: var(--line-inverse);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
+}
+
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 0.2rem;
+  left: 0.2rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--white);
+  transition: transform var(--t-fast) var(--ease);
+}
+
+.switch:checked {
+  background: var(--accent);
+}
+
+.switch:checked::after {
+  transform: translateX(1.1rem);
+  background: var(--black-950);
+}
+
+.switch:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.switch:focus-visible {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner {
+    animation: none;
+  }
+}
+

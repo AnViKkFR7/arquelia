@@ -325,7 +325,6 @@ export function CTAForm({ onDone }: CTAFormProps) {
             onClick={submit}
             disabled={sending}
             arrow
-            data-track-event="clic_enviar_form_arquelia"
           >
             {sending ? t('ctaForm.submitting') : t('ctaForm.submit')}
           </Button>

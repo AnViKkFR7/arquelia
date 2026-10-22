@@ -44,7 +44,15 @@ export async function submitLead(data: CTAFormData): Promise<LeadResult> {
       }),
       signal: AbortSignal.timeout(15000),
     })
-    if (res.ok) return { ok: true }
+    if (res.ok) {
+      // Avisa a la analítica (lib/analytics.ts) de que ha habido un envío.
+      // Se hace AQUÍ, tras la respuesta del servidor, y no en el clic del
+      // botón: así el número de la analítica es el de solicitudes que de
+      // verdad llegaron, y no el de intentos. Es un evento del DOM para que
+      // este fichero no dependa de analytics.ts.
+      window.dispatchEvent(new CustomEvent('moira:lead-sent'))
+      return { ok: true }
+    }
     return { ok: false, reason: res.status === 400 ? 'invalid' : 'server' }
   } catch {
     return { ok: false, reason: 'network' }

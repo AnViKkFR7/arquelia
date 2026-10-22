@@ -534,7 +534,7 @@
       "sections": [
         {
           "heading": "1. Què són les cookies?",
-          "body": "Les cookies són petits arxius de text que un lloc web pot instal·lar al seu navegador o dispositiu quan el visita. Sota el mateix règim legal s'inclouen també altres tecnologies d'emmagatzematge i recuperació de dades, com l'emmagatzematge local del navegador (localStorage), que aquest lloc utilitza en lloc de cookies pròpiament dites per a l'única finalitat descrita a continuació."
+          "body": "Les cookies són petits arxius de text que un lloc web pot instal·lar al seu navegador o dispositiu quan el visita. Sota el mateix règim legal s'inclouen també altres tecnologies d'emmagatzematge i recuperació de dades, com l'emmagatzematge local del navegador (localStorage), que aquest lloc utilitza en lloc de cookies pròpiament dites per a les finalitats descrites a continuació."
         },
         {
           "heading": "2. Tipus de cookies segons la seva finalitat",
@@ -546,15 +546,15 @@
         },
         {
           "heading": "4. Què fem servir en aquest lloc web",
-          "body": "Aquest lloc web fa servir emmagatzematge tècnic propi i de sessió persistent (l'idioma que vostè selecciona, desat a l'emmagatzematge local del seu navegador) i, només si vostè ho accepta mitjançant l'avís de cookies, cookies analítiques de Google Analytics, gestionades a través de Google Tag Manager, per conèixer el nombre de visitants i com naveguen pel lloc. Aquestes cookies analítiques no s'instal·len fins que vostè atorga el seu consentiment exprés, i pot revocar-lo en qualsevol moment des de «Configurar cookies» al peu de pàgina. No fem servir cookies publicitàries ni compartim dades de navegació amb tercers amb finalitats comercials."
+          "body": "Aquest lloc web utilitza tres capes, que convé distingir. (a) Emmagatzematge tècnic necessari: guarda a l'emmagatzematge local del seu navegador l'idioma que selecciona i la seva decisió sobre aquest avís, per no tornar-li a preguntar a cada visita. (b) Mesura pròpia sense cookies: compta visites, pàgines vistes, clics en telèfon, correu electrònic i formulari, fins on es llegeix cada pàgina i el temps que s'hi roman. No utilitza cookies ni guarda res al seu dispositiu, no emmagatzema la seva adreça IP ni l'identifica: el servidor calcula un codi anònim que canvia cada dia i no permet seguir-lo d'un dia a l'altre. Les dades en brut s'eliminen als 35 dies. (c) Cookies d'analítica de tercers (Google Analytics, mitjançant Google Tag Manager): només es carreguen si vostè les accepta expressament. No fem servir cookies de publicitat ni de xarxes socials."
         },
         {
           "heading": "5. Base legal",
-          "body": "L'emmagatzematge tècnic estrictament necessari descrit (idioma) s'empara en l'article 22.2 de la Llei 34/2002, de Serveis de la Societat de la Informació i de Comerç Electrònic (LSSI-CE), que eximeix del deure d'obtenir consentiment les cookies i tecnologies equivalents estrictament necessàries per prestar el servei expressament sol·licitat per l'usuari. Les cookies analítiques de Google Analytics, en no ser estrictament necessàries, només s'instal·len si vostè atorga el seu consentiment exprés mitjançant l'avís de cookies; la seva elecció no afecta el funcionament bàsic del lloc, que continua operatiu tant si accepta com si rebutja."
+          "body": "L'emmagatzematge tècnic necessari està exempt de consentiment per l'article 22.2 de la Llei 34/2002 (LSSI-CE). La mesura pròpia sense cookies no accedeix al dispositiu de l'usuari, per la qual cosa tampoc requereix consentiment previ conforme a aquest article; es basa en l'interès legítim d'Arquelia a conèixer l'ús del lloc i millorar-lo (article 6.1.f del RGPD), i vostè hi pot oposar-se en qualsevol moment (article 21 del RGPD) des de l'enllaç «Configurar cookies» del peu de pàgina. També respectem el senyal Global Privacy Control del seu navegador. Les cookies d'analítica de Google Analytics es basen en el seu consentiment (article 22.2 de la LSSI-CE i 6.1.a del RGPD), que és lliure i pot retirar en qualsevol moment. Rebutjar les cookies no desactiva la mesura pròpia sense cookies: per fer-ho, desactivi l'opció «Mesura sense cookies»."
         },
         {
           "heading": "6. Com gestionar o revocar el seu consentiment",
-          "body": "Pot acceptar o rebutjar l'ús de cookies no essencials des de l'avís que apareix a la primera visita. Pot canviar la seva elecció en qualsevol moment des de l'enllaç «Configurar cookies» disponible al peu de pàgina d'aquest lloc web, la qual cosa tornarà a mostrar-li l'avís."
+          "body": "Des de l'avís que apareix a la primera visita pot acceptar-ho tot, quedar-se només amb el necessari o triar cada capa per separat. La seva decisió es guarda durant 12 mesos, passats els quals se li tornarà a preguntar. Pot canviar-la en qualsevol moment des de l'enllaç «Configurar cookies» del peu de pàgina, cosa que li tornarà a mostrar l'avís."
         },
         {
           "heading": "7. Com configurar el seu navegador",
@@ -568,9 +568,23 @@
     }
   },
   "cookieBanner": {
-    "text": "Fem servir emmagatzematge tècnic necessari per al funcionament del lloc i, només si ho accepta, cookies analítiques (Google Analytics) per saber com es fa servir el lloc. No fem servir cookies de publicitat.",
-    "accept": "Acceptar",
-    "reject": "Rebutjar",
+    "text": "Mesurem les visites de manera anònima i sense cookies (pots desactivar-ho). Si ho acceptes, també fem servir cookies analítiques de Google Analytics per saber com es fa servir el lloc. No fem servir cookies de publicitat.",
+    "accept": "Acceptar tot",
+    "reject": "Només necessàries",
+    "customize": "Personalitzar",
+    "save": "Desar preferències",
+    "necessary": {
+      "title": "Necessàries",
+      "desc": "Imprescindibles perquè el lloc funcioni, com recordar el teu idioma. Sempre actives."
+    },
+    "measurement": {
+      "title": "Mesura sense cookies",
+      "desc": "Compta visites i clics de manera anònima, sense cookies ni identificar-te. Activa per defecte; pots oposar-t'hi aquí."
+    },
+    "analytics": {
+      "title": "Analítica (Google Analytics)",
+      "desc": "Cookies per saber com es fa servir el lloc. Només es carreguen si les acceptes."
+    },
     "policyLink": "Política de cookies",
     "manage": "Configurar cookies"
   },

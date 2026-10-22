@@ -1,331 +1,266 @@
-# Integración de analítica de tráfico — moira ordo
+# Analítica — integrar en la web de un cliente
 
-Este documento es **autocontenido**: pégalo en cualquier proyecto de web de
-empresa que consuma el backend multi-tenant de moira ordo (Supabase
-compartido) y, siguiendo los pasos de aquí, tendrás tráfico y clics medidos
-sin depender de ningún otro archivo ni repositorio.
-
-**Qué mide**: visitantes únicos, páginas vistas por ruta, país/ciudad,
-tipo de dispositivo, y clics en cualquier botón/CTA que se marque a mano
-(WhatsApp, "Reservar", enviar formulario, etc.), tantos como se quieran.
-
-**Qué NO hace falta**: ni aviso de cookies, ni `localStorage`, ni ninguna
-librería de terceros (nada de GTM/GA4). No se accede a ningún
-almacenamiento del dispositivo del visitante — por eso no aplica el deber
-de consentimiento de cookies (art. 22.2 LSSI-CE/ePrivacy).
-
-Los resultados se ven en el panel de admin de moira ordo, pestaña
-**"Analítica"**. El clic llega a Supabase al instante, pero el dashboard no
-lee la tabla en crudo directamente: lee un resumen agregado por
-empresa/día que se recalcula a las 10:00, 12:00, 14:00, 16:00 y 18:00 (hora
-de Madrid) — no una sola vez de madrugada, así que los datos de hoy se van
-viendo a lo largo del día, con un margen de un par de horas como mucho.
-Para probar la integración sin esperar a la siguiente pasada, el propio
-panel de admin tiene un botón **"Agregar ahora"** en esa misma pestaña que
-recalcula el día de hoy al instante.
-
----
-
-## 0. Requisitos previos
-
-Antes de tocar código de este proyecto:
-
-1. **La empresa ya debe existir** en la tabla `companies` de Supabase — se
-   crea desde el panel de admin (`/profile` → Crear Compañía), no desde
-   aquí. Necesitas su `id` (uuid).
-2. **Tener a mano**, del mismo proyecto Supabase que ya usa el admin panel:
-   - la URL del proyecto (`https://xxxxx.supabase.co`)
-   - la **service role key** (Supabase → Settings → API → `service_role`,
-     nunca la `anon` key para esto)
-3. **El proyecto de esta web despliega en Vercel.** Si no es así, ver la
-   nota "Otros hostings" al final del Paso 2 — el resto del documento
-   asume Vercel porque la geolocalización sale gratis de sus cabeceras.
-
----
-
-## 1. Variables de entorno
-
-Configúralas en el proyecto Vercel de **esta web** (Settings → Environment
-Variables), no en el admin panel:
-
-| Variable | Prefijo público? | Valor |
-|---|---|---|
-| `SUPABASE_URL` | No — solo servidor | URL del proyecto Supabase compartido |
-| `SUPABASE_SERVICE_ROLE_KEY` | **No, nunca** | Service role key de ese mismo proyecto |
-| `VITE_COMPANY_ID` | Sí — pública, se sirve al navegador | `id` de esta empresa en `companies` |
-
-> Si este proyecto no usa Vite (por ejemplo Next.js), sustituye
-> `VITE_COMPANY_ID` por la convención de variables públicas de tu bundler
-> (`NEXT_PUBLIC_COMPANY_ID` en Next.js) y ajusta la línea que la lee en el
-> Paso 3.
+> **Prompt para empezar, dentro del proyecto de la web del cliente:**
 >
-> `SUPABASE_SERVICE_ROLE_KEY` da acceso total a la base de datos saltándose
-> RLS. Solo debe existir como variable de entorno de servidor. Si alguna
-> vez aparece en un archivo con prefijo `VITE_`/`NEXT_PUBLIC_`, el bundler
-> la mete en el bundle del cliente y queda expuesta — no lo hagas nunca.
+> «Integra la analítica de moira ordo en esta web siguiendo
+> `company-site-snippet/ANALYTICS_INTEGRATION.md`. Copia `trackCore.ts`,
+> `analytics.ts`, `consent.ts` y `api/track.ts`, arranca el seguimiento en el
+> punto de entrada, llama a `trackNotFound()` desde la página 404 y añade el
+> banner de cookies.»
+
+Mide visitas y clics **sin cookies y sin identificar a nadie**. Lo que se ve
+está en la pestaña **Analítica** del panel.
 
 ---
 
-## 2. Endpoint de ingesta: `api/track.ts`
+## Lo que hay que entender antes de copiar nada
 
-Crea este archivo tal cual, en `api/track.ts` (Vercel lo despliega como
-Serverless Function automáticamente, sin configuración adicional):
+Son **dos cosas distintas** y el banner tiene que distinguirlas:
 
-```ts
-// api/track.ts
-import { createClient } from '@supabase/supabase-js'
+| | Medición propia | Cookies de terceros (GA4, Meta) |
+|---|---|---|
+| ¿Toca el dispositivo? | **No**: ni cookies ni `localStorage` | Sí |
+| ¿Necesita consentimiento previo? | **No** (LSSI 22.2). Va por interés legítimo, con derecho a oponerse | **Sí**, explícito y previo |
+| ¿Qué pasa si rechazan cookies? | **Sigue midiendo** | No se cargan |
+| ¿Cuándo se apaga? | Si la persona se opone, o si su navegador manda Global Privacy Control | Siempre que no acepten |
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+> Esto es lo que más se suele hacer mal: poner la medición propia detrás del
+> botón «Aceptar» del banner. No hace falta, y perderías la mitad de los datos.
 
-const ALLOWED_EVENT_TYPES = new Set(['page_view', 'cta_click'])
-
-// Caché en memoria por invocación "caliente" de la función — evita
-// consultar analytics_event_definitions en cada clic.
-let definitionsCache: { keys: Set<string>; expiresAt: number } | null = null
-
-async function activeEventKeys(companyId: string): Promise<Set<string>> {
-  if (definitionsCache && definitionsCache.expiresAt > Date.now()) {
-    return definitionsCache.keys
-  }
-  const { data } = await supabase
-    .from('analytics_event_definitions')
-    .select('key')
-    .eq('company_id', companyId)
-    .eq('is_active', true)
-  const keys = new Set((data ?? []).map((d) => d.key as string))
-  definitionsCache = { keys, expiresAt: Date.now() + 5 * 60 * 1000 }
-  return keys
-}
-
-export default async function handler(req: Request) {
-  if (req.method !== 'POST') return new Response('Method not allowed', { status: 405 })
-
-  let body: { company_id?: string; event_type?: string; event_key?: string; path?: string; session_id?: string }
-  try {
-    body = await req.json()
-  } catch {
-    return new Response('Bad request', { status: 400 })
-  }
-
-  const { company_id, event_type, event_key, path, session_id } = body
-  if (!company_id || !event_type || !ALLOWED_EVENT_TYPES.has(event_type) || !session_id) {
-    return new Response('Bad request', { status: 400 })
-  }
-
-  // company_id debe existir — evita inyectar tráfico a una empresa que no
-  // sea la que corresponde a este despliegue.
-  const { data: company } = await supabase
-    .from('companies')
-    .select('id')
-    .eq('id', company_id)
-    .maybeSingle()
-  if (!company) return new Response('Bad request', { status: 400 })
-
-  // Un clic con event_key que la empresa no ha dado de alta (o desactivado
-  // desde el admin) se descarta en silencio: nunca da error al visitante.
-  if (event_type === 'cta_click') {
-    if (!event_key) return new Response('Bad request', { status: 400 })
-    const keys = await activeEventKeys(company_id)
-    if (!keys.has(event_key)) return new Response(null, { status: 204 })
-  }
-
-  // Gratis en Vercel: geo ya resuelto por la CDN, sin llamar a ningún
-  // servicio externo de geolocalización.
-  const country = req.headers.get('x-vercel-ip-country') ?? null
-  const region = req.headers.get('x-vercel-ip-country-region') ?? null
-  const city = req.headers.get('x-vercel-ip-city') ?? null
-
-  const ua = req.headers.get('user-agent') ?? ''
-  const device = /mobile/i.test(ua) ? 'mobile' : /tablet|ipad/i.test(ua) ? 'tablet' : 'desktop'
-
-  const { error } = await supabase.from('analytics_events').insert({
-    company_id,
-    event_type,
-    event_key: event_type === 'cta_click' ? event_key : null,
-    path,
-    session_id,
-    device,
-    country,
-    region,
-    city,
-  })
-
-  if (error) return new Response('Error', { status: 500 })
-  return new Response(null, { status: 204 })
-}
-
-export const config = { runtime: 'nodejs' }
-```
-
-**Otros hostings (no Vercel)**: el endpoint funciona igual en cualquier
-runtime que acepte `Request`/`Response` estándar (Deno, Cloudflare Workers,
-Next.js Route Handlers). Lo único que se pierde es la geolocalización
-gratuita de las cabeceras `x-vercel-ip-*` — en ese caso, deja
-`country`/`region`/`city` en `null` (se sigue midiendo todo lo demás) o
-integra un servicio de geo-IP aparte.
+**El navegador dice qué pasó; el servidor decide quién, desde dónde y con qué.**
+El navegador manda el tipo de evento, la ruta, el idioma y de dónde viene la
+visita. El servidor añade el visitante (hash anónimo), el país y el
+dispositivo. Así nadie puede falsear su identidad desde el cliente.
 
 ---
 
-## 3. Instrumentación cliente: `lib/analytics.ts`
+## Qué se mide
 
-Crea este archivo tal cual (ajusta la ruta a la convención de este
-proyecto, p. ej. `src/lib/analytics.ts`):
+Con solo copiar los archivos y llamar a `initAutoTracking()`, **sin tocar el
+HTML** de la web:
 
-```ts
-// lib/analytics.ts
-const ENDPOINT = '/api/track'
-const COMPANY_ID = import.meta.env.VITE_COMPANY_ID
-// Next.js: usar process.env.NEXT_PUBLIC_COMPANY_ID en su lugar.
+| Qué | Cómo se ve en el panel | Cómo se mide |
+|---|---|---|
+| Visitas y páginas vistas | Tráfico, páginas más vistas | Una vista por cambio de ruta |
+| **Clics en teléfono** | Conversiones → *Clics en teléfono* | Cualquier enlace `tel:` |
+| **Clics en email** | Conversiones → *Clics en email* | Cualquier enlace `mailto:` |
+| **Formulario enviado** | Conversiones → *Formularios enviados* | Automático al usar `submitLead` (ver abajo) |
+| **Hasta dónde se lee** cada página | Tabla de lectura: % de visitas que llega al 25 / 50 / 75 / 100 % | Evento de scroll, una vez por umbral y página |
+| **Tiempo en la página** | Reparto por tramos y % de visitas de menos de 10 s | Reloj con la pestaña visible |
+| **Páginas que no existen** | Lista de URLs rotas y cuántas veces se pidieron | Hay que llamar a `trackNotFound()` desde la página 404 |
+| Clics propios (`data-track-event`) | Eventos | Como hasta ahora |
 
-// Un id aleatorio por PESTAÑA/SESIÓN, en memoria — no en localStorage ni en
-// cookie. Se pierde al cerrar la pestaña a propósito: así no se accede a
-// ningún almacenamiento del dispositivo y no hace falta consentimiento.
-const sessionId = crypto.randomUUID()
+### Teléfono, email y formulario valen sin darlos de alta
 
-type EventType = 'page_view' | 'cta_click'
+`phone_click`, `email_click` y `form_submit` son **claves reservadas**: el
+servidor las acepta en todas las empresas sin registrarlas en el panel, igual
+que `page_view`. Antes, un clic con una clave no registrada se descartaba en
+silencio, y que un cliente olvidara darla de alta significaba perder datos sin
+enterarse. Las claves propias (`whatsapp_click`, `reservar_click`…) siguen
+necesitando estar dadas de alta y activas.
 
-function send(eventType: EventType, extra?: { path?: string; event_key?: string }) {
-  if (!COMPANY_ID) {
-    console.warn('[analytics] COMPANY_ID no está configurado — evento descartado')
-    return
-  }
-  const body = JSON.stringify({
-    company_id: COMPANY_ID,
-    event_type: eventType,
-    session_id: sessionId,
-    ...extra,
-  })
-  // sendBeacon no bloquea la navegación ni se pierde si el usuario cambia
-  // de página justo después del clic (a diferencia de un fetch normal).
-  navigator.sendBeacon(ENDPOINT, new Blob([body], { type: 'application/json' }))
-}
+Si un enlace tiene **su propio** `data-track-event`, manda esa clave en vez de
+`phone_click`: así un cliente puede distinguir «llamar a oficina» de «llamar a
+urgencias» si lo necesita.
 
-export const trackPageview = (path: string) => send('page_view', { path })
+### Formulario de contacto
 
-// Auto-instrumentación: UN solo listener delegado en toda la app. Cualquier
-// botón/link/CTA nuevo se mide con solo añadirle un atributo HTML — sin
-// escribir una función nueva por evento cada vez. La "clave" tiene que
-// coincidir con un evento dado de alta (y activo) para esta empresa en el
-// panel de admin — si no coincide, el backend lo descarta en silencio.
-export function initAutoTracking() {
-  document.addEventListener('click', (e) => {
-    const target = e.target as Element | null
-    const el = target?.closest?.('[data-track-event]')
-    const key = el?.getAttribute('data-track-event')
-    if (key) send('cta_click', { path: window.location.pathname, event_key: key })
-  })
-}
-```
+Si el formulario usa `submitLead` (ver `LEADS_INTEGRATION.md`), el envío se
+cuenta **solo y solo cuando la solicitud ha llegado** a la bandeja. No pongas
+además `data-track-event="form_submit"` en el botón: contaría dos veces, y
+contaría también los intentos que fallan. Para un formulario que **no** use
+`submitLead`, sí puedes ponérselo al botón; esa clave no hace falta registrarla.
 
----
+### Página 404
 
-## 4. Arrancar el tracking
+Llama a `trackNotFound()` cuando se pinte la página «no encontrada». Con React:
 
-En el punto de entrada de la app (`main.tsx`, `App.tsx` o equivalente),
-una sola vez:
-
-```ts
-import { initAutoTracking } from './lib/analytics' // ajusta la ruta
-
-initAutoTracking()
-```
-
-Y en el sitio donde ya gestiones el cambio de ruta (según el router de
-este proyecto), llama a `trackPageview` con la nueva ruta:
-
-**react-router:**
 ```tsx
-import { useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
-import { trackPageview } from './lib/analytics'
+import { trackNotFound } from '../lib/analytics'
 
-function usePageviewTracking() {
-  const location = useLocation()
-  useEffect(() => {
-    trackPageview(location.pathname)
-  }, [location.pathname])
+export function NotFoundPage() {
+  useEffect(() => { trackNotFound() }, [])
+  return <h1>Esta página no existe</h1>
 }
 ```
 
-**Next.js App Router:**
-```tsx
-'use client'
-import { usePathname } from 'next/navigation'
-import { useEffect } from 'react'
-import { trackPageview } from '@/lib/analytics'
+En una web de HTML plano, en el `404.html`:
+`<script type="module">import { trackNotFound } from '/lib/analytics.js'; trackNotFound()</script>`.
 
-export function PageviewTracker() {
-  const pathname = usePathname()
-  useEffect(() => { trackPageview(pathname) }, [pathname])
-  return null
-}
+Guarda la URL que falló y, si la persona llegó **directamente** a ella desde otra
+web, el dominio de origen: es el dato que permite pedirle a quien enlaza que
+corrija el enlace. Si el router ya manda un `page_view` para la 404, esa ruta
+saldrá también en «Páginas más vistas»; es normal.
+
+### Cómo se interpretan los datos nuevos
+
+- **Lectura**: el porcentaje es sobre las visitas **de esa página**. Una página
+  con un 80 % en el 25 % y un 8 % en el 100 % se abandona a mitad: o es muy
+  larga, o el contenido no engancha. Las páginas que apenas se desplazan (menos
+  de 200 px de recorrido) **no se miden**: llegar «al 100 %» sin moverse no
+  dice nada.
+- **Tiempo**: solo cuenta con la pestaña visible; dejarla abierta de fondo no
+  es leer. Si alguien se va a otra pestaña y vuelve, cuenta como **dos tramos**
+  de la misma visita. Es una aproximación y el panel lo dice. Se recorta a 2 h
+  para que una pestaña olvidada no falsee las medias.
+- **«Rebote»** aquí significa una visita de **menos de 10 segundos** con la
+  pestaña visible. No es el rebote clásico de otras herramientas (una sola
+  página vista), y no deben compararse cifras entre una y otra.
+
+## 1. Copiar los cuatro archivos
+
+```
+la-web-del-cliente/
+├── api/
+│   └── track.ts          ← company-site-snippet/api/track.ts
+└── src/lib/
+    ├── trackCore.ts      ← company-site-snippet/lib/trackCore.ts
+    ├── analytics.ts      ← company-site-snippet/lib/analytics.ts
+    └── consent.ts        ← company-site-snippet/lib/consent.ts
 ```
 
-Si es un sitio sin router de SPA (páginas estáticas tradicionales), basta
-con llamar `trackPageview(window.location.pathname)` una vez al cargar cada
-página.
+`api/track.ts` importa `../src/lib/trackCore`: si tu proyecto no usa `src/`,
+ajusta esa ruta.
 
----
+Copia también `lib/trackCore.test.ts` si el proyecto tiene tests: comprueba lo
+que de verdad importa (que la ruta no guarde ids, que el panel no cuente como
+tráfico, que el hash del visitante cambie cada día).
 
-## 5. Instrumentar botones y CTAs
+## 2. Variables de entorno (proyecto Vercel del cliente)
 
-Sin tocar `lib/analytics.ts` de nuevo, añade el atributo a cualquier
-elemento clicable que se quiera medir:
+| Variable | Dónde | Valor |
+|---|---|---|
+| `SUPABASE_URL` | Servidor | La misma URL de Supabase que usa el panel |
+| `SUPABASE_SERVICE_ROLE_KEY` | Servidor, **nunca** `VITE_` | Service role key de ese proyecto |
+| `ANALYTICS_SALT` | Servidor | Cadena larga al azar: `openssl rand -hex 32`. Distinta por entorno |
+| `VITE_COMPANY_ID` | Cliente (pública) | El `id` (uuid) de esta empresa en `companies` |
+
+Sin las tres de servidor el endpoint responde `204` y no guarda nada, en
+silencio. La medición nunca rompe la web.
+
+> `ANALYTICS_SALT` se combina con una sal que cambia cada día y se borra a las
+> 48 h. Si la cambias, los visitantes únicos de ese día empiezan de cero.
+
+## 3. Arrancar el seguimiento
+
+En el punto de entrada (`main.tsx` o equivalente):
+
+```ts
+import { initAutoTracking, trackPageview } from './lib/analytics'
+
+initAutoTracking()   // una sola vez: respeta GPC y la decisión guardada
+```
+
+**El orden importa**: `initAutoTracking()` va **antes** que la primera llamada a
+`trackPageview`. Es quien pone en marcha el reloj del tiempo en página; si se
+llama después, la primera página sale sin tiempo.
+
+Y en el listener de cambio de ruta del router:
+
+```ts
+trackPageview(window.location.pathname)
+```
+
+En una web multipágina (sin router) basta `initAutoTracking()`: cada carga es
+una vista.
+
+**Clics**, sin JavaScript por botón:
 
 ```html
 <button data-track-event="whatsapp_click">Escríbenos por WhatsApp</button>
-<a href="tel:+34..." data-track-event="phone_click">Llamar</a>
-<button type="submit" data-track-event="form_submit">Enviar</button>
 ```
 
-**La clave (`whatsapp_click`, `form_submit`, ...) tiene que existir como
-evento activo para esta empresa en el panel de admin** (pestaña
-"Analítica" → "Nuevo evento"). Si el evento no está dado de alta ahí, el
-clic se descarta en silencio — no rompe nada, simplemente no se cuenta.
-Coordínate con quien gestione el admin de esta empresa para acordar las
-claves antes de desplegar, o dalas de alta tú mismo si tienes acceso.
+La clave (`whatsapp_click`) tiene que estar dada de alta y activa en la
+pestaña Analítica del panel. Si no, el servidor la descarta en silencio. El
+panel enseña el atributo exacto a copiar junto a cada evento.
 
-Eventos recomendados para empezar: `form_open` (al abrir el modal/sección
-de contacto) y `form_submit` (al enviar con éxito) — si la empresa se creó
-desde el admin panel, es posible que estos dos ya existan por defecto.
+## 4. Banner de cookies
 
----
+El snippet trae la lógica (`consent.ts`), no el diseño: cada web tiene el
+suyo. Lo que el banner **tiene que** hacer:
 
-## 6. Verificación
+```ts
+import { readConsent, writeConsent, measurementAllowed, needsDecision } from './lib/consent'
+import { setMeasurement } from './lib/analytics'
 
-1. Desplegar con las tres variables de entorno del Paso 1 configuradas.
-2. Abrir la web en el navegador, DevTools → Network, filtrar por `track`.
-   Cada cambio de página y cada clic instrumentado debe generar una
-   petición `POST /api/track` con respuesta `204`.
-3. Un `400` indica `company_id` inválido o payload mal formado — revisar
-   `VITE_COMPANY_ID`. Un `204` en un clic que no aparece luego en el
-   dashboard normalmente significa que el `event_key` no coincide con
-   ningún evento activo dado de alta en el admin (se descarta en silencio
-   a propósito, no es un error).
-4. Pedir a quien tenga acceso al admin de esta empresa que pulse "Agregar
-   ahora" en la pestaña "Analítica" (o esperar a la siguiente pasada
-   automática, cada 2 horas aprox. entre las 10:00 y las 18:00) y comprobar
-   que los datos de hoy aparecen ahí.
+const consent = readConsent()
+if (needsDecision(consent)) mostrarBanner()
 
----
+// Al decidir:
+function decidir(opciones: { analytics: boolean; marketing: boolean; measurement: boolean }) {
+  const guardado = writeConsent(opciones)
+  setMeasurement(measurementAllowed(guardado))   // surte efecto sin recargar
+  // aquí cargas o descargas GA4 / Meta según opciones.analytics y .marketing
+}
+```
 
-## 7. Checklist final
+Reglas:
 
-- [ ] `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` configuradas en Vercel
-      (servidor, nunca con prefijo público)
-- [ ] `VITE_COMPANY_ID` (o el equivalente del bundler) configurada con el
-      `id` correcto de esta empresa
-- [ ] `api/track.ts` desplegado
-- [ ] `lib/analytics.ts` creado y `initAutoTracking()` llamado una vez al
-      arrancar
-- [ ] `trackPageview` cableado al cambio de ruta
-- [ ] Al menos `form_open`/`form_submit` (u otros eventos ya acordados)
-      instrumentados con `data-track-event` en los botones correspondientes
-- [ ] Esos eventos existen y están activos en el panel de admin de esta
-      empresa
-- [ ] Verificado en Network que `/api/track` responde `204`
-- [ ] Confirmado al día siguiente que los datos aparecen en la pestaña
-      "Analítica" del admin
+- **Tres interruptores**, no uno: *Medición sin cookies* · *Analítica* ·
+  *Publicidad*. Más la fila de «Necesarias», fija.
+- «Solo necesarias» pone `analytics` y `marketing` a `false` pero **deja
+  `measurement` como esté** (activo por defecto).
+- El banner va **fijo abajo** y no empuja el contenido, para no mover la
+  página al cargar.
+- Si la web es prerenderizada, no pintes el banner hasta que hidrate: si no,
+  parpadea a quien ya decidió.
+- Un enlace «Preferencias de cookies» en el pie para poder cambiar de opinión.
+- La decisión caduca al año y tiene versión: si cambian las finalidades, sube
+  `CONSENT_VERSION` y se vuelve a preguntar.
+
+## 5. Qué se guarda y qué no
+
+**Sí**: visitante-hash del día, tipo de evento, ruta normalizada, país, región
+y ciudad (por IP, lo da el hosting), dispositivo, idioma del navegador,
+dominio de origen y UTM de la primera vista. Con las mejoras: hasta qué punto
+se baja cada página (25 / 50 / 75 / 100 %) y cuántos segundos se está en ella.
+Ninguno de los dos identifica a nadie.
+
+**No**: la IP, el user-agent completo, cookies, identificadores persistentes,
+la URL con su query, nombres, emails ni teléfonos.
+
+**Protecciones que ya vienen puestas**:
+
+| Riesgo | Qué lo evita |
+|---|---|
+| Datos personales en la URL (`/pedido/12345`) | `normalizePath` los sustituye por `:id` / `:token` |
+| Bots y Lighthouse inflando las visitas | `isBot` por user-agent; un UA vacío también es bot |
+| Alguien metiendo tráfico falso desde otra web | `isSameOrigin` (`Sec-Fetch-Site` / `Origin`) |
+| Inundar la tabla desde un navegador | Tope de 500 eventos por visitante y 24 h, en la base de datos |
+| Seguir a una persona entre días | La sal cambia a diario y se borra a las 48 h |
+| El tráfico interno del panel contando como visitas | Se descarta `/admin` (también `/ADMIN`) |
+| Volver de Stripe/PayPal apareciendo como «fuente» | Lista de dominios que no son fuente |
+
+**Retención**: los eventos en crudo se purgan a los 35 días; el resumen diario
+(sin visitante) se conserva.
+
+## 6. Comprobar que funciona
+
+1. Despliega a producción. **En desarrollo no se mide a propósito**, para no
+   ensuciar los datos del cliente.
+2. Entra en la web y navega por un par de páginas.
+3. Panel → **Analítica**, con esa empresa seleccionada → «Actualizar ahora».
+
+| Síntoma | Causa más probable |
+|---|---|
+| No aparece nada | `VITE_COMPANY_ID` vacío o de otra empresa. Mira la consola: avisa |
+| Las visitas no suben | ¿Estás en desarrollo? Solo mide en producción |
+| Los clics no cuentan | La clave no está dada de alta o está desactivada en el panel |
+| Visitantes únicos = páginas vistas | Falta `ANALYTICS_SALT`, o la RPC `analytics_salt` no existe: ejecuta `ANALYTICS_PRIVACY_UPGRADE.sql` |
+| Todo sale como «(directo)» | Normal si llegan escribiendo la URL. Prueba con `?utm_source=prueba` |
+| El teléfono o el email salen a 0 | ¿Los enlaces son `<a href="tel:...">` / `mailto:...`? Un botón con JavaScript que abre el marcador no es un enlace |
+| No sale ninguna página en «Hasta dónde se lee» | Las páginas muy cortas no se miden. Prueba en una larga, bajando hasta el final |
+| El tiempo sale vacío | Falta `initAutoTracking()` o se llama después de `trackPageview` |
+| No salen las páginas 404 | Falta llamar a `trackNotFound()` en la página «no encontrada» |
+| Las columnas nuevas no se rellenan | Falta ejecutar `ANALYTICS_ENGAGEMENT.sql` **y volver a ejecutar** `ANALYTICS_AGGREGATION.sql` |
+
+## 7. Legal
+
+Hace falta una **política de cookies** que describa **las dos capas** y su
+base jurídica: la medición propia por interés legítimo (con derecho de
+oposición) y las cookies de terceros por consentimiento. Esto no es opcional
+y no lo cubre el código.
+
+Este diseño sigue el criterio español (LSSI art. 22.2 + RGPD 6.1.f y 21).
+Para otro país, que lo revise quien corresponda.

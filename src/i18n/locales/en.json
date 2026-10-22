@@ -534,7 +534,7 @@
       "sections": [
         {
           "heading": "1. What are cookies?",
-          "body": "Cookies are small text files that a website may store in your browser or device when you visit it. The same legal regime also covers other data storage and retrieval technologies, such as the browser's local storage (localStorage), which this website uses instead of actual cookies for the single purpose described below."
+          "body": "Cookies are small text files that a website may store in your browser or device when you visit it. The same legal regime also covers other data storage and retrieval technologies, such as the browser's local storage (localStorage), which this website uses instead of actual cookies for the purposes described below."
         },
         {
           "heading": "2. Types of cookies by purpose",
@@ -546,15 +546,15 @@
         },
         {
           "heading": "4. What we use on this website",
-          "body": "This website uses its own, persistent technical storage (the language you select, saved in your browser's local storage) and, only if you accept via the cookie notice, Google Analytics analytics cookies, managed through Google Tag Manager, to know the number of visitors and how they browse the site. These analytics cookies are not installed until you give your express consent, and you can revoke it at any time from \"Cookie settings\" in the footer. We do not use advertising cookies and do not share browsing data with third parties for commercial purposes."
+          "body": "This website uses three layers, which are worth telling apart. (a) Necessary technical storage: it saves, in your browser's local storage, the language you choose and your decision on this notice, so we don't ask you again on every visit. (b) Our own cookie-free measurement: it counts visits, page views, clicks on phone, email and the form, how far each page is read and the time spent on it. It uses no cookies, stores nothing on your device, does not store your IP address and does not identify you: the server computes an anonymous code that changes every day and does not allow you to be followed from one day to the next. Raw data is deleted after 35 days. (c) Third-party analytics cookies (Google Analytics, via Google Tag Manager): they are only loaded if you expressly accept them. We do not use advertising or social media cookies."
         },
         {
           "heading": "5. Legal basis",
-          "body": "The strictly necessary technical storage described (language) is based on article 22.2 of Spanish Law 34/2002, on Information Society Services and Electronic Commerce (LSSI-CE), which exempts cookies and equivalent technologies that are strictly necessary to provide a service expressly requested by the user from the duty to obtain consent. Google Analytics analytics cookies, not being strictly necessary, are only installed if you give your express consent via the cookie notice; your choice does not affect the site's basic operation, which remains functional whether you accept or reject."
+          "body": "Necessary technical storage is exempt from consent under article 22.2 of Spanish Law 34/2002 (LSSI-CE). Our own cookie-free measurement does not access the user's device, so it does not require prior consent under that article either; it relies on Arquelia's legitimate interest in understanding and improving the use of the site (GDPR article 6.1.f), and you may object at any time (GDPR article 21) from the \"Cookie settings\" link in the footer. We also respect your browser's Global Privacy Control signal. Google Analytics cookies rely on your consent (LSSI-CE article 22.2 and GDPR 6.1.a), which is freely given and can be withdrawn at any time. Rejecting cookies does not switch off the cookie-free measurement: to do that, turn off the \"Cookie-free measurement\" option."
         },
         {
           "heading": "6. Managing or withdrawing your consent",
-          "body": "You can accept or reject the use of non-essential cookies from the notice shown on your first visit. You can change your choice at any time from the \"Cookie settings\" link available in this website’s footer, which will show the notice again."
+          "body": "From the notice shown on your first visit you can accept everything, keep only what is necessary, or choose each layer separately. Your decision is stored for 12 months, after which you will be asked again. You can change it at any time from the \"Cookie settings\" link in the footer, which shows the notice again."
         },
         {
           "heading": "7. Configuring your browser",
@@ -568,9 +568,23 @@
     }
   },
   "cookieBanner": {
-    "text": "We use technical storage necessary for the site to work and, only if you accept, analytics cookies (Google Analytics) to understand how the site is used. We don't use advertising cookies.",
-    "accept": "Accept",
-    "reject": "Reject",
+    "text": "We measure visits anonymously and without cookies (you can turn this off). If you accept, we also use Google Analytics cookies to understand how the site is used. We don't use advertising cookies.",
+    "accept": "Accept all",
+    "reject": "Necessary only",
+    "customize": "Customize",
+    "save": "Save preferences",
+    "necessary": {
+      "title": "Necessary",
+      "desc": "Required for the site to work, such as remembering your language. Always on."
+    },
+    "measurement": {
+      "title": "Cookie-free measurement",
+      "desc": "Counts visits and clicks anonymously, with no cookies and without identifying you. On by default; you can opt out here."
+    },
+    "analytics": {
+      "title": "Analytics (Google Analytics)",
+      "desc": "Cookies to understand how the site is used. Only loaded if you accept them."
+    },
     "policyLink": "Cookie policy",
     "manage": "Cookie settings"
   },

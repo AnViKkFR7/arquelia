@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { trackNotFound } from '../lib/analytics'
 import { Button } from '../components/ui/Button'
 import styles from './NotFoundPage.module.css'
 
@@ -13,6 +15,12 @@ import styles from './NotFoundPage.module.css'
  */
 export function NotFoundPage() {
   const { t } = useTranslation()
+
+  // Guarda qué URL falló y desde dónde llegó: es el dato que permite pedir
+  // que corrijan un enlace roto en otra web.
+  useEffect(() => {
+    trackNotFound()
+  }, [])
 
   return (
     <div className={styles.page}>

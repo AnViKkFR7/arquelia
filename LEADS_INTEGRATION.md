@@ -134,10 +134,19 @@ desde un listener de `submit`, haciendo `event.preventDefault()`.
 
 ## 5. Si la web ya mide eventos
 
-Añade `data-track-event="form_submit"` al botón de enviar (y date de alta ese
-evento en la pestaña Analítica del panel). Así el número de la analítica y las
-solicitudes de la bandeja cuadran, y se ve cuántos envíos se quedan por el
-camino.
+`submitLead` avisa **solo** a la analítica cuando la solicitud ha llegado a la
+bandeja (un evento `moira:lead-sent` que recoge `lib/analytics.ts` y cuenta como
+`form_submit`). No hay que hacer nada:
+
+- Cuenta **solo los envíos que llegaron**, no los intentos fallidos.
+- No pongas además `data-track-event="form_submit"` en el botón: se contaría
+  dos veces.
+- No hace falta dar de alta `form_submit` en el panel: es una clave reservada.
+
+Así el número de *Formularios enviados* de la analítica y las solicitudes de la
+bandeja coinciden, y la diferencia con las visitas a la página de contacto es la
+tasa real de abandono. Si la analítica no está instalada, no pasa nada: el
+evento se dispara y nadie lo escucha.
 
 ## 6. Comprobar que funciona
 
