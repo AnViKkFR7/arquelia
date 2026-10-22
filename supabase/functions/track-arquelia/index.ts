@@ -27,7 +27,7 @@ import {
   isEventKeyAllowed,
   parseTrackPayload,
   visitorHash,
-} from '../_shared/trackCore.ts'
+} from './trackCore.ts'
 
 const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!)
 

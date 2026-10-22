@@ -1,4 +1,4 @@
-// _shared/trackCore.ts — núcleo de la medición, sin dependencias.
+// track-arquelia/trackCore.ts — núcleo de la medición, sin dependencias.
 // Copia tal cual de company-site-snippet/lib/trackCore.ts (no editar aquí:
 // se mantiene idéntico en todas las webs). Lo importa la Edge Function
 // track-arquelia. Aquí no se toca la red ni la base de datos, solo se valida
