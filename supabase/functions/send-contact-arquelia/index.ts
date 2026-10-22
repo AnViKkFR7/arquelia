@@ -1,3 +1,29 @@
+// Además del email, cada solicitud se guarda en la tabla `lead` (bandeja
+// "Solicitudes" del admin panel — ver LEADS_INTEGRATION.md). Se escribe aquí,
+// en el servidor, con la service role key (inyectada sola en toda Edge
+// Function): la tabla no tiene política de insert para la clave pública, a
+// propósito, para que nadie pueda llenarla de basura desde el navegador.
+import { createClient } from 'npm:@supabase/supabase-js@2'
+
+const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!)
+
+// Un `Promise.race` con temporizador de verdad: no depende de que la librería
+// de red coopere con un abort (ver supabase/functions/track-arquelia).
+function withTimeout<T>(promise: PromiseLike<T>, ms: number): Promise<T> {
+  return Promise.race([
+    Promise.resolve(promise),
+    new Promise<never>((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)),
+  ])
+}
+
+const LEAD_MAX = { name: 120, email: 160, phone: 40, message: 4000, path: 300, campaign: 120 }
+
+const clean = (value: unknown, max: number): string | null => {
+  if (typeof value !== 'string') return null
+  const trimmed = value.trim().slice(0, max)
+  return trimmed.length > 0 ? trimmed : null
+}
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -24,6 +50,12 @@ interface ContactPayload {
   email?: string
   telefono?: string
   descripcion?: string
+  // Bandeja de solicitudes (leads)
+  company_id?: string
+  /** Campo trampa anti-bots: una persona nunca lo rellena. */
+  company_website?: string
+  source_path?: string
+  source_campaign?: string
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
@@ -139,6 +171,55 @@ function buildHtml(d: Required<ContactPayload>, serviceLabel: string): string {
 </html>`
 }
 
+interface LeadRow {
+  company_id: string | null
+  name: string
+  email: string
+  phone: string
+  message: string
+  source_path: string | null
+  source_campaign: string | null
+}
+
+// Devuelve si se ha guardado. Nunca lanza: un fallo aquí no debe impedir el
+// envío del email (ni al revés).
+async function saveLead(lead: LeadRow): Promise<boolean> {
+  if (!lead.company_id) {
+    console.error('[lead] falta company_id — solicitud sin guardar en la bandeja')
+    return false
+  }
+  try {
+    // company_id debe existir: evita meter solicitudes en la bandeja de otra
+    // empresa con un id inventado.
+    const { data: company } = await withTimeout(
+      supabase.from('companies').select('id').eq('id', lead.company_id).maybeSingle(),
+      5000
+    )
+    if (!company) {
+      console.error('[lead] company_id desconocido', lead.company_id)
+      return false
+    }
+    const { error } = await withTimeout(
+      supabase.from('lead').insert({
+        ...lead,
+        name: lead.name.slice(0, LEAD_MAX.name),
+        email: lead.email.slice(0, LEAD_MAX.email),
+        phone: lead.phone.slice(0, LEAD_MAX.phone),
+        message: lead.message.slice(0, LEAD_MAX.message),
+      }),
+      5000
+    )
+    if (error) {
+      console.error('[lead] insert failed', error)
+      return false
+    }
+    return true
+  } catch (err) {
+    console.error('[lead] error guardando', err)
+    return false
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
   if (req.method !== 'POST') {
@@ -154,6 +235,15 @@ Deno.serve(async (req) => {
   } catch {
     return new Response(JSON.stringify({ error: 'Bad request' }), {
       status: 400,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
+  }
+
+  // Trampa anti-bots: se responde 200 para que el bot crea que ha funcionado
+  // y no reintente, y no se envía ni guarda nada.
+  if (clean(body.company_website, 200)) {
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   }
@@ -186,6 +276,25 @@ Deno.serve(async (req) => {
   const serviceLabel = (servicio && SERVICE_LABELS[servicio]) || 'Sin especificar'
   const data = { servicio, nombre, poblacion, email, telefono, descripcion }
 
+  // La bandeja no tiene columnas de servicio ni población: van al principio
+  // del mensaje, para que se vean al abrir la solicitud en el panel.
+  const leadSaved = await saveLead({
+    company_id: clean(body.company_id, 64),
+    name: nombre,
+    email,
+    phone: telefono,
+    message: [
+      `Servicio: ${serviceLabel}`,
+      poblacion ? `Población: ${poblacion}` : null,
+      descripcion ? `\n${descripcion}` : null,
+    ]
+      .filter(Boolean)
+      .join('\n'),
+    source_path: clean(body.source_path, LEAD_MAX.path),
+    source_campaign: clean(body.source_campaign, LEAD_MAX.campaign),
+  })
+
+  let emailSent = false
   try {
     const resendResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -203,17 +312,20 @@ Deno.serve(async (req) => {
       }),
     })
 
-    if (!resendResponse.ok) {
-      const errText = await resendResponse.text()
-      console.error('Resend API error:', errText)
-      return new Response(JSON.stringify({ error: 'Failed to send email' }), {
-        status: 502,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      })
+    if (resendResponse.ok) {
+      emailSent = true
+    } else {
+      console.error('Resend API error:', await resendResponse.text())
     }
   } catch (err) {
     console.error('Error llamando a Resend:', err)
-    return new Response(JSON.stringify({ error: 'Failed to send email' }), {
+  }
+
+  // Si falla uno de los dos pero el otro llegó, la solicitud no se pierde:
+  // está en el email o en la bandeja, y al visitante se le dice que ha ido
+  // bien. Sólo es error si no ha llegado a ninguno de los dos.
+  if (!emailSent && !leadSaved) {
+    return new Response(JSON.stringify({ error: 'Failed to send' }), {
       status: 502,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })

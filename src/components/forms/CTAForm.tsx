@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Button } from '../ui/Button'
+import { submitLead } from '../../lib/leads'
 import {
   SERVICE_OPTIONS,
   emptyCTAFormData,
@@ -93,28 +94,10 @@ export function CTAForm({ onDone }: CTAFormProps) {
   const submit = async () => {
     setSending(true)
     setSendError(false)
-    try {
-      // Supabase Edge Function, no una función serverless de Vercel: ver
-      // supabase/functions/send-contact-arquelia/index.ts. La anon key es pública a
-      // propósito (la función se despliega con --no-verify-jwt para aceptar
-      // envíos sin sesión de usuario, imprescindible para un formulario
-      // público) — la clave que de verdad importa (RESEND_API_KEY) sólo
-      // vive como secreto de servidor en Supabase, nunca en el cliente.
-      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-contact-arquelia`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-        },
-        body: JSON.stringify(data),
-      })
-      if (!res.ok) throw new Error('send failed')
-      setSent(true)
-    } catch {
-      setSendError(true)
-    } finally {
-      setSending(false)
-    }
+    const result = await submitLead(data)
+    if (result.ok) setSent(true)
+    else setSendError(true)
+    setSending(false)
   }
 
   if (sent) {
@@ -260,6 +243,18 @@ export function CTAForm({ onDone }: CTAFormProps) {
               placeholder={t('ctaForm.fields.cityPlaceholder')}
               value={data.poblacion}
               onChange={(v) => update('poblacion', v)}
+            />
+            {/* Trampa anti-bots: una persona nunca lo ve ni lo rellena. No usar
+                display:none, que algunos bots detectan. */}
+            <input
+              type="text"
+              name="company_website"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              value={data.company_website}
+              onChange={(e) => update('company_website', e.target.value)}
+              style={{ position: 'absolute', left: '-9999px', width: 1, height: 1 }}
             />
           </div>
         )}
