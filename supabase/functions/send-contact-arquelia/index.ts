@@ -6,6 +6,7 @@
 import { createClient } from 'npm:@supabase/supabase-js@2'
 
 const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!)
+const COMPANY_ID = Deno.env.get('ARQUELIA_COMPANY_ID')
 
 // Un `Promise.race` con temporizador de verdad: no depende de que la librería
 // de red coopere con un abort (ver supabase/functions/track-arquelia).
@@ -56,6 +57,14 @@ interface ContactPayload {
   company_website?: string
   source_path?: string
   source_campaign?: string
+  source_item?: string
+  source_referrer?: string
+  source_utm_source?: string
+  source_utm_medium?: string
+  source_utm_term?: string
+  source_utm_content?: string
+  consent_given?: boolean
+  consent_text_version?: string
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
@@ -69,7 +78,9 @@ function escapeHtml(s: string): string {
     .replace(/'/g, '&#39;')
 }
 
-function buildText(d: Required<ContactPayload>, serviceLabel: string): string {
+type EmailData = { nombre: string; poblacion: string; email: string; telefono: string; descripcion: string }
+
+function buildText(d: EmailData, serviceLabel: string): string {
   return [
     'Nueva solicitud de presupuesto — Arquelia',
     '',
@@ -88,7 +99,7 @@ function buildText(d: Required<ContactPayload>, serviceLabel: string): string {
 // bien en Gmail/Apple Mail/Outlook: tablas (no flex/grid, Outlook de
 // escritorio las ignora), estilos en línea (muchos clientes recortan
 // <style>), sin fuentes externas (no se cargan de forma fiable en email).
-function buildHtml(d: Required<ContactPayload>, serviceLabel: string): string {
+function buildHtml(d: EmailData, serviceLabel: string): string {
   const nombre = escapeHtml(d.nombre)
   const poblacion = escapeHtml(d.poblacion || '—')
   const email = escapeHtml(d.email)
@@ -179,6 +190,16 @@ interface LeadRow {
   message: string
   source_path: string | null
   source_campaign: string | null
+  source_item: string | null
+  source_referrer: string | null
+  source_utm_source: string | null
+  source_utm_medium: string | null
+  source_utm_term: string | null
+  source_utm_content: string | null
+  consent_given: boolean
+  consent_at: string | null
+  consent_text_version: string | null
+  consent_source: string | null
 }
 
 // Devuelve si se ha guardado. Nunca lanza: un fallo aquí no debe impedir el
@@ -231,7 +252,9 @@ Deno.serve(async (req) => {
 
   let body: ContactPayload
   try {
-    body = (await req.json()) as ContactPayload
+    const parsed = await req.json()
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('Bad request')
+    body = parsed as ContactPayload
   } catch {
     return new Response(JSON.stringify({ error: 'Bad request' }), {
       status: 400,
@@ -239,47 +262,58 @@ Deno.serve(async (req) => {
     })
   }
 
+  if (!COMPANY_ID || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(COMPANY_ID)) {
+    return Response.json({ error: 'Company not configured' }, { status: 503, headers: corsHeaders })
+  }
+  if (body.company_id !== COMPANY_ID) {
+    return Response.json({ error: 'Bad request' }, { status: 400, headers: corsHeaders })
+  }
+
   // Trampa anti-bots: se responde 200 para que el bot crea que ha funcionado
   // y no reintente, y no se envía ni guarda nada.
   if (clean(body.company_website, 200)) {
-    return new Response(JSON.stringify({ success: true }), {
+    return new Response(JSON.stringify({ success: true, lead_saved: false }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   }
 
-  const nombre = (body.nombre ?? '').trim()
-  const email = (body.email ?? '').trim()
-  const telefono = (body.telefono ?? '').trim()
-  const poblacion = (body.poblacion ?? '').trim()
-  const descripcion = (body.descripcion ?? '').trim()
-  const servicio = body.servicio ?? null
+  const nombre = clean(body.nombre, LEAD_MAX.name) ?? ''
+  const email = clean(body.email, LEAD_MAX.email) ?? ''
+  const telefono = clean(body.telefono, LEAD_MAX.phone) ?? ''
+  const poblacion = clean(body.poblacion, 200) ?? ''
+  const descripcion = clean(body.descripcion, LEAD_MAX.message) ?? ''
+  const servicio = clean(body.servicio, 40)
 
   // El cliente ya valida esto, pero el servidor nunca se fía de eso solo:
   // es la última barrera antes de gastar una petición real a Resend.
-  if (!nombre || !EMAIL_RE.test(email) || telefono.replace(/\D/g, '').length < 9) {
+  if (!nombre || (!email && !telefono) || (email && !EMAIL_RE.test(email)) || (telefono && telefono.replace(/\D/g, '').length < 9)) {
     return new Response(JSON.stringify({ error: 'Bad request' }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   }
 
-  const RESEND_ARQUELIA_API_KEY = Deno.env.get('RESEND_ARQUELIA_API_KEY')
-  if (!RESEND_ARQUELIA_API_KEY) {
-    console.error('RESEND_ARQUELIA_API_KEY no configurada (supabase secrets set RESEND_ARQUELIA_API_KEY=...)')
-    return new Response(JSON.stringify({ error: 'Server misconfigured' }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    })
+  try {
+    const { data: crm, error } = await withTimeout(supabase.from('company_modules')
+      .select('is_enabled').eq('company_id', COMPANY_ID).eq('module_key', 'crm').maybeSingle(), 5000)
+    if (error || !crm?.is_enabled) {
+      return Response.json({ error: 'Requests unavailable' }, { status: 503, headers: corsHeaders })
+    }
+  } catch {
+    return Response.json({ error: 'Requests unavailable' }, { status: 503, headers: corsHeaders })
   }
+  const RESEND_ARQUELIA_API_KEY = Deno.env.get('RESEND_ARQUELIA_API_KEY')
 
   const serviceLabel = (servicio && SERVICE_LABELS[servicio]) || 'Sin especificar'
   const data = { servicio, nombre, poblacion, email, telefono, descripcion }
+  const consentVersion = clean(body.consent_text_version, 80)
+  const consentGiven = body.consent_given === true && Boolean(consentVersion)
 
   // La bandeja no tiene columnas de servicio ni población: van al principio
   // del mensaje, para que se vean al abrir la solicitud en el panel.
   const leadSaved = await saveLead({
-    company_id: clean(body.company_id, 64),
+    company_id: COMPANY_ID,
     name: nombre,
     email,
     phone: telefono,
@@ -292,10 +326,21 @@ Deno.serve(async (req) => {
       .join('\n'),
     source_path: clean(body.source_path, LEAD_MAX.path),
     source_campaign: clean(body.source_campaign, LEAD_MAX.campaign),
+    source_item: clean(body.source_item, 200),
+    source_referrer: clean(body.source_referrer, 500),
+    source_utm_source: clean(body.source_utm_source, 120),
+    source_utm_medium: clean(body.source_utm_medium, 120),
+    source_utm_term: clean(body.source_utm_term, 120),
+    source_utm_content: clean(body.source_utm_content, 120),
+    consent_given: consentGiven,
+    consent_at: consentGiven ? new Date().toISOString() : null,
+    consent_text_version: consentGiven ? consentVersion : null,
+    consent_source: consentGiven ? 'public_contact_form' : null,
   })
 
   let emailSent = false
   try {
+    if (!RESEND_ARQUELIA_API_KEY) throw new Error('RESEND_ARQUELIA_API_KEY no configurada')
     const resendResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -305,11 +350,12 @@ Deno.serve(async (req) => {
       body: JSON.stringify({
         from: FROM,
         to: TO,
-        reply_to: email,
+        reply_to: email || undefined,
         subject: `Nueva solicitud de presupuesto — ${nombre} (${serviceLabel})`,
         html: buildHtml(data, serviceLabel),
         text: buildText(data, serviceLabel),
       }),
+      signal: AbortSignal.timeout(7000),
     })
 
     if (resendResponse.ok) {
@@ -331,7 +377,7 @@ Deno.serve(async (req) => {
     })
   }
 
-  return new Response(JSON.stringify({ success: true }), {
+  return new Response(JSON.stringify({ success: true, lead_saved: leadSaved }), {
     status: 200,
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   })

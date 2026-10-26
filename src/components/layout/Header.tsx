@@ -13,11 +13,12 @@ const links = [
   { to: '/', key: 'home' },
   { to: '/servicios', key: 'services' },
   { to: '/proyectos', key: 'projects' },
+  { to: '/blog', key: 'blog' },
   { to: '/sobre-nosotros', key: 'about' },
   { to: '/contacto', key: 'contact' },
 ] as const
 
-const desktopLinks = links.filter((l) => ['services', 'projects', 'about'].includes(l.key))
+const desktopLinks = links.filter((l) => ['services', 'projects', 'blog', 'about'].includes(l.key))
 
 export function Header() {
   const { t } = useTranslation()
@@ -40,7 +41,7 @@ export function Header() {
 
   return (
     <header className={styles.header}>
-      <div className={styles.bar}>
+      <div className={`${styles.bar} ${pathname === '/blog' || pathname.startsWith('/blog/') ? styles.solid : ''}`}>
         {/* En el DOM va antes que el logo a propósito: en desktop `.bar` es
             una rejilla de 3 columnas (nav / logo / acciones) y el orden
             visual depende del orden del marcado, no hay `order` en CSS. */}

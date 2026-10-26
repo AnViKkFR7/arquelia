@@ -35,7 +35,8 @@
     "mainAria": "Main",
     "mobileAria": "Mobile",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "blog": "Blog"
   },
   "footer": {
     "rights": "All rights reserved.",
@@ -428,9 +429,9 @@
     },
     "errors": {
       "name": "Tell us your name.",
-      "emailRequired": "We need an email to get back to you.",
+      "emailRequired": "Provide at least an email address or phone number so we can reply.",
       "emailInvalid": "That email doesn't look valid.",
-      "phoneRequired": "We need a contact phone number.",
+      "phoneRequired": "Provide at least an email address or phone number so we can reply.",
       "phoneInvalid": "That phone number doesn't look valid.",
       "sendFailed": "Couldn't send it. Please try again or write to us at info@arquelia.es."
     },
@@ -458,7 +459,10 @@
       "textPost": " request. We'll review the project and get back to you within 24 business hours.",
       "close": "Close",
       "seeProjects": "View projects"
-    }
+    },
+    "privacyConsent": "I have read and accept the processing of my data as explained in the",
+    "attributionNotice": "We use your data to respond to your request. We save its source and, where applicable, the project or article you viewed. You can send the request without checking this box.",
+    "contactHint": "Provide at least an email address or phone number so we can reply."
   },
   "legal": {
     "eyebrow": "Legal",
@@ -505,7 +509,7 @@
         },
         {
           "heading": "2. Purpose of processing",
-          "body": "The data you provide through this website's forms (name, email, phone number, town/city and project details) are processed to handle your quote and information requests, respond to your enquiries and, where applicable, manage any resulting contractual relationship. No automated decisions or profiling are carried out using your data."
+          "body": "The data you provide through this website's forms (name, email, phone number, town/city and project details) are processed to handle your quote and information requests, respond to your enquiries and, where applicable, manage any resulting contractual relationship. No automated decisions or profiling are carried out using your data. We also retain the source path, the project or article viewed, the referrer and the campaign parameters associated with the request."
         },
         {
           "heading": "3. Legal basis",
@@ -586,7 +590,11 @@
       "desc": "Cookies to understand how the site is used. Only loaded if you accept them."
     },
     "policyLink": "Cookie policy",
-    "manage": "Cookie settings"
+    "manage": "Cookie settings",
+    "marketing": {
+      "title": "Advertising",
+      "desc": "This website does not use advertising cookies."
+    }
   },
   "notFound": {
     "title": "This page doesn't exist",

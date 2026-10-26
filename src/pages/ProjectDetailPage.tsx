@@ -91,6 +91,7 @@ export function ProjectDetailPage() {
       {/* Hero: imagen + marquesina con el título */}
       <section
         className={styles.hero}
+        data-lead-item={`${project.title} · ${project.id}`}
         style={project.coverUrl ? { backgroundImage: `url(${project.coverUrl})` } : undefined}
       >
         <span className={styles.heroScrim} />

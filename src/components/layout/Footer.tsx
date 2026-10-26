@@ -44,6 +44,7 @@ export function Footer() {
             <NavLink to="/sobre-nosotros" className={styles.link}>
               {t('nav.about')}
             </NavLink>
+            <NavLink to="/blog" className={styles.link}>Blog</NavLink>
             <NavLink to="/contacto" className={styles.link} data-track-event="clic_ir_a_contacto_arquelia">
               {t('nav.contact')}
             </NavLink>

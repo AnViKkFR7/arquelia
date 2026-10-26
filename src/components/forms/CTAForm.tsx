@@ -38,9 +38,10 @@ const SERVICE_ICONS: Record<ServiceOption, () => React.JSX.Element> = {
 
 interface CTAFormProps {
   onDone: () => void
+  sourceItem?: string
 }
 
-export function CTAForm({ onDone }: CTAFormProps) {
+export function CTAForm({ onDone, sourceItem }: CTAFormProps) {
   const { t } = useTranslation()
   const [step, setStep] = useState(0)
   const [data, setData] = useState<CTAFormData>(emptyCTAFormData)
@@ -64,13 +65,13 @@ export function CTAForm({ onDone }: CTAFormProps) {
   const errors = {
     nombre: touched.nombre && data.nombre.trim() === '' ? t('ctaForm.errors.name') : null,
     email:
-      touched.email && !emailValid
+      touched.email && ((!data.email.trim() && !phoneValid) || (!!data.email.trim() && !emailValid))
         ? data.email.trim() === ''
           ? t('ctaForm.errors.emailRequired')
           : t('ctaForm.errors.emailInvalid')
         : null,
     telefono:
-      touched.telefono && !phoneValid
+      touched.telefono && ((!data.telefono.trim() && !emailValid) || (!!data.telefono.trim() && !phoneValid))
         ? data.telefono.trim() === ''
           ? t('ctaForm.errors.phoneRequired')
           : t('ctaForm.errors.phoneInvalid')
@@ -79,7 +80,7 @@ export function CTAForm({ onDone }: CTAFormProps) {
 
   const canAdvance = () => {
     if (step === 0) return data.servicio !== null
-    if (step === 1) return data.nombre.trim() !== '' && emailValid && phoneValid
+    if (step === 1) return data.nombre.trim() !== '' && (emailValid || phoneValid) && (!data.email.trim() || emailValid) && (!data.telefono.trim() || phoneValid)
     return true
   }
 
@@ -92,9 +93,10 @@ export function CTAForm({ onDone }: CTAFormProps) {
   }
 
   const submit = async () => {
+    if (sending) return
     setSending(true)
     setSendError(false)
-    const result = await submitLead(data)
+    const result = await submitLead({ ...data, source_item: sourceItem })
     if (result.ok) setSent(true)
     else setSendError(true)
     setSending(false)
@@ -200,6 +202,7 @@ export function CTAForm({ onDone }: CTAFormProps) {
 
         {step === 1 && (
           <div className={styles.fields}>
+            <p>{t('ctaForm.contactHint')}</p>
             <Field
               ref={firstFieldRef}
               label={t('ctaForm.fields.name')}
@@ -215,7 +218,6 @@ export function CTAForm({ onDone }: CTAFormProps) {
             <div className={styles.fieldRow}>
               <Field
                 label={t('ctaForm.fields.email')}
-                required
                 type="email"
                 autoComplete="email"
                 placeholder={t('ctaForm.fields.emailPlaceholder')}
@@ -226,7 +228,6 @@ export function CTAForm({ onDone }: CTAFormProps) {
               />
               <Field
                 label={t('ctaForm.fields.phone')}
-                required
                 type="tel"
                 autoComplete="tel"
                 placeholder={t('ctaForm.fields.phonePlaceholder')}
@@ -296,11 +297,12 @@ export function CTAForm({ onDone }: CTAFormProps) {
                 <SummaryRow label={t('ctaForm.summary.details')} value={data.descripcion} onEdit={() => setStep(2)} />
               )}
             </dl>
-            <p className={styles.privacy}>
-              {t('ctaForm.privacyPre')} <Link to="/privacidad">{t('ctaForm.privacyLink')}</Link>
-              {t('ctaForm.privacyPost')}
-            </p>
-            {sendError && <p className={styles.sendError}>{t('ctaForm.errors.sendFailed')}</p>}
+            <label className={styles.privacy}>
+              <input type="checkbox" checked={data.consent_given} onChange={(e) => update('consent_given', e.target.checked)} />{' '}
+              {t('ctaForm.privacyConsent')} <Link to="/privacidad">{t('ctaForm.privacyLink')}</Link>.
+            </label>
+            <p className={styles.privacy}>{t('ctaForm.attributionNotice')}</p>
+            {sendError && <p role="alert" className={styles.sendError}>{t('ctaForm.errors.sendFailed')}</p>}
           </>
         )}
       </div>

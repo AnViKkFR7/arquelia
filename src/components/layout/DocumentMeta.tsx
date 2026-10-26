@@ -52,6 +52,7 @@ export function DocumentMeta() {
   useEffect(() => {
     const lang = i18n.language
     document.documentElement.lang = lang.startsWith('ca') ? 'ca' : lang.startsWith('en') ? 'en' : 'es'
+    if (pathname === '/blog' || pathname.startsWith('/blog/')) return
 
     const pageKey = PAGE_META_KEYS[pathname]
     // Sin entrada específica para esta ruta (home, páginas legales, el
@@ -63,8 +64,10 @@ export function DocumentMeta() {
     document.title = title
     setMeta('meta[name="description"]', 'content', description)
     setMeta('meta[property="og:title"]', 'content', title)
+    setMeta('meta[property="og:type"]', 'content', 'website')
     setMeta('meta[property="og:description"]', 'content', description)
     setMeta('meta[property="og:locale"]', 'content', t('meta.locale'))
+    setMeta('meta[property="og:image"]', 'content', `${SITE_URL}/og-image.jpg`)
 
     const url = `${SITE_URL}${pathname === '/' ? '' : pathname}`
     upsertLink('canonical', url)

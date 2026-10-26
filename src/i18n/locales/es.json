@@ -35,7 +35,8 @@
     "mainAria": "Principal",
     "mobileAria": "Móvil",
     "openMenu": "Abrir menú",
-    "closeMenu": "Cerrar menú"
+    "closeMenu": "Cerrar menú",
+    "blog": "Blog"
   },
   "footer": {
     "rights": "Todos los derechos reservados.",
@@ -428,9 +429,9 @@
     },
     "errors": {
       "name": "Dinos cómo te llamas.",
-      "emailRequired": "Necesitamos un email para responderte.",
+      "emailRequired": "Indica al menos un email o teléfono para poder responderte.",
       "emailInvalid": "Ese email no parece válido.",
-      "phoneRequired": "Necesitamos un teléfono de contacto.",
+      "phoneRequired": "Indica al menos un email o teléfono para poder responderte.",
       "phoneInvalid": "Ese teléfono no parece válido.",
       "sendFailed": "No se ha podido enviar. Inténtalo de nuevo o escríbenos a info@arquelia.es."
     },
@@ -458,7 +459,10 @@
       "textPost": ". Revisaremos el proyecto y te contactaremos en menos de 24 h laborables.",
       "close": "Cerrar",
       "seeProjects": "Ver proyectos"
-    }
+    },
+    "privacyConsent": "He leído y acepto el tratamiento de mis datos según la",
+    "attributionNotice": "Usaremos tus datos para responder a la solicitud. Guardamos su origen y, cuando corresponda, el proyecto o artículo consultado. Puedes enviar la solicitud sin marcar esta casilla.",
+    "contactHint": "Indica al menos un email o teléfono para poder responderte."
   },
   "legal": {
     "eyebrow": "Legal",
@@ -505,7 +509,7 @@
         },
         {
           "heading": "2. Finalidad del tratamiento",
-          "body": "Los datos que nos facilite a través de los formularios de este sitio web (nombre, correo electrónico, teléfono, población y detalles del proyecto) se tratan para gestionar sus solicitudes de presupuesto e información, atender sus consultas y, en su caso, gestionar la relación contractual que pudiera derivarse. No se toman decisiones automatizadas ni se elaboran perfiles a partir de sus datos."
+          "body": "Los datos que nos facilite a través de los formularios de este sitio web (nombre, correo electrónico, teléfono, población y detalles del proyecto) se tratan para gestionar sus solicitudes de presupuesto e información, atender sus consultas y, en su caso, gestionar la relación contractual que pudiera derivarse. No se toman decisiones automatizadas ni se elaboran perfiles a partir de sus datos. También conservamos la ruta de origen, el proyecto o artículo consultado, el referrer y los parámetros de campaña asociados a la solicitud."
         },
         {
           "heading": "3. Legitimación",
@@ -586,7 +590,11 @@
       "desc": "Cookies para saber cómo se usa la web. Solo se cargan si las aceptas."
     },
     "policyLink": "Política de cookies",
-    "manage": "Configurar cookies"
+    "manage": "Configurar cookies",
+    "marketing": {
+      "title": "Publicidad",
+      "desc": "Esta web no utiliza cookies de publicidad."
+    }
   },
   "notFound": {
     "title": "Esta página no existe",

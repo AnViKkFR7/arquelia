@@ -35,7 +35,8 @@
     "mainAria": "Principal",
     "mobileAria": "Mòbil",
     "openMenu": "Obrir menú",
-    "closeMenu": "Tancar menú"
+    "closeMenu": "Tancar menú",
+    "blog": "Blog"
   },
   "footer": {
     "rights": "Tots els drets reservats.",
@@ -428,9 +429,9 @@
     },
     "errors": {
       "name": "Digues-nos com et dius.",
-      "emailRequired": "Necessitem un email per respondre't.",
+      "emailRequired": "Indica almenys un email o telèfon per poder respondre’t.",
       "emailInvalid": "Aquest email no sembla vàlid.",
-      "phoneRequired": "Necessitem un telèfon de contacte.",
+      "phoneRequired": "Indica almenys un email o telèfon per poder respondre’t.",
       "phoneInvalid": "Aquest telèfon no sembla vàlid.",
       "sendFailed": "No s'ha pogut enviar. Torna-ho a provar o escriu-nos a info@arquelia.es."
     },
@@ -458,7 +459,10 @@
       "textPost": ". Revisarem el projecte i et contactarem en menys de 24 h laborables.",
       "close": "Tancar",
       "seeProjects": "Veure projectes"
-    }
+    },
+    "privacyConsent": "He llegit i accepto el tractament de les meves dades segons la",
+    "attributionNotice": "Farem servir les teves dades per respondre a la sol·licitud. En guardem l’origen i, quan correspongui, el projecte o article consultat. Pots enviar-la sense marcar aquesta casella.",
+    "contactHint": "Indica almenys un email o telèfon per poder respondre’t."
   },
   "legal": {
     "eyebrow": "Legal",
@@ -505,7 +509,7 @@
         },
         {
           "heading": "2. Finalitat del tractament",
-          "body": "Les dades que ens faciliti a través dels formularis d'aquest lloc web (nom, correu electrònic, telèfon, població i detalls del projecte) es tracten per gestionar les seves sol·licituds de pressupost i informació, atendre les seves consultes i, si escau, gestionar la relació contractual que se'n pugui derivar. No es prenen decisions automatitzades ni s'elaboren perfils a partir de les seves dades."
+          "body": "Les dades que ens faciliti a través dels formularis d'aquest lloc web (nom, correu electrònic, telèfon, població i detalls del projecte) es tracten per gestionar les seves sol·licituds de pressupost i informació, atendre les seves consultes i, si escau, gestionar la relació contractual que se'n pugui derivar. No es prenen decisions automatitzades ni s'elaboren perfils a partir de les seves dades. També conservem la ruta d’origen, el projecte o article consultat, la pàgina de procedència i els paràmetres de campanya associats a la sol·licitud."
         },
         {
           "heading": "3. Legitimació",
@@ -586,7 +590,11 @@
       "desc": "Cookies per saber com es fa servir el lloc. Només es carreguen si les acceptes."
     },
     "policyLink": "Política de cookies",
-    "manage": "Configurar cookies"
+    "manage": "Configurar cookies",
+    "marketing": {
+      "title": "Publicitat",
+      "desc": "Aquest web no utilitza cookies de publicitat."
+    }
   },
   "notFound": {
     "title": "Aquesta pàgina no existeix",

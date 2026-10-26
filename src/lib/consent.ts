@@ -74,10 +74,10 @@ export function writeConsent(decision: Pick<Consent, 'analytics' | 'marketing' |
 
 /**
  * ¿Se puede medir sin cookies? Sí, salvo oposición expresa.
- * Mientras no haya decidido nada, GPC cuenta como oposición.
+ * GPC cuenta como oposición también si había una decisión guardada.
  */
 export const measurementAllowed = (consent: Consent | null): boolean =>
-  consent ? consent.measurement !== false : !globalPrivacyControl()
+  !globalPrivacyControl() && consent?.measurement !== false
 
 /** ¿Hay que enseñar el banner? */
 export const needsDecision = (consent: Consent | null): boolean => consent === null

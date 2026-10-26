@@ -6,9 +6,10 @@
 > `company-site-snippet/LEADS_INTEGRATION.md`. El formulario de contacto debe
 > guardar en la tabla `lead` a través de `/api/lead`.»
 
-Todo lo que hay que hacer está en este fichero. No hace falta tocar el admin
-panel ni la base de datos: la tabla `lead` y sus permisos ya existen
-(`database/schema/LEADS_SCHEMA.sql`).
+Todo lo que hay que hacer en cada web está en este fichero. Para registrar el
+item consultado, aplica primero la migración aditiva
+`database/migrations/CRM_LEAD_ITEM_ATTRIBUTION.sql`; los campos base de
+solicitudes ya existen (`database/schema/LEADS_SCHEMA.sql`).
 
 ---
 
@@ -16,8 +17,8 @@ panel ni la base de datos: la tabla `lead` y sus permisos ya existen
 
 Lo que hoy se pierde en un email (o directamente no se recoge) pasa a la
 pestaña **Solicitudes** del panel, con estado *nueva → contactada → cerrada*,
-buscador y notas internas. Cada solicitud guarda además desde qué página se
-envió y la campaña (`utm_campaign`), para saber qué páginas traen clientes.
+buscador y notas internas. El CRM conserva la ruta de origen, el item consultado,
+el referrer, la campaña y los cinco campos UTM cuando el formulario los envía.
 
 ## 1. Copiar los dos archivos
 
@@ -39,18 +40,24 @@ entorno.
 |---|---|---|
 | `SUPABASE_URL` | Servidor (sin prefijo) | La misma URL de Supabase que usa el admin panel |
 | `SUPABASE_SERVICE_ROLE_KEY` | Servidor (sin prefijo, **nunca** `VITE_`) | Service role key de ese proyecto Supabase |
-| `VITE_COMPANY_ID` | Cliente (con prefijo `VITE_`, es pública) | El `id` (uuid) de esta empresa en la tabla `companies` |
+| `VITE_COMPANY_ID` | Cliente y servidor de esta web Vercel (es pública) | El `id` (uuid) de esta empresa en `companies`; el endpoint lo fija desde la configuración del despliegue y rechaza IDs distintos del cuerpo |
 
 Si la analítica ya está integrada, las tres existen y no hay que tocar nada.
 
 > La service role key se salta todos los permisos: va **solo** en el servidor.
 > Si acaba en una variable `VITE_`, queda publicada en el JavaScript de la web.
+> `VITE_COMPANY_ID` no es un secreto. El endpoint no confía en el valor enviado
+> por el navegador para elegir empresa: lo compara con la configuración de
+> este despliegue y usa el valor configurado al consultar e insertar.
 
 ## 3. Conectar el formulario
 
 ```tsx
 import { useState } from 'react'
 import { submitLead } from '../lib/leads'
+
+// Cambia esta versión cada vez que cambie el texto de privacidad.
+const LEAD_PRIVACY_TEXT_VERSION = 'contact-form-2026-10'
 
 export function ContactForm() {
   const [sending, setSending] = useState(false)
@@ -67,8 +74,10 @@ export function ContactForm() {
       name: String(data.get('name') ?? ''),
       email: String(data.get('email') ?? ''),
       phone: String(data.get('phone') ?? ''),
-      message: String(data.get('message') ?? ''),
+  message: String(data.get('message') ?? ''),
       company_website: String(data.get('company_website') ?? ''), // trampa anti-bots
+      consent_given: data.get('privacy_consent') === 'on',
+      consent_text_version: LEAD_PRIVACY_TEXT_VERSION,
     })
 
     setSending(false)
@@ -95,6 +104,11 @@ export function ContactForm() {
 
       <label htmlFor="message">¿En qué podemos ayudarte?</label>
       <textarea id="message" name="message" rows={4} />
+
+      <label htmlFor="privacy_consent">
+        <input id="privacy_consent" name="privacy_consent" type="checkbox" />
+        He leído la <a href="/privacy-policy">información de privacidad</a> y acepto el tratamiento de mis datos según lo explicado allí.
+      </label>
 
       {/* Trampa anti-bots: una persona nunca lo ve ni lo rellena.
           No usar display:none, que algunos bots detectan. */}
@@ -129,8 +143,25 @@ desde un listener de `submit`, haciendo `event.preventDefault()`.
   reintente.
 - Límites: nombre 120, email 160, teléfono 40, mensaje 4000 caracteres. Lo que
   pase se recorta, no se rechaza.
-- `source_path` y `source_campaign` los rellena `lib/leads.ts` solo, con la
-  URL actual. No hay que pasarlos.
+- `source_path`, `source_referrer` y los cinco campos UTM los rellena `lib/leads.ts`.
+  En un formulario abierto desde una ficha, pasa además `source_item` con el
+  título, slug o identificador público de esa ficha:
+  `submitLead({ ...formValues, source_item: item.title + ' · ' + item.slug })`.
+  En un formulario de contacto general, deja ese campo vacío. El servidor
+  conserva solo el texto público (máximo 200 caracteres).
+  La API registra `consent_given: true` solo cuando se marca la casilla y se
+  envía una versión del texto. Si queda sin marcar, el lead se sigue enviando
+  con `consent_given: false`; no se confunde la solicitud de respuesta con el
+  consentimiento. El texto del ejemplo no sustituye la revisión de privacidad
+  de cada empresa. Mantén la versión estable y cámbiala al modificar el texto.
+
+Tras instalar `database/migrations/CRM_CONTACTS_PIPELINE.sql` y
+`database/migrations/CRM_LEAD_ITEM_ATTRIBUTION.sql`, el servidor crea
+o enlaza automáticamente el contacto al insertar la solicitud. La coincidencia
+se calcula por email normalizado o teléfono. Si cada campo apunta a un contacto
+distinto, queda `review_required` sin vinculación y el equipo debe resolverlo en
+Contactos y pipeline. La web nunca debe decidir ni enviar un identificador de
+contacto.
 
 ## 5. Si la web ya mide eventos
 
@@ -158,7 +189,8 @@ Si no aparece:
 
 | Síntoma | Causa más probable |
 |---|---|
-| 400 en `/api/lead` | Falta el nombre, o faltan email y teléfono a la vez; o `VITE_COMPANY_ID` no es un uuid de `companies`. |
+| 400 en `/api/lead` | Falta el nombre, faltan email y teléfono a la vez, o el ID enviado no coincide con `VITE_COMPANY_ID` de este despliegue. |
+| 503 en `/api/lead` | Falta o no es válido `VITE_COMPANY_ID` en la configuración de servidor, o el módulo CRM está desactivado. |
 | 500 en `/api/lead` | `SUPABASE_URL` o `SUPABASE_SERVICE_ROLE_KEY` mal puestas en Vercel. Mira los logs de la función. |
 | 200 pero no aparece nada | El campo trampa llegó relleno: algún autocompletado lo está rellenando. Cámbiale el `name`. |
 | Aparece en otra empresa | `VITE_COMPANY_ID` es el uuid de otra empresa. |
@@ -171,6 +203,8 @@ que es un tratamiento con una finalidad clara. Dos cosas que conviene tener:
 - Una casilla de aceptación de la política de privacidad junto al botón.
 - Que la política de privacidad diga que los datos de contacto se guardan para
   responder a la solicitud, y durante cuánto tiempo.
+- Si se envía `source_item`, informar que también se conserva el item relacionado
+  con la solicitud. No usar ese texto como autorización ni como dato verificado.
 
 A diferencia de la analítica, aquí **sí** hay datos personales: no se puede
 borrar la bandeja entera sin más, pero sí se pueden borrar solicitudes sueltas

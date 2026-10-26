@@ -32,6 +32,7 @@ import {
 const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!)
 
 const ANALYTICS_SALT = Deno.env.get('ANALYTICS_SALT')
+const COMPANY_ID = Deno.env.get('ARQUELIA_COMPANY_ID')
 const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGINS') ?? 'https://arquelia.es,https://www.arquelia.es')
   .split(',')
   .map((origin) => origin.trim().toLowerCase())
@@ -158,7 +159,7 @@ async function handle(req: Request): Promise<Response> {
   }
 
   const preliminary = parseTrackPayload(body, { ownHost: new URL(origin).host })
-  if (!preliminary) return noContent(req)
+  if (!preliminary || !COMPANY_ID || preliminary.company_id !== COMPANY_ID) return noContent(req)
 
   // Un clic con una clave que la empresa no ha dado de alta se descarta,
   // salvo las reservadas (teléfono, email, formulario), que valen siempre.

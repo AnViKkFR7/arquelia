@@ -1,6 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/blog.ts": { "includeFiles": "dist/index.html", "maxDuration": 30 }
+  },
   "rewrites": [
+    { "source": "/blog", "destination": "/api/blog" },
+    { "source": "/blog/:slug", "destination": "/api/blog?slug=:slug" },
+    { "source": "/sitemap.xml", "destination": "/api/blog?mode=sitemap" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

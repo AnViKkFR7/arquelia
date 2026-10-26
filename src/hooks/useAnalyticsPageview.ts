@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { trackPageview } from '../lib/analytics'
 
@@ -10,11 +10,14 @@ import { trackPageview } from '../lib/analytics'
  */
 export function useAnalyticsPageview() {
   const { pathname } = useLocation()
+  const lastPath = useRef<string | null>(null)
 
   // Sólo la ruta, sin query: la analítica nunca guarda la URL con su query
   // (podría llevar datos personales) y de las UTM de la primera vista se
   // encarga `trackPageview` leyéndolas del navegador.
   useEffect(() => {
+    if (lastPath.current === pathname) return
+    lastPath.current = pathname
     trackPageview(pathname)
   }, [pathname])
 }

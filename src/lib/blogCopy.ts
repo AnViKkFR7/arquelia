@@ -1,0 +1,5 @@
+export const blogCopy = {
+  es: { title: 'Ideas para transformar espacios', intro: 'Reformas, construcción e interiorismo desde nuestra experiencia.', empty: 'Próximamente compartiremos nuevos artículos.', back: 'Todos los artículos', previous: 'Anterior', next: 'Siguiente', read: 'Leer artículo', loading: 'Cargando artículos…', error: 'No se ha podido cargar el blog. Inténtalo de nuevo.', retry: 'Reintentar' },
+  ca: { title: 'Idees per transformar espais', intro: 'Reformes, construcció i interiorisme des de la nostra experiència.', empty: 'Pròximament compartirem nous articles.', back: 'Tots els articles', previous: 'Anterior', next: 'Següent', read: 'Llegir article', loading: 'Carregant articles…', error: 'No s’ha pogut carregar el blog. Torna-ho a provar.', retry: 'Tornar-ho a provar' },
+  en: { title: 'Ideas to transform spaces', intro: 'Renovation, construction and interior design from our experience.', empty: 'We will share new articles soon.', back: 'All articles', previous: 'Previous', next: 'Next', read: 'Read article', loading: 'Loading articles…', error: 'The blog could not be loaded. Please try again.', retry: 'Try again' },
+}

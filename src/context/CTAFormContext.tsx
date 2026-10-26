@@ -11,8 +11,13 @@ const CTAFormContext = createContext<CTAFormContextValue | null>(null)
 
 export function CTAFormProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [sourceItem, setSourceItem] = useState<string | undefined>()
 
-  const openForm = useCallback(() => setIsOpen(true), [])
+  const openForm = useCallback(() => {
+    // Solo la ficha visible en el momento de abrir el formulario aporta item.
+    setSourceItem(document.querySelector<HTMLElement>('[data-lead-item]')?.dataset.leadItem)
+    setIsOpen(true)
+  }, [])
   const closeForm = useCallback(() => setIsOpen(false), [])
 
   const value = useMemo(() => ({ openForm, closeForm }), [openForm, closeForm])
@@ -23,7 +28,7 @@ export function CTAFormProvider({ children }: { children: ReactNode }) {
       <CTAModal isOpen={isOpen} onClose={closeForm}>
         {/* `key` reinicia el formulario en cada apertura: no queremos que
             reaparezca la pantalla de "gracias" de un envío anterior. */}
-        <CTAForm key={String(isOpen)} onDone={closeForm} />
+        <CTAForm key={String(isOpen)} onDone={closeForm} sourceItem={sourceItem} />
       </CTAModal>
     </CTAFormContext.Provider>
   )

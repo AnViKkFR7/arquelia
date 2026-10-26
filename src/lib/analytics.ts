@@ -49,6 +49,10 @@ let scrollQueued = false
 
 /** Lo llama el banner de cookies al decidir, y también al arrancar */
 export function setMeasurement(on: boolean) {
+  if (on !== enabled) {
+    activeMs = 0
+    visibleSince = on && document.visibilityState === 'visible' ? performance.now() : null
+  }
   enabled = on
 }
 
@@ -118,12 +122,12 @@ const pauseClock = () => {
 }
 
 const resumeClock = () => {
-  if (visibleSince === null) visibleSince = performance.now()
+  if (enabled && visibleSince === null) visibleSince = performance.now()
 }
 
 function flushEngagement() {
   pauseClock()
-  const seconds = Math.round(activeMs / 1000)
+  const seconds = Math.min(7200, Math.round(activeMs / 1000))
   activeMs = 0
   // Menos de 1 s es ruido (por ejemplo, el primer pageview del router)
   if (seconds >= 1) send({ event_type: 'engagement', value: seconds, path: pagePath })
@@ -133,6 +137,7 @@ function flushEngagement() {
 
 function checkScroll() {
   scrollQueued = false
+  if (!enabled) return
   const doc = document.documentElement
   if (doc.scrollHeight - window.innerHeight < MIN_SCROLLABLE_PX) return
 
@@ -166,7 +171,7 @@ export function trackPageview(path?: string) {
     flushEngagement()
     reachedDepths = new Set()
     activeMs = 0
-    visibleSince = document.visibilityState === 'visible' ? performance.now() : null
+    visibleSince = enabled && document.visibilityState === 'visible' ? performance.now() : null
   }
 
   pagePath = next

@@ -42,6 +42,8 @@ export interface CTAFormData {
   descripcion: string
   /** Campo trampa anti-bots: una persona nunca lo rellena. */
   company_website: string
+  consent_given: boolean
+  source_item?: string
 }
 
 export const emptyCTAFormData: CTAFormData = {
@@ -52,6 +54,7 @@ export const emptyCTAFormData: CTAFormData = {
   telefono: '',
   descripcion: '',
   company_website: '',
+  consent_given: false,
 }
 
 export function buildMessageBody(data: CTAFormData): string {

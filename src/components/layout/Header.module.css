@@ -64,6 +64,8 @@
    necesitaba volver a ser texto para poder ponerlo en negrita — no existe
    una variante bold del wordmark en PNG, y con Tosh A ya cargado (real, con
    licencia) no hace falta: el peso lo pone el CSS. */
+.bar.solid { background: rgb(14 14 14 / 94%); }
+
 .logo {
   display: inline-flex;
   align-items: center;

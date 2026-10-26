@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { loadGTM, isGTMLoaded, trackEvent } from '../../lib/gtm'
 import { setMeasurement } from '../../lib/analytics'
-import { measurementAllowed, readConsent, writeConsent, type Consent } from '../../lib/consent'
+import { globalPrivacyControl, measurementAllowed, readConsent, writeConsent, type Consent } from '../../lib/consent'
 import styles from './CookieConsent.module.css'
 
 // El enlace "Configurar cookies" del footer necesita reabrir este aviso sin
@@ -40,7 +40,7 @@ export function CookieConsent() {
   const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
   const [customizing, setCustomizing] = useState(false)
-  const [prefs, setPrefs] = useState<Prefs>({ measurement: true, analytics: false })
+  const [prefs, setPrefs] = useState<Prefs>({ measurement: measurementAllowed(readConsent()), analytics: false })
 
   // Aplica una decisión ya tomada (la guardada, o la que acaba de darse)
   const apply = (consent: Consent) => {
@@ -56,7 +56,7 @@ export function CookieConsent() {
   useEffect(() => {
     const stored = readConsent()
     if (stored) {
-      setPrefs({ measurement: stored.measurement, analytics: stored.analytics })
+      setPrefs({ measurement: measurementAllowed(stored), analytics: stored.analytics })
       apply(stored)
     } else {
       setVisible(true)
@@ -64,7 +64,7 @@ export function CookieConsent() {
 
     reopen = () => {
       const current = readConsent()
-      if (current) setPrefs({ measurement: current.measurement, analytics: current.analytics })
+      if (current) setPrefs({ measurement: measurementAllowed(current), analytics: current.analytics })
       setCustomizing(true)
       setVisible(true)
     }
@@ -100,13 +100,13 @@ export function CookieConsent() {
         </p>
         {!customizing && (
           <div className={styles.actions}>
-            <button type="button" className={styles.reject} onClick={() => decide({ measurement: true, analytics: false })}>
+            <button type="button" className={styles.reject} onClick={() => decide({ measurement: prefs.measurement, analytics: false })}>
               {t('cookieBanner.reject')}
             </button>
             <button type="button" className={styles.reject} onClick={() => setCustomizing(true)}>
               {t('cookieBanner.customize')}
             </button>
-            <button type="button" className={styles.accept} onClick={() => decide({ measurement: true, analytics: true })}>
+            <button type="button" className={styles.accept} onClick={() => decide({ measurement: prefs.measurement, analytics: true })}>
               {t('cookieBanner.accept')}
             </button>
           </div>
@@ -133,6 +133,7 @@ export function CookieConsent() {
               role="switch"
               className={styles.switch}
               checked={prefs.measurement}
+              disabled={globalPrivacyControl()}
               onChange={(e) => setPrefs((p) => ({ ...p, measurement: e.target.checked }))}
             />
           </label>
@@ -150,6 +151,14 @@ export function CookieConsent() {
               onChange={(e) => setPrefs((p) => ({ ...p, analytics: e.target.checked }))}
             />
           </label>
+
+          <div className={styles.option}>
+            <div>
+              <p className={styles.optionTitle}>{t('cookieBanner.marketing.title')}</p>
+              <p className={styles.optionDesc}>{t('cookieBanner.marketing.desc')}</p>
+            </div>
+            <input type="checkbox" role="switch" className={styles.switch} checked={false} disabled aria-label={t('cookieBanner.marketing.title')} />
+          </div>
 
           <div className={styles.actions}>
             <button type="button" className={styles.accept} onClick={() => decide(prefs)}>
