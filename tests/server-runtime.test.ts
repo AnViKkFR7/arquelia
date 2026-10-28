@@ -4,8 +4,11 @@ import { mkdir, mkdtemp, writeFile, rm } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { spawnSync } from 'node:child_process'
+import { checkServerTrace } from '../scripts/check-server-trace'
 
-test('las funciones compiladas arrancan en Node ESM sin tsx ni bundler', async () => {
+test('Vercel incluye los renderizadores y las funciones arrancan en Node ESM', async () => {
+  await checkServerTrace()
+
   const temporaryRoot = resolve('node_modules', '.tmp')
   await mkdir(temporaryRoot, { recursive: true })
   // Dentro del proyecto para que Node encuentre las dependencias de producción.
