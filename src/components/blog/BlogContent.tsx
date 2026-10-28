@@ -1,9 +1,9 @@
 import * as React from 'react'
 import Markdown from 'react-markdown'
-import type { BlogPost } from '../../lib/blogRepository'
-import { httpsImage } from '../../lib/blogRepository'
+import type { BlogPost } from '../../lib/blogRepository.js'
+import { httpsImage } from '../../lib/blogRepository.js'
 
-import { blogCopy } from '../../lib/blogCopy'
+import { blogCopy } from '../../lib/blogCopy.js'
 
 
 export function BlogContent({ posts, post, page, hasMore, language = 'es' }: {

@@ -1,7 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Project, ProjectMedia } from '../types/project'
-import { httpsImage } from './blogRepository'
-import { projectRedirects } from './projectRedirects'
+import type { Project, ProjectMedia } from '../types/project.js'
+import { httpsImage } from './blogRepository.js'
+import { projectRedirects } from './projectRedirects.js'
 
 export const ARQUELIA_ITEM_TYPE = 'construcciones-arquelia'
 export const PROJECT_PAGE_SIZE = 9

@@ -1,6 +1,6 @@
 import * as React from 'react'
-import type { Project } from '../../types/project'
-import { projectPath } from '../../lib/projectRepository'
+import type { Project } from '../../types/project.js'
+import { projectPath } from '../../lib/projectRepository.js'
 
 // Contenido equivalente al detalle React; no requiere router, sesión ni JavaScript.
 export function ProjectInitialContent({ project }: { project: Project }) {
