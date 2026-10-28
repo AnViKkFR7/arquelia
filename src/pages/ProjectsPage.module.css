@@ -3,6 +3,8 @@
   flex-direction: column;
 }
 
+.pagination { display: flex; justify-content: center; gap: 2rem; padding-block: 2rem; }
+
 .loading {
   padding-block: var(--sp-16);
   color: var(--text-subtle);

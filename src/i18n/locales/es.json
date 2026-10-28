@@ -253,7 +253,12 @@
     "cta": {
       "title": "¿Quieres algo así en tu casa?",
       "text": "Cada proyecto empieza con una visita. Cuéntanos qué tienes en mente y te preparamos una propuesta a medida."
-    }
+    },
+    "loadError": "No se han podido cargar los proyectos. Inténtalo de nuevo.",
+    "retry": "Reintentar",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "pagination": "Paginación de proyectos"
   },
   "projectDetail": {
     "loading": "Cargando proyecto…",

@@ -253,7 +253,12 @@
     "cta": {
       "title": "Vols alguna cosa així a casa teva?",
       "text": "Cada projecte comença amb una visita. Explica'ns què tens en ment i et preparem una proposta a mida."
-    }
+    },
+    "loadError": "No s’han pogut carregar els projectes. Torna-ho a provar.",
+    "retry": "Tornar-ho a provar",
+    "previous": "Anterior",
+    "next": "Següent",
+    "pagination": "Paginació de projectes"
   },
   "projectDetail": {
     "loading": "Carregant projecte…",

@@ -1,0 +1,172 @@
+{
+  "company_id": "4fa302e4-e210-4b9c-bd03-71b23684b284",
+  "item_type": "construcciones-arquelia",
+  "exported_at": "2026-10-28T10:11:36.819Z",
+  "projects": [
+    {
+      "id": "83ae79ab-e561-41c7-baab-075be07dd55b",
+      "companyId": "4fa302e4-e210-4b9c-bd03-71b23684b284",
+      "itemType": "construcciones-arquelia",
+      "title": "Reforma de comedor y cocina en ático de Passeig de Gràcia",
+      "summary": "Reforma integral premium de ático de 145 m² en pleno centro de Barcelona.",
+      "status": "published",
+      "slug": null,
+      "seoTitle": null,
+      "seoDescription": null,
+      "seoOgImageUrl": null,
+      "updatedAt": "2026-09-04T15:27:29.826588+00:00",
+      "description": "Reforma de comedor y cocina en ático emblemático en Passeig de Gràcia. Se han cuidado hasta el último milímetro los acabados: suelos de piedra natural, carpintería a medida y sistemas domóticos integrados, logrando un equilibrio entre arquitectura clásica y confort contemporáneo.",
+      "whatWasDone": [
+        "Demolición y redistribución completa",
+        "Instalaciones eléctricas y fontanería",
+        "Carpintería interior a medida",
+        "Domótica integrada",
+        "Iluminación arquitectónica",
+        "Suelos de parquet",
+        "Sesiones de interiorismo"
+      ],
+      "ubicacion": "Barcelona",
+      "categoria": "Reforma integral",
+      "superficieM2": 100,
+      "media": [
+        {
+          "id": "9b126bdc-48f3-44c0-b7bd-1d4619977da9",
+          "url": "https://pakbxfdewswzkipeddhr.supabase.co/storage/v1/object/public/items-media/4fa302e4-e210-4b9c-bd03-71b23684b284/83ae79ab-e561-41c7-baab-075be07dd55b/1787164820963_1d4be331-0370-4e59-9c44-6d472231d4d2.webp",
+          "title": "Blog1-imagen1_894dfb76-f106-401c-8cd2-6c0566ecba0c.webp",
+          "altText": null,
+          "isCover": true,
+          "sortOrder": 0
+        },
+        {
+          "id": "656b55db-3e34-4481-9847-4e549764347f",
+          "url": "https://pakbxfdewswzkipeddhr.supabase.co/storage/v1/object/public/items-media/4fa302e4-e210-4b9c-bd03-71b23684b284/83ae79ab-e561-41c7-baab-075be07dd55b/1788533124623_2ab9fe3c-04fe-4b2d-b3ab-10592a244571.webp",
+          "title": "cocina reformada.webp",
+          "altText": null,
+          "isCover": false,
+          "sortOrder": 1
+        },
+        {
+          "id": "c8dfd5b8-4221-46e4-927f-bf67d206163b",
+          "url": "https://pakbxfdewswzkipeddhr.supabase.co/storage/v1/object/public/items-media/4fa302e4-e210-4b9c-bd03-71b23684b284/83ae79ab-e561-41c7-baab-075be07dd55b/1788533193763_c770d74c-3934-4b31-ad64-352a740b76dd.webp",
+          "title": "tv sofa.webp",
+          "altText": null,
+          "isCover": false,
+          "sortOrder": 2
+        }
+      ],
+      "coverUrl": "https://pakbxfdewswzkipeddhr.supabase.co/storage/v1/object/public/items-media/4fa302e4-e210-4b9c-bd03-71b23684b284/83ae79ab-e561-41c7-baab-075be07dd55b/1787164820963_1d4be331-0370-4e59-9c44-6d472231d4d2.webp"
+    },
+    {
+      "id": "36d376ff-c61b-4f25-8498-6434a12956f4",
+      "companyId": "4fa302e4-e210-4b9c-bd03-71b23684b284",
+      "itemType": "construcciones-arquelia",
+      "title": "Reforma Cocina y Baño en Castelldefels",
+      "summary": "Renovación completa de cocina y aseo principal con acabados de alta gama.",
+      "status": "published",
+      "slug": null,
+      "seoTitle": null,
+      "seoDescription": null,
+      "seoOgImageUrl": null,
+      "updatedAt": "2026-09-04T15:24:58.570075+00:00",
+      "description": "Renovación de cocina y aseo principal en una vivienda familiar en Castelldefels. Diseño minimalista con materiales de primera calidad: encimeras de piedra sinterizada, grifería de diseño y mobiliario a medida, pensado para un uso diario funcional sin renunciar a la estética premium.",
+      "whatWasDone": [
+        "Diseño e interiorismo",
+        "Mobiliario de cocina a medida",
+        "Encimera de piedra sinterizada",
+        "Nueva red de fontanería",
+        "Alicatado de suelos y paredes",
+        "Instalación de mampara y plato de ducha"
+      ],
+      "ubicacion": "Castelldefels",
+      "categoria": "Reforma cocina y aseo principal ",
+      "superficieM2": 20,
+      "media": [
+        {
+          "id": "c0964148-6485-4d92-a75e-b8c0a2a7bccc",
+          "url": "https://pakbxfdewswzkipeddhr.supabase.co/storage/v1/object/public/items-media/4fa302e4-e210-4b9c-bd03-71b23684b284/36d376ff-c61b-4f25-8498-6434a12956f4/1788535336707_7ffeb6b6-d627-467d-9954-df683011d819.webp",
+          "title": "castelldefels 3.webp",
+          "altText": null,
+          "isCover": false,
+          "sortOrder": 0
+        },
+        {
+          "id": "daa39006-490a-491b-8f0c-7f8272f00621",
+          "url": "https://pakbxfdewswzkipeddhr.supabase.co/storage/v1/object/public/items-media/4fa302e4-e210-4b9c-bd03-71b23684b284/36d376ff-c61b-4f25-8498-6434a12956f4/1788535335973_b673ceee-363d-441f-a84e-98e6cb01d4e5.webp",
+          "title": "castelldefels 4.webp",
+          "altText": null,
+          "isCover": false,
+          "sortOrder": 1
+        },
+        {
+          "id": "81f16273-aa7f-4667-b448-565400895c0f",
+          "url": "https://pakbxfdewswzkipeddhr.supabase.co/storage/v1/object/public/items-media/4fa302e4-e210-4b9c-bd03-71b23684b284/36d376ff-c61b-4f25-8498-6434a12956f4/1788535337395_e0b82442-fc0b-4d05-841c-4646a9edbb0e.webp",
+          "title": "castelldefels 1.webp",
+          "altText": null,
+          "isCover": false,
+          "sortOrder": 2
+        },
+        {
+          "id": "718b671f-c6aa-45ae-a58b-2d62fba0d735",
+          "url": "https://pakbxfdewswzkipeddhr.supabase.co/storage/v1/object/public/items-media/4fa302e4-e210-4b9c-bd03-71b23684b284/36d376ff-c61b-4f25-8498-6434a12956f4/1788534219782_fa1c329b-04bb-4468-838b-84c0ae8bc268.webp",
+          "title": "castelldefels 2.webp",
+          "altText": null,
+          "isCover": false,
+          "sortOrder": 3
+        }
+      ],
+      "coverUrl": "https://pakbxfdewswzkipeddhr.supabase.co/storage/v1/object/public/items-media/4fa302e4-e210-4b9c-bd03-71b23684b284/36d376ff-c61b-4f25-8498-6434a12956f4/1788535336707_7ffeb6b6-d627-467d-9954-df683011d819.webp"
+    },
+    {
+      "id": "2096c489-2210-4337-8642-df13f7c484be",
+      "companyId": "4fa302e4-e210-4b9c-bd03-71b23684b284",
+      "itemType": "construcciones-arquelia",
+      "title": "Reforma de cocina y salida a terraza en Sitges",
+      "summary": "Reforma de cocina y salida a terraza en Sitges",
+      "status": "published",
+      "slug": null,
+      "seoTitle": null,
+      "seoDescription": null,
+      "seoOgImageUrl": null,
+      "updatedAt": "2026-09-04T15:33:10.821784+00:00",
+      "description": "Reforma de cocina y salida a terraza en Sitges. Hemos convertido una vieja cocina con muebles desgastados y humedades, y una terraza desaprovechada en un lujoso espacio con una sintonía perfecta. ",
+      "whatWasDone": [
+        "Saneamiento de humedades",
+        "Alicatado de paredes",
+        "Mobiliario a medida",
+        "Instalación de ventanal corredero",
+        "Rehabilitación de terraza",
+        "Impermeabilización y adecuación de pendientes en terraza"
+      ],
+      "ubicacion": "Sitges",
+      "categoria": "Reforma cocina y terraza",
+      "superficieM2": 40,
+      "media": [
+        {
+          "id": "9ebe724e-0d31-4061-a041-6389d2e24be6",
+          "url": "https://pakbxfdewswzkipeddhr.supabase.co/storage/v1/object/public/items-media/4fa302e4-e210-4b9c-bd03-71b23684b284/2096c489-2210-4337-8642-df13f7c484be/1787164843149_4f34cb79-a91f-4ddb-b7f9-173ef24692fb.webp",
+          "title": "reformas-integrales-lujo-bilbao-espacium-diseno-premium.webp",
+          "altText": null,
+          "isCover": true,
+          "sortOrder": 0
+        },
+        {
+          "id": "89724915-e1f4-4533-a61c-aa0f8263be76",
+          "url": "https://pakbxfdewswzkipeddhr.supabase.co/storage/v1/object/public/items-media/4fa302e4-e210-4b9c-bd03-71b23684b284/2096c489-2210-4337-8642-df13f7c484be/1788537182565_403581e7-4f9a-4e1f-af76-75130ded3c49.webp",
+          "title": "sitges 3.webp",
+          "altText": null,
+          "isCover": false,
+          "sortOrder": 2
+        },
+        {
+          "id": "097515d7-f1ba-4bbc-a9f9-1366eece4161",
+          "url": "https://pakbxfdewswzkipeddhr.supabase.co/storage/v1/object/public/items-media/4fa302e4-e210-4b9c-bd03-71b23684b284/2096c489-2210-4337-8642-df13f7c484be/1788536232506_0cd00413-1a3d-4278-909d-8d13aba82ad6.webp",
+          "title": "sitge_cocinaterraza2.png.webp",
+          "altText": null,
+          "isCover": false,
+          "sortOrder": 2
+        }
+      ],
+      "coverUrl": "https://pakbxfdewswzkipeddhr.supabase.co/storage/v1/object/public/items-media/4fa302e4-e210-4b9c-bd03-71b23684b284/2096c489-2210-4337-8642-df13f7c484be/1787164843149_4f34cb79-a91f-4ddb-b7f9-173ef24692fb.webp"
+    }
+  ]
+}

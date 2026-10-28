@@ -31,7 +31,11 @@ export function BlogPage() {
     const meta = blogMetadata(state?.post ?? null, import.meta.env.VITE_SITE_URL || 'https://arquelia.es', page)
     document.title = state?.missing ? '404 · Arquelia' : meta.title
     const update = (selector: string, attr: string, value?: string) => {
-      const node = document.head.querySelector(selector)
+      let node = document.head.querySelector(selector)
+      if (!node && value) {
+        const match = selector.match(/^(meta|link)\[(name|property|rel)="([^"]+)"\]$/)
+        if (match) { node = document.createElement(match[1]); node.setAttribute(match[2], match[3]); document.head.appendChild(node) }
+      }
       if (value) node?.setAttribute(attr, value)
       else node?.removeAttribute(attr)
     }

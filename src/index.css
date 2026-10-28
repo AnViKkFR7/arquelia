@@ -178,3 +178,10 @@ ol {
     transition-duration: 0.01ms !important;
   }
 }
+/* HTML inicial de proyectos, visible también sin JavaScript. */
+.project-initial { padding-block: 8rem 4rem; }
+.project-initial h1 { font-size: clamp(2rem, 5vw, 4rem); margin-block: 1rem; }
+.project-initial p, .project-initial section { margin-block: 1rem; }
+.project-initial img { max-width: 100%; height: auto; object-fit: contain; }
+.project-initial-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1rem; }
+.project-initial nav { display: flex; gap: 1.5rem; margin-top: 2rem; }

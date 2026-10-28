@@ -8,6 +8,8 @@
     "build": "tsc -b && tsc -p tsconfig.server.json && vite build",
     "test": "tsx --test tests/*.test.ts",
     "blog:preflight": "tsx scripts/blog-preflight.ts",
+    "items-seo:preflight": "tsx scripts/items-seo.ts audit",
+    "items-seo:prepare": "tsx scripts/items-seo.ts prepare",
     "lint": "oxlint",
     "preview": "vite preview"
   },

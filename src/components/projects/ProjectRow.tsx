@@ -1,8 +1,9 @@
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useInView } from '../../hooks/useInView'
 import { Button } from '../ui/Button'
 import type { Project } from '../../types/project'
+import { projectPath } from '../../lib/projectRepository'
 import styles from './ProjectRow.module.css'
 
 interface ProjectRowProps {
@@ -16,10 +17,8 @@ interface ProjectRowProps {
  */
 export function ProjectRow({ project, index }: ProjectRowProps) {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const { ref, inView } = useInView<HTMLElement>({ threshold: 0.12 })
   const reversed = index % 2 === 1
-  const go = () => navigate(`/proyectos/${project.id}`)
 
   const meta = [
     project.categoria,
@@ -47,15 +46,14 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
 
         {project.description && <p className={styles.desc}>{project.description}</p>}
 
-        <Button variant="link" arrow onClick={go} className={styles.cta}>
+        <Button variant="link" arrow to={projectPath(project)} className={styles.cta}>
           {t('common.seeProject')}
         </Button>
       </div>
 
-      <button
-        type="button"
+      <Link
+        to={projectPath(project)}
         className={styles.media}
-        onClick={go}
         aria-label={t('common.seeAria', { title: project.title })}
       >
         <span
@@ -66,7 +64,7 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
           <span className={styles.plusBar} />
           <span className={`${styles.plusBar} ${styles.plusBarV}`} />
         </span>
-      </button>
+      </Link>
     </article>
   )
 }

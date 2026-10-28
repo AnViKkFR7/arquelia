@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { getProjectById, getPublishedProjects } from '../lib/projects'
+import { getProjectByKey, getPublishedProjects } from '../lib/projects'
+import { projectPath, validProjectSlug } from '../lib/projectRepository'
+import { ProjectMeta } from '../components/projects/ProjectMeta'
+import { NotFoundPage } from './NotFoundPage'
 import { Reveal } from '../components/ui/Reveal'
 import { Button } from '../components/ui/Button'
 import { SectionHeader } from '../components/ui/SectionHeader'
@@ -14,10 +17,14 @@ import ButtonSlider from '../components/ui/ButtonSlider'
 
 export function ProjectDetailPage() {
   const { t } = useTranslation()
-  const { id } = useParams<{ id: string }>()
-  const [project, setProject] = useState<Project | null>(null)
-  const [others, setOthers] = useState<Project[]>([])
-  const [loading, setLoading] = useState(true)
+  const { key = '' } = useParams<{ key: string }>()
+  const [retry, setRetry] = useState(0)
+  const requestKey = `${key}:${retry}`
+  const [result, setResult] = useState<{ key: string; project: Project | null; others: Project[]; failed: boolean }>()
+  const current = result?.key === requestKey ? result : undefined
+  const project = current?.project ?? null
+  const others = current?.others ?? []
+  const loading = !current
 
   // En móvil la cabecera cambia de forma (tira deslizable en horizontal), y eso
   // hay que saberlo también en JS: ahí las tarjetas no llevan revelado, porque
@@ -32,36 +39,35 @@ export function ProjectDetailPage() {
   }, [])
 
   useEffect(() => {
-    if (!id) return
-    setLoading(true)
-
-    Promise.all([getProjectById(id), getPublishedProjects()])
+    let active = true
+    Promise.all([getProjectByKey(key), getPublishedProjects()])
       .then(([current, all]) => {
-        setProject(current)
-        setOthers(all.filter((p) => p.id !== id).slice(0, 3))
+        if (active) setResult({ key: requestKey, project: current, others: all.filter((p) => p.id !== current?.id).slice(0, 3), failed: false })
       })
-      .catch((err) => console.error('Error loading project', err))
-      .finally(() => setLoading(false))
-  }, [id])
+      .catch(() => { if (active) setResult({ key: requestKey, project: null, others: [], failed: true }) })
+    return () => { active = false }
+  }, [key, requestKey])
 
   if (loading) {
     return (
       <div className={`container ${styles.state}`}>
+        <ProjectMeta project={null} failed={false} loading />
         <p>{t('projectDetail.loading')}</p>
       </div>
     )
   }
 
-  if (!project) {
+  if (current?.failed) {
     return (
       <div className={`container ${styles.state}`}>
-        <h1>{t('projectDetail.notFound')}</h1>
-        <Button to="/proyectos" variant="outline" arrow className={styles.stateCta}>
-          {t('projectDetail.seeAll')}
-        </Button>
+        <ProjectMeta project={null} failed loading={false} />
+        <p role="alert">{t('projects.loadError')}</p>
+        <Button variant="outline" onClick={() => setRetry((value) => value + 1)}>{t('projects.retry')}</Button>
       </div>
     )
   }
+  if (!project) return <><ProjectMeta project={null} failed={false} loading={false} /><NotFoundPage /></>
+  if (validProjectSlug(project.slug) && key !== project.slug) return <Navigate to={projectPath(project)} replace />
 
   const stats = [
     project.categoria && {
@@ -88,10 +94,11 @@ export function ProjectDetailPage() {
 
   return (
     <>
+      <ProjectMeta project={project} failed={false} loading={false} />
       {/* Hero: imagen + marquesina con el título */}
       <section
         className={styles.hero}
-        data-lead-item={`${project.title} · ${project.id}`}
+        data-lead-item={`${project.title} · ${project.slug || project.id}`}
         style={project.coverUrl ? { backgroundImage: `url(${project.coverUrl})` } : undefined}
       >
         <span className={styles.heroScrim} />
@@ -143,6 +150,7 @@ export function ProjectDetailPage() {
         </div>
         <div className={`container ${styles.bodyGrid}`}>
           <div>
+            {project.summary && project.summary !== project.description && <p className={`lead ${styles.description}`}>{project.summary}</p>}
             {project.description && (
               <Reveal variant="up">
                 <p className={`lead ${styles.description}`}>{project.description}</p>

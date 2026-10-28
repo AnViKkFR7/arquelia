@@ -195,6 +195,8 @@ Si no aparece:
 | 200 pero no aparece nada | El campo trampa llegó relleno: algún autocompletado lo está rellenando. Cámbiale el `name`. |
 | Aparece en otra empresa | `VITE_COMPANY_ID` es el uuid de otra empresa. |
 
+El endpoint también falla de forma cerrada si no existe la fila CRM de esa empresa en `company_modules`; revisa que `COMPANY_MODULES.sql` esté aplicado y que el módulo CRM se haya inicializado antes de habilitar el formulario público.
+
 ## 7. Privacidad
 
 Estos datos los escribe la propia persona en un formulario de contacto, así

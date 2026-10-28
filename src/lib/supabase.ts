@@ -10,4 +10,4 @@ if (!supabaseUrl || !supabaseAnonKey) {
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export const ARQUELIA_COMPANY_ID = import.meta.env.VITE_ARQUELIA_COMPANY_ID as string
-export const ARQUELIA_ITEM_TYPE = 'construcciones-arquelia' as const
+export { ARQUELIA_ITEM_TYPE } from './projectRepository'

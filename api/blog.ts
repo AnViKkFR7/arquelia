@@ -7,6 +7,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { blogMetadata, blogRepository } from '../src/lib/blogRepository.js'
 import type { BlogPost } from '../src/lib/blogRepository.js'
 import { BlogContent } from '../src/components/blog/BlogContent.js'
+import { projectRepository } from '../src/lib/projectRepository.js'
 
 export const escapeAttribute = (value: string) => value.replace(/[&<>"']/g, (char) =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!)
@@ -58,11 +59,14 @@ export default async function handler(req: IncomingMessage & { query?: Record<st
     })
     const repository = blogRepository(client, process.env.VITE_ARQUELIA_COMPANY_ID!)
     if (sitemap) {
+      const canonicalSite = new URL(siteUrl)
+      if (canonicalSite.protocol !== 'https:' || canonicalSite.pathname !== '/' || canonicalSite.search || canonicalSite.hash || canonicalSite.username || canonicalSite.password) throw new Error('VITE_SITE_URL no es un origen HTTPS')
       const posts = await repository.auditAndSitemap()
-      const paths = ['/', '/servicios', '/proyectos', '/sobre-nosotros', '/contacto', '/blog', ...posts.map((post) => `/blog/${post.slug}`)]
+      const projects = await projectRepository(client, process.env.VITE_ARQUELIA_COMPANY_ID!).sitemap()
+      const paths = ['/', '/servicios', '/proyectos', '/sobre-nosotros', '/contacto', '/blog', ...posts.map((post) => `/blog/${post.slug}`), ...projects.map((project) => `/proyectos/${project.slug}`)]
       const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map((path) => `<url><loc>${escapeAttribute(siteUrl + path)}</loc></url>`).join('')}</urlset>`
       res.setHeader('Content-Type', 'application/xml; charset=utf-8')
-      res.setHeader('Cache-Control', 'public, s-maxage=60')
+      res.setHeader('Cache-Control', 'no-store')
       return res.end(req.method === 'HEAD' ? undefined : xml)
     }
     if (slug !== null) {

@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-const SITE_URL = 'https://arquelia.es'
+const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://arquelia.es').replace(/\/$/, '')
 
 // Ruta → clave de `nav.*` para el nombre del segundo nivel de la miga de
 // pan. La home no lleva entrada: no hay "Inicio > Inicio".

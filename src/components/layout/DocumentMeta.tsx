@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-const SITE_URL = 'https://arquelia.es'
+const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://arquelia.es').replace(/\/$/, '')
 
 // Ruta → clave dentro de `meta.pages` en los locales. La home usa las
 // claves `meta.title`/`meta.description` de siempre, sin entrada aquí.
@@ -24,7 +24,15 @@ const STATIC_ROUTES = new Set(['/', '/servicios', '/proyectos', '/sobre-nosotros
 const isKnownRoute = (pathname: string) => STATIC_ROUTES.has(pathname) || pathname.startsWith('/proyectos/')
 
 const setMeta = (selector: string, attr: string, value: string) => {
-  document.head.querySelector(selector)?.setAttribute(attr, value)
+  let node = document.head.querySelector(selector)
+  if (!node) {
+    const match = selector.match(/^meta\[(name|property)="([^"]+)"\]$/)
+    if (!match) return
+    node = document.createElement('meta')
+    node.setAttribute(match[1], match[2])
+    document.head.appendChild(node)
+  }
+  node.setAttribute(attr, value)
 }
 
 // A diferencia de `setMeta`, crea la etiqueta si `index.html` no la trae de
@@ -47,12 +55,12 @@ const upsertLink = (rel: string, href: string) => {
  */
 export function DocumentMeta() {
   const { t, i18n } = useTranslation()
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
 
   useEffect(() => {
     const lang = i18n.language
     document.documentElement.lang = lang.startsWith('ca') ? 'ca' : lang.startsWith('en') ? 'en' : 'es'
-    if (pathname === '/blog' || pathname.startsWith('/blog/')) return
+    if (pathname === '/blog' || pathname.startsWith('/blog/') || pathname.startsWith('/proyectos/')) return
 
     const pageKey = PAGE_META_KEYS[pathname]
     // Sin entrada específica para esta ruta (home, páginas legales, el
@@ -68,13 +76,18 @@ export function DocumentMeta() {
     setMeta('meta[property="og:description"]', 'content', description)
     setMeta('meta[property="og:locale"]', 'content', t('meta.locale'))
     setMeta('meta[property="og:image"]', 'content', `${SITE_URL}/og-image.jpg`)
+    setMeta('meta[name="twitter:title"]', 'content', title)
+    setMeta('meta[name="twitter:description"]', 'content', description)
+    setMeta('meta[name="twitter:card"]', 'content', 'summary_large_image')
+    setMeta('meta[name="twitter:image"]', 'content', `${SITE_URL}/og-image.jpg`)
 
-    const url = `${SITE_URL}${pathname === '/' ? '' : pathname}`
+    const page = Math.max(1, Math.min(10000, Math.floor(Number(new URLSearchParams(search).get('page')) || 1)))
+    const url = `${SITE_URL}${pathname === '/' ? '' : pathname}${pathname === '/proyectos' && page > 1 ? `?page=${page}` : ''}`
     upsertLink('canonical', url)
     setMeta('meta[property="og:url"]', 'content', url)
 
     setMeta('meta[name="robots"]', 'content', isKnownRoute(pathname) ? 'index, follow' : 'noindex, follow')
-  }, [t, i18n.language, pathname])
+  }, [t, i18n.language, pathname, search])
 
   return null
 }

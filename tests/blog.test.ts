@@ -97,7 +97,7 @@ test('handler devuelve 404 real y sitemap sin borradores ni otras empresas', asy
     const url = new URL(String(input))
     assert.equal(url.searchParams.get('company_id'), `eq.${company}`)
     assert.equal(url.searchParams.get('status'), 'eq.published')
-    return new Response(JSON.stringify(url.searchParams.has('slug') ? [] : [{ slug: 'reformas', updated_at: post.updated_at }]), { headers: { 'Content-Type': 'application/json' } })
+    return new Response(JSON.stringify(url.pathname.endsWith('/items') || url.searchParams.has('slug') ? [] : [{ slug: 'reformas', updated_at: post.updated_at }]), { headers: { 'Content-Type': 'application/json' } })
   }
   const invoke = async (url: string) => {
     let body = ''

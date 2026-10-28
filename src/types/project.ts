@@ -9,6 +9,13 @@ export interface ProjectMedia {
 
 export interface Project {
   id: string
+  companyId: string
+  itemType: string
+  slug: string | null
+  seoTitle: string | null
+  seoDescription: string | null
+  seoOgImageUrl: string | null
+  updatedAt: string
   title: string
   summary: string | null
   status: string

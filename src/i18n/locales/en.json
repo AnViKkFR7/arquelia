@@ -253,7 +253,12 @@
     "cta": {
       "title": "Want something like this in your home?",
       "text": "Every project starts with a visit. Tell us what you have in mind and we'll prepare a tailored proposal."
-    }
+    },
+    "loadError": "Projects could not be loaded. Please try again.",
+    "retry": "Try again",
+    "previous": "Previous",
+    "next": "Next",
+    "pagination": "Project pages"
   },
   "projectDetail": {
     "loading": "Loading project…",

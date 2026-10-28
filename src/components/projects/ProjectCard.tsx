@@ -1,8 +1,9 @@
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import styles from './ProjectCard.module.css'
 
 import type { Project } from '../../types/project'
+import { projectPath } from '../../lib/projectRepository'
 
 interface ProjectCardProps {
   project: Project
@@ -12,13 +13,11 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project, index }: ProjectCardProps) {
   const { t } = useTranslation()
-  const navigate = useNavigate()
 
   return (
-    <button
-      type="button"
+    <Link
+      to={projectPath(project)}
       className={styles.card}
-      onClick={() => navigate(`/proyectos/${project.id}`)}
       aria-label={t('common.seeProjectAria', { title: project.title })}
     >
       <span className={styles.frame}>
@@ -45,6 +44,6 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           {[project.categoria, project.ubicacion].filter(Boolean).join(' · ')}
         </span>
       </span>
-    </button>
+    </Link>
   )
 }
